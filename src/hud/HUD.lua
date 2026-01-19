@@ -71,7 +71,7 @@ function HUD:createOverlay()
     
     -- Компактні розміри для вертикального HUD (4 рядки: LOAD + T/h + LOSS + Speed)
     local boxWidth = 140  -- вужчий
-    local boxHeight = 80  -- вище для 4 рядків
+    local boxHeight = 90  -- ЗБІЛЬШЕНО для більших іконок
     
     -- Конвертуємо в екранні координати
     local width, height = speedMeter:scalePixelToScreenVector({boxWidth, boxHeight})
@@ -84,6 +84,22 @@ function HUD:createOverlay()
     local whiteTexture = self.modDirectory .. "textures/white.png"
     self.backgroundOverlay = Overlay.new(whiteTexture, posX, posY, width, height)
     self.backgroundOverlay:setColor(0, 0, 0, 0.5) -- Чорний з 50% непрозорістю
+    
+    -- ПРАВИЛЬНО створюємо іконки - КВАДРАТНІ 32x32px
+    local iconSize = speedMeter:scalePixelToScreenHeight(32) -- ЗБІЛЬШЕНО до 32px!
+    local iconWidth = speedMeter:scalePixelToScreenWidth(32)  -- Квадратні!
+    
+    -- Створюємо іконки з КВАДРАТНИМИ пропорціями
+    self.iconLoad = Overlay.new(self.modDirectory .. "textures/icon_load.png", 0, 0, iconWidth, iconSize)
+    self.iconProductivity = Overlay.new(self.modDirectory .. "textures/icon_productivity.png", 0, 0, iconWidth, iconSize)
+    self.iconLoss = Overlay.new(self.modDirectory .. "textures/icon_loss.png", 0, 0, iconWidth, iconSize)
+    self.iconSpeed = Overlay.new(self.modDirectory .. "textures/icon_speed.png", 0, 0, iconWidth, iconSize)
+    
+    -- Встановлюємо білий колір для іконок
+    if self.iconLoad then self.iconLoad:setColor(1, 1, 1, 1) end
+    if self.iconProductivity then self.iconProductivity:setColor(1, 1, 1, 1) end
+    if self.iconLoss then self.iconLoss:setColor(1, 1, 1, 1) end
+    if self.iconSpeed then self.iconSpeed:setColor(1, 1, 1, 1) end
 end
 
 ---Оновлення даних HUD
@@ -161,97 +177,148 @@ function HUD:draw()
 end
 
 function HUD:drawText()
+    if not self.data or not self.data.load then return end
+    
     if not g_currentMission or not g_currentMission.hud or not g_currentMission.hud.speedMeter then
         return
     end
     
     local speedMeter = g_currentMission.hud.speedMeter
+    
     local baseX = speedMeter.speedBg.x
     local baseY = speedMeter.speedBg.y
     
-    -- Позиція тексту (відповідає позиції фону)
     local offsetX = speedMeter:scalePixelToScreenWidth(-145)
     local offsetY = speedMeter:scalePixelToScreenHeight(15)
     
-    local textX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(8)  -- Відступ від краю
-    local textY = baseY + offsetY + speedMeter:scalePixelToScreenHeight(65) -- Ближче до верху
+    -- ЩЕ БІЛЬШІ розміри
+    local iconSize = speedMeter:scalePixelToScreenHeight(36) -- 36px іконки
+    local iconWidth = speedMeter:scalePixelToScreenWidth(36)
     
-    local textSize = speedMeter:scalePixelToScreenHeight(13)  -- Однаковий розмір для всіх
-    local lineHeight = speedMeter:scalePixelToScreenHeight(15) -- Відступ між рядками
+    local iconX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(6)
+    local textX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(46) -- Ближче до іконок
+    local startY = baseY + offsetY + speedMeter:scalePixelToScreenHeight(72) -- Вище
+    
+    local textSize = speedMeter:scalePixelToScreenHeight(17) -- Більший текст
+    local lineHeight = speedMeter:scalePixelToScreenHeight(24) -- Більші відступи
+    
+    -- Розмір фону для рядка
+    local rowBgWidth = speedMeter:scalePixelToScreenWidth(132)
+    local rowBgHeight = speedMeter:scalePixelToScreenHeight(24)
     
     setTextAlignment(RenderText.ALIGN_LEFT)
-    setTextBold(false)  -- Без bold для всіх рядків
+    setTextBold(false)
     
-    -- Рядок 1: Load (навантаження) - з кольоровою градацією
-    local loadColor
-    if self.data.load < 70 then
-        loadColor = {1, 1, 1, 1}      -- Білий (нормально)
-    elseif self.data.load < 100 then
-        loadColor = {1, 1, 0.4, 1}    -- Жовтий (попередження)
-    else
-        loadColor = {1, 0.4, 0.4, 1}  -- Червоний (небезпечно!)
-    end
-    
-    setTextColor(loadColor[1], loadColor[2], loadColor[3], loadColor[4])
-    renderText(textX, textY, textSize, string.format("Load: %.0f%%", self.data.load))
-    
-    -- Рядок 2: T/h (продуктивність) - завжди показується при зборі
-    textY = textY - lineHeight
-    if self.data.tonPerHour and self.data.tonPerHour > 0.01 then
-        setTextColor(1, 1, 1, 0.95)  -- Білий
-        renderText(textX, textY, textSize, string.format("T/h: %.1f", self.data.tonPerHour))
-    else
-        setTextColor(0.6, 0.6, 0.6, 0.8)  -- Сірий якщо ще не рахується
-        renderText(textX, textY, textSize, "T/h: --")
-    end
-    
-    -- Рядок 3: Crop Loss (тільки якщо функція увімкнена)
-    if self.settings.enableCropLoss then
-        textY = textY - lineHeight
-        if self.data.cropLoss and self.data.cropLoss > 0 then
-            setTextColor(1, 0.4, 0.4, 1) -- Червоний (втрати!)
-            renderText(textX, textY, textSize, string.format("Loss: %.1f%%", self.data.cropLoss))
-        else
-            -- Якщо немає втрат - темно-сірий
-            setTextColor(0.6, 0.6, 0.6, 0.8)
-            renderText(textX, textY, textSize, "Loss: 0%")
-        end
-    end
-    
-    -- Рядок 4: Speed (тільки якщо enableSpeedLimit вимкнений)
-    if not self.settings.enableSpeedLimit then
-        -- Якщо LOSS не показується, Speed буде на місці LOSS
-        if not self.settings.enableCropLoss then
-            textY = textY - lineHeight
+    -- Функція для малювання фону та іконки
+    local function drawRowWithIcon(icon, textY)
+        -- Фон
+        if self.backgroundOverlay then
+            self.backgroundOverlay:setPosition(baseX + offsetX, textY)
+            self.backgroundOverlay:setDimension(rowBgWidth, rowBgHeight)
+            self.backgroundOverlay:render()
         end
         
-        if self.data.recommendedSpeed then
+        -- Іконка (центрувати по вертикалі з текстом)
+        if icon then
+            local iconY = textY + textSize / 2 - iconSize / 2 -- Центр текста = центр іконки
+            icon:setPosition(iconX, iconY)
+            icon:render()
+        end
+    end
+    
+    local textY = startY
+    
+    -- Рядок 1: Load
+    local loadColor
+    if self.data.load < 70 then
+        loadColor = {1, 1, 1, 1}
+    elseif self.data.load < 100 then
+        loadColor = {1, 1, 0.4, 1}
+    else
+        loadColor = {1, 0.4, 0.4, 1}
+    end
+    
+    drawRowWithIcon(self.iconLoad, textY)
+    setTextColor(loadColor[1], loadColor[2], loadColor[3], loadColor[4])
+    renderText(textX, textY, textSize, string.format("%.0f%%", self.data.load))
+    
+    -- Рядок 2: T/h
+    textY = textY - lineHeight
+    drawRowWithIcon(self.iconProductivity, textY)
+    
+    if self.data.tonPerHour and self.data.tonPerHour > 0.01 then
+        setTextColor(1, 1, 1, 0.95)
+        renderText(textX, textY, textSize, string.format("%.1f", self.data.tonPerHour))
+    else
+        setTextColor(0.6, 0.6, 0.6, 0.8)
+        renderText(textX, textY, textSize, "--")
+    end
+    
+    -- Рядок 3: Loss (якщо включений) АБО Speed (якщо Loss вимкнений і Speed потрібен)
+    textY = textY - lineHeight
+    
+    if self.settings.enableCropLoss then
+        -- Показуємо Loss
+        drawRowWithIcon(self.iconLoss, textY)
+        
+        if self.data.cropLoss and self.data.cropLoss > 0 then
+            setTextColor(1, 0.4, 0.4, 1)
+            renderText(textX, textY, textSize, string.format("%.1f%%", self.data.cropLoss))
+        else
+            setTextColor(0.6, 0.6, 0.6, 0.8)
+            renderText(textX, textY, textSize, "0%")
+        end
+        
+        -- Рядок 4: Speed (якщо Loss включений І Speed потрібен)
+        if not self.settings.enableSpeedLimit and self.data.recommendedSpeed then
             textY = textY - lineHeight
+            drawRowWithIcon(self.iconSpeed, textY)
+            
             local currentSpeed = 0
             if self.vehicle then
                 currentSpeed = self.vehicle:getLastSpeed()
             end
             
-            -- Вибираємо колір - білий базовий з градацією
             local speedColor
-            if currentSpeed <= self.data.recommendedSpeed then
-                speedColor = {1, 1, 1, 0.95}  -- Білий - нормально
-            elseif currentSpeed <= self.data.recommendedSpeed * 1.1 then
-                speedColor = {1, 0.9, 0.3, 1}  -- Жовтий - трохи швидко
+            if currentSpeed > (self.data.recommendedSpeed + 2) then
+                speedColor = {1, 0.4, 0.4, 1}
+            elseif currentSpeed > self.data.recommendedSpeed then
+                speedColor = {1, 1, 0.4, 1}
             else
-                speedColor = {1, 0.3, 0.3, 1}  -- Червоний - занадто швидко
+                speedColor = {1, 1, 1, 1}
             end
             
             setTextColor(speedColor[1], speedColor[2], speedColor[3], speedColor[4])
-            renderText(textX, textY, textSize, string.format("Speed: %.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
+            renderText(textX, textY, textSize, 
+                string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
         end
+    elseif not self.settings.enableSpeedLimit and self.data.recommendedSpeed then
+        -- Loss вимкнений, але Speed потрібен - показуємо Speed НА МІСЦІ Loss (рядок 3)
+        drawRowWithIcon(self.iconSpeed, textY)
+        
+        local currentSpeed = 0
+        if self.vehicle then
+            currentSpeed = self.vehicle:getLastSpeed()
+        end
+        
+        local speedColor
+        if currentSpeed > (self.data.recommendedSpeed + 2) then
+            speedColor = {1, 0.4, 0.4, 1}
+        elseif currentSpeed > self.data.recommendedSpeed then
+            speedColor = {1, 1, 0.4, 1}
+        else
+            speedColor = {1, 1, 1, 1}
+        end
+        
+        setTextColor(speedColor[1], speedColor[2], speedColor[3], speedColor[4])
+        renderText(textX, textY, textSize, 
+            string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
     end
     
-    -- Скидаємо налаштування
+    -- Скидання alignment
     setTextAlignment(RenderText.ALIGN_LEFT)
-    setTextBold(false)
-    setTextColor(1, 1, 1, 1)
 end
+
 
 ---Очистка ресурсів
 function HUD:delete()
