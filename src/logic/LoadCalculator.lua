@@ -37,6 +37,11 @@ function LoadCalculator.new(modDirectory)
     self.tonPerHour = 0  -- Продуктивність в T/h
     self.totalOutputMass = 0  -- Загальна маса зібраного врожаю
     
+    -- Накопичення для розрахунку T/h
+    self.productivityMass = 0  -- Накопичена маса за поточний період (кг)
+    self.productivityTime = 0  -- Час накопичення (мс)
+    self.productivityUpdateInterval = 3000  -- Оновлювати кожні 3 секунди
+    
     print("RHM: LoadCalculator initialized")
     
     return self
@@ -244,8 +249,8 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
     local maxAvgArea = (1 + 0.01 * powerBoost) * self.basePerfAvgArea
     
     -- Діагностика
-    Logging.info("RHM: [LoadCalc] currentAvgArea: %.2f, maxAvgArea: %.2f, ratio: %.1f%%", 
-        self.currentAvgArea, maxAvgArea, (self.currentAvgArea / maxAvgArea) * 100)
+    -- Logging.info("RHM: [LoadCalc] currentAvgArea: %.2f, maxAvgArea: %.2f, ratio: %.1f%%", 
+    --     self.currentAvgArea, maxAvgArea, (self.currentAvgArea / maxAvgArea) * 100)
     
     -- Розраховуємо прискорення площі (як у CombineXP)
     local areaAcc = (self.currentAvgArea - self.basePerfAvgArea) / self.currentTime
@@ -260,8 +265,8 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
             local oldLimit = self.speedLimit
             self.speedLimit = math.max(2, math.min(0.95 * self.speedLimit, 0.9 * avgSpeed * 3.6))
             predictLimitSet = true
-            Logging.info("RHM: [LoadCalc] PREDICT OVERLOAD - reducing speed %.1f -> %.1f km/h", 
-                oldLimit, self.speedLimit)
+            -- Logging.info("RHM: [LoadCalc] PREDICT OVERLOAD - reducing speed %.1f -> %.1f km/h", 
+            --     oldLimit, self.speedLimit)
         end
     end
     
@@ -276,16 +281,16 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
             local oldLimit = self.speedLimit
             self.speedLimit = math.max(2, math.min(self.speedLimit, avgSpeed * 3.6) - 10 * (1 - maxAvgArea / self.currentAvgArea)^2)
             if oldLimit ~= self.speedLimit then
-                Logging.info("RHM: [LoadCalc] HIGH LOAD (%.1f%%) - reducing speed %.1f -> %.1f km/h", 
-                    (self.currentAvgArea / maxAvgArea) * 100, oldLimit, self.speedLimit)
+                -- Logging.info("RHM: [LoadCalc] HIGH LOAD (%.1f%%) - reducing speed %.1f -> %.1f km/h", 
+                --     (self.currentAvgArea / maxAvgArea) * 100, oldLimit, self.speedLimit)
             end
         elseif self.currentAvgArea < (0.60 * maxAvgArea) then
             -- Є великий запас - збільшити швидкість
             local oldLimit = self.speedLimit
             self.speedLimit = math.min(self.genuineSpeedLimit, self.speedLimit + 0.1 * (maxAvgArea / self.currentAvgArea)^3)
             if oldLimit ~= self.speedLimit then
-                Logging.info("RHM: [LoadCalc] Capacity available (%.1f%%) - increasing speed %.1f -> %.1f km/h", 
-                    (self.currentAvgArea / maxAvgArea) * 100, oldLimit, self.speedLimit)
+                -- Logging.info("RHM: [LoadCalc] Capacity available (%.1f%%) - increasing speed %.1f -> %.1f km/h", 
+                --     (self.currentAvgArea / maxAvgArea) * 100, oldLimit, self.speedLimit)
             end
         end
     end
@@ -320,6 +325,11 @@ function LoadCalculator:reset()
     self.cropLoss = 0
     -- Скидаємо speedLimit до genuineSpeedLimit (коли не косимо)
     self.speedLimit = self.genuineSpeedLimit
+    
+    -- Скидаємо накопичення продуктивності
+    self.productivityMass = 0
+    self.productivityTime = 0
+    self.tonPerHour = 0
     
     if self.debug then
         print("RHM: LoadCalculator reset")
@@ -377,10 +387,23 @@ end
 function LoadCalculator:updateProductivity(mass, dt)
     self.totalOutputMass = self.totalOutputMass + mass
     
-    -- Розраховуємо T/h
-    if dt > 0 then
-        -- kg/ms → T/h
-        self.tonPerHour = (mass / dt) * 3600 / 1000
+    -- Накопичуємо масу та час
+    self.productivityMass = self.productivityMass + mass
+    self.productivityTime = self.productivityTime + dt
+    
+    -- Оновлюємо T/h кожні 3 секунди для стабільного значення
+    if self.productivityTime >= self.productivityUpdateInterval then
+        if self.productivityTime > 0 then
+            -- Розраховуємо T/h: (кг / мс) * 3600 = т/год
+            self.tonPerHour = (self.productivityMass / self.productivityTime) * 3600
+        end
+        
+        -- Скидаємо накопичення з невеликим перекриттям для плавності
+        self.productivityMass = self.productivityMass * 0.2
+        self.productivityTime = self.productivityTime * 0.2
     end
 end
+
+
+
 

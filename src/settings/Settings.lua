@@ -24,10 +24,10 @@ function Settings.new(manager)
     self.enableSpeedLimit = true
     self.enableCropLoss = true
     self.showHUD = true
-    self.showSpeedIndicator = true  -- Показувати рекомендовану швидкість
     
     -- HUD settings
-    self.hudOffsetY = 350
+    self.hudOffsetX = 0  -- Горизонтальне зміщення (-200 to 200)
+    self.hudOffsetY = 350  -- Вертикальне зміщення (100 to 500)
     
     Logging.info("RHM: Settings initialized with difficulty: Normal")
     
@@ -112,6 +112,6 @@ function Settings:save()
     end
     
     self.manager:saveSettings(self)
-    Logging.info("RHM: Settings Saved. Difficulty: %s, HUD: %s", 
-        self:getDifficultyName(), tostring(self.showHUD))
+    -- Logging.info("RHM: Settings Saved. Difficulty: %s, HUD: %s", 
+    --    self:getDifficultyName(), tostring(self.showHUD))
 end

@@ -105,19 +105,13 @@ function UIHelper.createBinaryOption(layout, id, textId, state, callback)
     if opt.toolTipText then opt.toolTipText = "" end
     if lbl and lbl.toolTipText then lbl.toolTipText = "" end
     
-    -- Встановлюємо state
-    if opt.setState then
-        opt:setState(state and 2 or 1) -- 2 = checked, 1 = unchecked
-    end
-    
-    -- Callback - аргументи приходять у зворотному порядку!
+    -- Callback - ПРЯМЕ ПРИСВОЄННЯ (не перевіряємо if)
+    -- Аргументи приходять у зворотному порядку!
     -- Перший аргумент: newState (число), другий: element (таблиця)
-    if opt.onClickCallback then
-        opt.onClickCallback = function(newState, element)
-            -- newState це число (1 або 2)
-            local isChecked = (newState == 2)
-            callback(isChecked)
-        end
+    opt.onClickCallback = function(newState, element)
+        -- newState це число (1 або 2)
+        local isChecked = (newState == 2)
+        callback(isChecked)
     end
     
     -- Встановлюємо тексти
@@ -127,6 +121,11 @@ function UIHelper.createBinaryOption(layout, id, textId, state, callback)
     
     -- Додаємо елемент В ПЕРШУ ЧЕРГУ
     layout:addElement(row)
+    
+    -- ТЕПЕР встановлюємо state (ПІСЛЯ додавання до layout)
+    if opt.setState then
+        opt:setState(state and 2 or 1) -- 2 = checked, 1 = unchecked
+    end
     
     -- ТЕПЕР встановлюємо tooltip (ПІСЛЯ додавання до layout)
     local tooltipText = getTextSafe(textId .. "_long")
@@ -197,13 +196,12 @@ function UIHelper.createMultiOption(layout, id, textId, options, state, callback
         opt:setState(state)
     end
     
-    -- Callback - аргументи приходять у зворотному порядку!
+    -- Callback - ПРЯМЕ ПРИСВОЄННЯ (не перевір яємо if)
+    -- Аргументи приходять у зворотному порядку!
     -- Перший аргумент: newState (число - індекс опції), другий: element (таблиця)
-    if opt.onClickCallback then
-        opt.onClickCallback = function(newState, element)
-            -- newState це число - індекс вибраної опції (1, 2, 3, ...)
-            callback(newState)
-        end
+    opt.onClickCallback = function(newState, element)
+        -- newState це число - індекс вибраної опції (1, 2, 3, ...)
+        callback(newState)
     end
     
     -- Встановлюємо тексти

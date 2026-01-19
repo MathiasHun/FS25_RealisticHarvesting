@@ -73,7 +73,7 @@ function SettingsUI:inject()
         function(val)
             self.settings.enableSpeedLimit = val
             self.settings:save()
-            Logging.info("RHM: Speed Limiting %s", val and "enabled" or "disabled")
+            -- Logging.info("RHM: Speed Limiting %s", val and "enabled" or "disabled")
         end
     )
     
@@ -86,20 +86,7 @@ function SettingsUI:inject()
         function(val)
             self.settings.enableCropLoss = val
             self.settings:save()
-            Logging.info("RHM: Crop Loss %s", val and "enabled" or "disabled")
-        end
-    )
-    
-    -- Додаємо Speed Indicator перемикач (Binary)
-    local speedIndOpt = UIHelper.createBinaryOption(
-        layout,
-        "rhm_speedind",
-        "rhm_speedindicator",
-        self.settings.showSpeedIndicator,
-        function(val)
-            self.settings.showSpeedIndicator = val
-            self.settings:save()
-            Logging.info("RHM: Speed Indicator %s", val and "enabled" or "disabled")
+            -- Logging.info("RHM: Crop Loss %s", val and "enabled" or "disabled")
         end
     )
     

@@ -28,7 +28,11 @@ function SettingsGUI:registerConsoleCommands()
     -- Команда для зміни зміщення HUD
     addConsoleCommand("rhmSetHUDOffset", "Set HUD vertical offset (100-500)", "consoleCommandSetHUDOffset", self)
     
-    Logging.info("RHM: Console commands registered")
+    -- Команди для переміщення HUD ліворуч/праворуч
+    addConsoleCommand("rhmMoveHUDLeft", "Move HUD to the left by 10px", "consoleCommandMoveHUDLeft", self)
+    addConsoleCommand("rhmMoveHUDRight", "Move HUD to the right by 10px", "consoleCommandMoveHUDRight", self)
+    
+    -- Logging.info("RHM: Console commands registered")
 end
 
 function SettingsGUI:consoleCommandSetDifficulty(difficulty)
@@ -121,6 +125,34 @@ function SettingsGUI:consoleCommandSetHUDOffset(offset)
         end
         
         return string.format("HUD Offset Y set to: %d", offsetY)
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandMoveHUDLeft()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        settings.hudOffsetX = math.max(-200, settings.hudOffsetX - 10)
+        settings:save()
+        
+        -- Позиція оновиться автоматично в HUD:draw() на наступному кадрі
+        
+        return string.format("HUD Offset X: %d (moved LEFT)", settings.hudOffsetX)
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandMoveHUDRight()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        settings.hudOffsetX = math.min(200, settings.hudOffsetX + 10)
+        settings:save()
+        
+        -- Позиція оновиться автоматично в HUD:draw() на наступному кадрі
+        
+        return string.format("HUD Offset X: %d (moved RIGHT)", settings.hudOffsetX)
     end
     
     return "Error: RHM not initialized"

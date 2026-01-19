@@ -58,6 +58,7 @@ function rhm_Combine:onLoad(savegame)
     
     -- Лічильник для збереження площі з addCutterArea
     spec.lastArea = 0
+    spec.lastLiters = 0  -- Літри зібраного врожаю
     
     -- Відстеження поточної жатки для визначення зміни
     spec.currentCutter = nil
@@ -98,15 +99,8 @@ function rhm_Combine:addCutterArea(superFunc, area, liters, inputFruitType, outp
     spec.lastArea = (spec.lastArea or 0) + (area * multiplier)
     spec.lastMultiplier = multiplier
     
-    -- Розраховуємо продуктивність (T/h) на основі зібраних літрів
-    -- liters → kg (density ~0.75 kg/L для зерна) → tons
-    if liters and liters > 0 then
-        local massKg = liters * 0.75 -- Приблизна щільність зерна
-        -- Оновлюємо продуктивність в LoadCalculator
-        if spec.loadCalculator then
-            spec.loadCalculator:updateProductivity(massKg, 16.67) -- ~60 FPS = 16.67ms per frame
-        end
-    end
+    -- Зберігаємо літри для розрахунку продуктивності в onUpdateTick
+    spec.lastLiters = (spec.lastLiters or 0) + (liters or 0)
     
     -- Викликаємо оригінальну функцію
     return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
@@ -157,7 +151,7 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         if currentCutter ~= spec.currentCutter and currentCutter ~= nil then
             spec.currentCutter = currentCutter
             spec.loadCalculator.genuineSpeedLimit = 15 -- Скидаємо до початкового значення
-            Logging.info("RHM: [getSpeedLimit] Cutter changed, resetting genuineSpeedLimit")
+            -- Logging.info("RHM: [getSpeedLimit] Cutter changed, resetting genuineSpeedLimit")
         end
     end
     
@@ -170,8 +164,8 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         -- Це дозволяє комбайну їхати швидше на легких полях!
         local genuineLimit = math.max(1.5 * limit, 18.0)
         spec.loadCalculator:setGenuineSpeedLimit(genuineLimit)
-        Logging.info("RHM: [getSpeedLimit] Initial genuine limit set to %.1f km/h (from game limit %.1f)", 
-            genuineLimit, limit)
+        -- Logging.info("RHM: [getSpeedLimit] Initial genuine limit set to %.1f km/h (from game limit %.1f)", 
+        --     genuineLimit, limit)
     end
     
     -- Отримуємо обмеження з LoadCalculator
@@ -180,8 +174,8 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     
     -- Діагностика: логуємо розрахунки (рідше)
     if not self._speedLimitLogTime or (g_currentMission.time - self._speedLimitLogTime) > 2000 then
-        Logging.info("RHM: [getSpeedLimit] Load: %.1f%%, Calc limit: %.1f, Orig limit: %.1f", 
-            engineLoad, calculatedLimit, limit)
+        -- Logging.info("RHM: [getSpeedLimit] Load: %.1f%%, Calc limit: %.1f, Orig limit: %.1f", 
+        --     engineLoad, calculatedLimit, limit)
         self._speedLimitLogTime = g_currentMission.time
     end
     
@@ -193,8 +187,8 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         
         -- Логуємо тільки коли РЕАЛЬНО обмежуємо
         if not self._lastLimitLog or math.abs(self._lastLimitLog - limit) > 0.5 then
-            Logging.info("RHM: [getSpeedLimit] *** LIMITING SPEED to %.1f km/h (load: %.1f%%) ***", 
-                limit, engineLoad)
+            -- Logging.info("RHM: [getSpeedLimit] *** LIMITING SPEED to %.1f km/h (load: %.1f%%) ***", 
+            --     limit, engineLoad)
             self._lastLimitLog = limit
         end
     else
@@ -258,8 +252,15 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     local area = spec.lastArea or 0
     spec.loadCalculator:update(self, dt, area)
     
-    -- Скидаємо лічильник площі
+    -- Оновлюємо продуктивність з накопичених літрів
+    if spec.lastLiters and spec.lastLiters > 0 then
+        local massKg = spec.lastLiters * 0.75 -- Приблизна щільність зерна kg/L
+        spec.loadCalculator:updateProductivity(massKg, dt) -- Використовуємо РЕАЛЬНИЙ dt!
+    end
+    
+    -- Скидаємо лічильники
     spec.lastArea = 0
+    spec.lastLiters = 0
     
     -- Оновлюємо дані для HUD
     if spec.data then

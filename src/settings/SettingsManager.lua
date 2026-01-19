@@ -10,6 +10,7 @@ SettingsManager.defaultConfig = {
     showHUD = true,
     enableSpeedLimit = true,
     enableCropLoss = true,
+    hudOffsetX = 0,    -- Horizontal offset
     hudOffsetY = 350  -- Vertical offset
 }
 
@@ -33,6 +34,7 @@ function SettingsManager:loadSettings(settingsObject)
             settingsObject.showHUD = xml:getBool(self.XMLTAG..".showHUD", self.defaultConfig.showHUD)
             settingsObject.enableSpeedLimit = xml:getBool(self.XMLTAG..".enableSpeedLimit", self.defaultConfig.enableSpeedLimit)
             settingsObject.enableCropLoss = xml:getBool(self.XMLTAG..".enableCropLoss", self.defaultConfig.enableCropLoss)
+            settingsObject.hudOffsetX = xml:getInt(self.XMLTAG..".hudOffsetX", self.defaultConfig.hudOffsetX)
             settingsObject.hudOffsetY = xml:getInt(self.XMLTAG..".hudOffsetY", self.defaultConfig.hudOffsetY)
             xml:delete()
             return
@@ -43,6 +45,7 @@ function SettingsManager:loadSettings(settingsObject)
     settingsObject.showHUD = self.defaultConfig.showHUD
     settingsObject.enableSpeedLimit = self.defaultConfig.enableSpeedLimit
     settingsObject.enableCropLoss = self.defaultConfig.enableCropLoss
+    settingsObject.hudOffsetX = self.defaultConfig.hudOffsetX
     settingsObject.hudOffsetY = self.defaultConfig.hudOffsetY
 end
 
@@ -56,6 +59,7 @@ function SettingsManager:saveSettings(settingsObject)
         xml:setBool(self.XMLTAG..".showHUD", settingsObject.showHUD)
         xml:setBool(self.XMLTAG..".enableSpeedLimit", settingsObject.enableSpeedLimit)
         xml:setBool(self.XMLTAG..".enableCropLoss", settingsObject.enableCropLoss)
+        xml:setInt(self.XMLTAG..".hudOffsetX", settingsObject.hudOffsetX)
         xml:setInt(self.XMLTAG..".hudOffsetY", settingsObject.hudOffsetY)
         xml:save()
         xml:delete()

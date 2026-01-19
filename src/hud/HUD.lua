@@ -69,9 +69,9 @@ end
 function HUD:createOverlay()
     local speedMeter = g_currentMission.hud.speedMeter
     
-    -- Компактні розміри для вертикального HUD (3 рядки)
+    -- Компактні розміри для вертикального HUD (4 рядки: LOAD + T/h + LOSS + Speed)
     local boxWidth = 140  -- вужчий
-    local boxHeight = 65  -- нижчий (3 рядки тексту)
+    local boxHeight = 80  -- вище для 4 рядків
     
     -- Конвертуємо в екранні координати
     local width, height = speedMeter:scalePixelToScreenVector({boxWidth, boxHeight})
@@ -83,7 +83,7 @@ function HUD:createOverlay()
     -- Створюємо overlay з білою текстурою
     local whiteTexture = self.modDirectory .. "textures/white.png"
     self.backgroundOverlay = Overlay.new(whiteTexture, posX, posY, width, height)
-    self.backgroundOverlay:setColor(0, 0, 0, 0.75) -- Чорний напівпрозорий
+    self.backgroundOverlay:setColor(0, 0, 0, 0.5) -- Чорний з 50% непрозорістю
 end
 
 ---Оновлення даних HUD
@@ -110,6 +110,7 @@ function HUD:updateData()
     if spec.loadCalculator then
         self.data.load = spec.loadCalculator:getCurrentLoad()
         self.data.recommendedSpeed = spec.loadCalculator:getRecommendedSpeed()
+        self.data.tonPerHour = spec.loadCalculator:getTonPerHour()
         
         -- Crop loss (якщо є)
         if spec.loadCalculator.getCropLoss then
@@ -139,9 +140,14 @@ function HUD:draw()
         local baseX = speedMeter.speedBg.x
         local baseY = speedMeter.speedBg.y
         
-        -- Зміщення: ближче до speedMeter
+        -- Базове зміщення: ближче до speedMeter
         local offsetX = speedMeter:scalePixelToScreenWidth(-145)
         local offsetY = speedMeter:scalePixelToScreenHeight(15)
+        
+        -- Додаємо користувацьке зміщення з налаштувань
+        if self.settings.hudOffsetX then
+            offsetX = offsetX + speedMeter:scalePixelToScreenWidth(self.settings.hudOffsetX)
+        end
         
         -- Встановлюємо позицію
         self.backgroundOverlay:setPosition(baseX + offsetX, baseY + offsetY)
@@ -168,15 +174,15 @@ function HUD:drawText()
     local offsetY = speedMeter:scalePixelToScreenHeight(15)
     
     local textX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(8)  -- Відступ від краю
-    local textY = baseY + offsetY + speedMeter:scalePixelToScreenHeight(50) -- Зверху
+    local textY = baseY + offsetY + speedMeter:scalePixelToScreenHeight(65) -- Ближче до верху
     
-    local textSize = speedMeter:scalePixelToScreenHeight(14)  -- Менший шрифт
-    local lineHeight = speedMeter:scalePixelToScreenHeight(16) -- КОМПАКТНІШИЙ інтервал
+    local textSize = speedMeter:scalePixelToScreenHeight(13)  -- Однаковий розмір для всіх
+    local lineHeight = speedMeter:scalePixelToScreenHeight(15) -- Відступ між рядками
     
     setTextAlignment(RenderText.ALIGN_LEFT)
-    setTextBold(true)
+    setTextBold(false)  -- Без bold для всіх рядків
     
-    -- Рядок 1: Load (навантаження) - білий з градацією
+    -- Рядок 1: Load (навантаження) - з кольоровою градацією
     local loadColor
     if self.data.load < 70 then
         loadColor = {1, 1, 1, 1}      -- Білий (нормально)
@@ -187,29 +193,39 @@ function HUD:drawText()
     end
     
     setTextColor(loadColor[1], loadColor[2], loadColor[3], loadColor[4])
-    renderText(textX, textY, textSize, string.format("LOAD: %.0f%%", self.data.load))
+    renderText(textX, textY, textSize, string.format("Load: %.0f%%", self.data.load))
     
-    -- Рядок 2: Crop Loss (тільки якщо функція увімкнена)
+    -- Рядок 2: T/h (продуктивність) - завжди показується при зборі
+    textY = textY - lineHeight
+    if self.data.tonPerHour and self.data.tonPerHour > 0.01 then
+        setTextColor(1, 1, 1, 0.95)  -- Білий
+        renderText(textX, textY, textSize, string.format("T/h: %.1f", self.data.tonPerHour))
+    else
+        setTextColor(0.6, 0.6, 0.6, 0.8)  -- Сірий якщо ще не рахується
+        renderText(textX, textY, textSize, "T/h: --")
+    end
+    
+    -- Рядок 3: Crop Loss (тільки якщо функція увімкнена)
     if self.settings.enableCropLoss then
         textY = textY - lineHeight
         if self.data.cropLoss and self.data.cropLoss > 0 then
             setTextColor(1, 0.4, 0.4, 1) -- Червоний (втрати!)
-            renderText(textX, textY, textSize, string.format("LOSS: %.1f%%", self.data.cropLoss))
+            renderText(textX, textY, textSize, string.format("Loss: %.1f%%", self.data.cropLoss))
         else
             -- Якщо немає втрат - темно-сірий
             setTextColor(0.6, 0.6, 0.6, 0.8)
-            renderText(textX, textY, textSize, "LOSS: 0%")
+            renderText(textX, textY, textSize, "Loss: 0%")
         end
     end
     
-    -- Рядок 3: Speed (тільки якщо enableSpeedLimit вимкнений)
+    -- Рядок 4: Speed (тільки якщо enableSpeedLimit вимкнений)
     if not self.settings.enableSpeedLimit then
         -- Якщо LOSS не показується, Speed буде на місці LOSS
         if not self.settings.enableCropLoss then
             textY = textY - lineHeight
         end
         
-        if self.settings.showSpeedIndicator and self.data.recommendedSpeed then
+        if self.data.recommendedSpeed then
             textY = textY - lineHeight
             local currentSpeed = 0
             if self.vehicle then
@@ -218,17 +234,16 @@ function HUD:drawText()
             
             -- Вибираємо колір - білий базовий з градацією
             local speedColor
-            local speedDiff = currentSpeed - self.data.recommendedSpeed
-            if speedDiff < 2 then
-                speedColor = {1, 1, 1, 1}      -- Білий (нормально)
-            elseif speedDiff < 5 then
-                speedColor = {1, 1, 0.4, 1}    -- Жовтий (трохи швидко)
+            if currentSpeed <= self.data.recommendedSpeed then
+                speedColor = {1, 1, 1, 0.95}  -- Білий - нормально
+            elseif currentSpeed <= self.data.recommendedSpeed * 1.1 then
+                speedColor = {1, 0.9, 0.3, 1}  -- Жовтий - трохи швидко
             else
-                speedColor = {1, 0.4, 0.4, 1}  -- Червоний (занадто швидко!)
+                speedColor = {1, 0.3, 0.3, 1}  -- Червоний - занадто швидко
             end
             
             setTextColor(speedColor[1], speedColor[2], speedColor[3], speedColor[4])
-            renderText(textX, textY, textSize, string.format("%.1f/%.1f", currentSpeed, self.data.recommendedSpeed))
+            renderText(textX, textY, textSize, string.format("Speed: %.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
         end
     end
     
