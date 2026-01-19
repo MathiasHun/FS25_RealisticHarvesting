@@ -1,4 +1,4 @@
-# 🌾 Realistic Harvesting - Farming Simulator 25
+﻿# 🌾 Realistic Harvesting - Farming Simulator 25
 
 [![Version](https://img.shields.io/badge/version-1.0.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![FS25](https://img.shields.io/badge/FS25-Compatible-blue.svg)](https://www.farming-simulator.com/)
@@ -165,7 +165,7 @@ For the best MP experience, all players should use the **same difficulty setting
 ## 🤝 Credits & Support
 
 **Created by:** exekx  
-**Version:** 1.0.1.0  
+**Version:** 1.0.0.0  
 **Compatible with:** Farming Simulator 25
 
 ### Support the Mod
@@ -178,7 +178,7 @@ For the best MP experience, all players should use the **same difficulty setting
 
 ## 📜 License
 
-**All Rights Reserved** © 2025 exekx
+**All Rights Reserved** © 2026 exekx
 
 This mod is protected by copyright law. Here's what that means:
 
@@ -232,3 +232,4 @@ Exciting features planned for upcoming versions:
 *If you enjoy this mod, please support by downloading from the official source!*
 
 </div>
+
