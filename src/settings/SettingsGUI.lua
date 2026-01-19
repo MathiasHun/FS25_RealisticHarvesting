@@ -1,0 +1,127 @@
+---@class SettingsGUI
+-- GUI для налаштувань Realistic Harvest Manager
+SettingsGUI = {}
+local SettingsGUI_mt = Class(SettingsGUI)
+
+function SettingsGUI.new()
+    local self = setmetatable({}, SettingsGUI_mt)
+    return self
+end
+
+---Реєструє консольні команди для налаштувань
+function SettingsGUI:registerConsoleCommands()
+    -- Команда для зміни складності
+    addConsoleCommand("rhmSetDifficulty", "Set difficulty (1=Arcade, 2=Normal, 3=Realistic)", "consoleCommandSetDifficulty", self)
+    
+    -- Команда для увімкнення/вимкнення обмеження швидкості
+    addConsoleCommand("rhmToggleSpeedLimit", "Toggle speed limiting on/off", "consoleCommandToggleSpeedLimit", self)
+    
+    -- Команда для увімкнення/вимкнення втрат врожаю
+    addConsoleCommand("rhmToggleCropLoss", "Toggle crop loss on/off", "consoleCommandToggleCropLoss", self)
+    
+    -- Команда для увімкнення/вимкнення HUD
+    addConsoleCommand("rhmToggleHUD", "Toggle HUD on/off", "consoleCommandToggleHUD", self)
+    
+    -- Команда для показу поточних налаштувань
+    addConsoleCommand("rhmShowSettings", "Show current settings", "consoleCommandShowSettings", self)
+    
+    -- Команда для зміни зміщення HUD
+    addConsoleCommand("rhmSetHUDOffset", "Set HUD vertical offset (100-500)", "consoleCommandSetHUDOffset", self)
+    
+    Logging.info("RHM: Console commands registered")
+end
+
+function SettingsGUI:consoleCommandSetDifficulty(difficulty)
+    local diff = tonumber(difficulty)
+    if not diff or diff < 1 or diff > 3 then
+        Logging.warning("RHM: Invalid difficulty. Use 1 (Arcade), 2 (Normal), or 3 (Realistic)")
+        return "Invalid difficulty"
+    end
+    
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        g_realisticHarvestManager.settings:setDifficulty(diff)
+        g_realisticHarvestManager.settings:save()
+        return string.format("Difficulty set to: %s", g_realisticHarvestManager.settings:getDifficultyName())
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandToggleSpeedLimit()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        settings.enableSpeedLimit = not settings.enableSpeedLimit
+        settings:save()
+        return string.format("Speed Limiting: %s", settings.enableSpeedLimit and "ON" or "OFF")
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandToggleCropLoss()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        settings.enableCropLoss = not settings.enableCropLoss
+        settings:save()
+        return string.format("Crop Loss: %s", settings.enableCropLoss and "ON" or "OFF")
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandToggleHUD()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        settings.showHUD = not settings.showHUD
+        settings:save()
+        return string.format("HUD: %s", settings.showHUD and "ON" or "OFF")
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandShowSettings()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        local info = string.format(
+            "=== RHM Settings ===\n" ..
+            "Difficulty: %s\n" ..
+            "Speed Limiting: %s\n" ..
+            "Crop Loss: %s\n" ..
+            "Show HUD: %s\n" ..
+            "HUD Offset Y: %d",
+            settings:getDifficultyName(),
+            settings.enableSpeedLimit and "ON" or "OFF",
+            settings.enableCropLoss and "ON" or "OFF",
+            settings.showHUD and "ON" or "OFF",
+            settings.hudOffsetY
+        )
+        print(info)
+        return info
+    end
+    
+    return "Error: RHM not initialized"
+end
+
+function SettingsGUI:consoleCommandSetHUDOffset(offset)
+    local offsetY = tonumber(offset)
+    if not offsetY or offsetY < 100 or offsetY > 500 then
+        Logging.warning("RHM: Invalid HUD offset. Use value between 100 and 500")
+        return "Invalid offset (use 100-500)"
+    end
+    
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        local settings = g_realisticHarvestManager.settings
+        settings.hudOffsetY = offsetY
+        settings:save()
+        
+        -- Оновити HUD якщо він активний
+        if g_realisticHarvestManager.hud then
+            g_realisticHarvestManager.hud.posY = offsetY / g_screenHeight
+        end
+        
+        return string.format("HUD Offset Y set to: %d", offsetY)
+    end
+    
+    return "Error: RHM not initialized"
+end

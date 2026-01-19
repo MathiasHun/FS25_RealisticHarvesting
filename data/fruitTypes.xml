@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+
+<fruitTypes>
+    <!--
+        Crop material quantity factors for Realistic Harvest Manager
+        These values affect engine load calculation (higher = heavier/denser crop)
+    -->
+    
+    <!-- Cereals -->
+    <fruitType name="wheat"         mrMaterialQtyFx="1.0" />
+    <fruitType name="barley"        mrMaterialQtyFx="1.05" />
+    <fruitType name="oat"           mrMaterialQtyFx="1.08" />
+    
+    <!-- Oilseeds -->
+    <fruitType name="canola"        mrMaterialQtyFx="0.75" />
+    <fruitType name="soybean"       mrMaterialQtyFx="0.57" />
+    <fruitType name="sunflower"     mrMaterialQtyFx="1.2" />
+    
+    <!-- Row crops -->
+    <fruitType name="maize"         mrMaterialQtyFx="1.8" />
+    <fruitType name="sorghum"       mrMaterialQtyFx="1.35" />
+    
+    <!-- Root crops -->
+    <fruitType name="sugarBeet"     mrMaterialQtyFx="1.18" />
+    <fruitType name="potato"        mrMaterialQtyFx="1.16" />
+    <fruitType name="beetroot"      mrMaterialQtyFx="1.2" />
+    <fruitType name="carrot"        mrMaterialQtyFx="1.23" />
+    <fruitType name="parsnip"       mrMaterialQtyFx="1.23" />
+    
+    <!-- Vegetables -->
+    <fruitType name="greenbean"     mrMaterialQtyFx="2.55" />
+    <fruitType name="pea"           mrMaterialQtyFx="1.39" />
+    <fruitType name="spinach"       mrMaterialQtyFx="4.94" />
+    
+    <!-- Other crops -->
+    <fruitType name="cotton"        mrMaterialQtyFx="3.43" />
+    <fruitType name="sugarcane"     mrMaterialQtyFx="3.04" />
+    
+    <!-- Forage -->
+    <fruitType name="grass"         mrMaterialQtyFx="3.2" />
+    <fruitType name="dryGrass"      mrMaterialQtyFx="2.9" />
+    <fruitType name="oilseedRadish" mrMaterialQtyFx="0.002" />
+    
+    <!-- Rice -->
+    <fruitType name="rice"          mrMaterialQtyFx="1.23" />
+    <fruitType name="ricelonggrain" mrMaterialQtyFx="1.0" />
+    
+    <!-- Trees -->
+    <fruitType name="poplar"        mrMaterialQtyFx="16.0" />
+</fruitTypes>

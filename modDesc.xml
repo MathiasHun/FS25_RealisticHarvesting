@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="92">
+    <author>exekx</author>
+    <version>1.0.0.0</version>
+    <modName>FS25_RealisticHarvesting</modName>
+    <title>
+        <en>Realistic Harvesting</en>
+        <uk>Реалістичний збір врожаю</uk>
+        <ru>Реалистичный сбор урожая</ru>
+    </title>
+    <description>
+        <en>Adds realistic harvesting mechanics.</en>
+        <uk>Додає реалістичну механіку збору врожаю.</uk>
+        <ru>Добавляет реалистичную механику уборки урожая.</ru>
+    </description>
+    <iconFilename>icon.dds</iconFilename>
+    <multiplayer supported="true"/>
+    
+    <extraSourceFiles>
+        <sourceFile filename="src/main.lua" />
+    </extraSourceFiles>
+
+    <l10n>
+        <text name="rhm_section">
+            <en>Realistic Harvesting</en>
+            <uk>Реалістичний збір врожаю</uk>
+            <ru>Реалистичный сбор урожая</ru>
+        </text>
+        
+        <text name="rhm_difficulty_short">
+            <en>Difficulty</en>
+            <uk>Складність</uk>
+            <ru>Сложность</ru>
+        </text>
+        
+        <text name="rhm_difficulty_long">
+            <en>Arcade: No speed limits. Normal: Moderate limits (120%). Realistic: Strict limits (100%)</en>
+            <uk>Аркада: Без обмежень. Нормальна: Помірні обмеження (120%). Реалістична: Жорсткі обмеження (100%)</uk>
+            <ru>Аркада: Без ограничений. Обычная: Умеренные ограничения (120%). Реалистичная: Строгие ограничения (100%)</ru>
+        </text>
+        
+        <text name="rhm_diff_1">
+            <en>Arcade</en>
+            <uk>Аркада</uk>
+            <ru>Аркада</ru>
+        </text>
+        
+        <text name="rhm_diff_2">
+            <en>Normal</en>
+            <uk>Звичайна</uk>
+            <ru>Обычная</ru>
+        </text>
+        
+        <text name="rhm_diff_3">
+            <en>Realistic</en>
+            <uk>Реалістична</uk>
+            <ru>Реалистичная</ru>
+        </text>
+        
+        <text name="rhm_hud_short">
+            <en>Show HUD</en>
+            <uk>Показувати HUD</uk>
+            <ru>Показывать HUD</ru>
+        </text>
+        
+        <text name="rhm_hud_long">
+            <en>Display harvest info</en>
+            <uk>Відображати інформацію про збір</uk>
+            <ru>Отображать информацию о сборе</ru>
+        </text>
+        
+        <text name="rhm_speedlimit_short">
+            <en>Speed Limiting</en>
+            <uk>Обмеження швидкості</uk>
+            <ru>Ограничение скорости</ru>
+        </text>
+        
+        <text name="rhm_speedlimit_long">
+            <en>Automatically limit combine speed based on engine load</en>
+            <uk>Автоматично обмежувати швидкість комбайна залежно від навантаження</uk>
+            <ru>Автоматически ограничивать скорость комбайна в зависимости от нагрузки</ru>
+        </text>
+        
+        <text name="rhm_croploss_short">
+            <en>Crop Loss</en>
+            <uk>Втрати врожаю</uk>
+            <ru>Потери урожая</ru>
+        </text>
+        
+        <text name="rhm_croploss_long">
+            <en>Calculate crop loss when overloaded</en>
+            <uk>Розраховувати втрати врожаю при перевантаженні комбайна</uk>
+            <ru>Рассчитывать потери урожая при перегрузке комбайна</ru>
+        </text>
+        
+        <text name="rhm_speedindicator_short">
+            <en>Speed Indicator</en>
+            <uk>Показник швидкості</uk>
+            <ru>Показатель скорости</ru>
+        </text>
+        
+        <text name="rhm_speedindicator_long">
+            <en>Display recommended speed indicator in HUD</en>
+            <uk>Відображати рекомендовану швидкість в HUD</uk>
+            <ru>Показывать рекомендуемую скорость в HUD</ru>
+        </text>
+    </l10n>
+</modDesc>
