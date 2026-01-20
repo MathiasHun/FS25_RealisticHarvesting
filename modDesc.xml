@@ -5,11 +5,25 @@
     <modName>FS25_RealisticHarvesting</modName>
     <title>
         <en>Realistic Harvesting</en>
+        <de>Realistisches Ernten</de>
+        <fr>Récolte Réaliste</fr>
+        <pl>Realistyczne Żniwa</pl>
+        <es>Cosecha Realista</es>
+        <it>Raccolta Realistica</it>
+        <cz>Realistická Sklizeň</cz>
+        <br>Colheita Realista</br>
         <uk>Реалістичний збір врожаю</uk>
         <ru>Реалистичный сбор урожая</ru>
     </title>
     <description>
         <en>Adds realistic harvesting mechanics.</en>
+        <de>Fügt realistische Erntemechanik hinzu.</de>
+        <fr>Ajoute des mécaniques de récolte réalistes.</fr>
+        <pl>Dodaje realistyczną mechanikę żniw.</pl>
+        <es>Añade mecánicas de cosecha realistas.</es>
+        <it>Aggiunge meccaniche di raccolta realistiche.</it>
+        <cz>Přidává realistickou mechaniku sklizně.</cz>
+        <br>Adiciona mecânicas de colheita realistas.</br>
         <uk>Додає реалістичну механіку збору врожаю.</uk>
         <ru>Добавляет реалистичную механику уборки урожая.</ru>
     </description>
@@ -23,72 +37,156 @@
     <l10n>
         <text name="rhm_section">
             <en>Realistic Harvesting</en>
+            <de>Realistisches Ernten</de>
+            <fr>Récolte Réaliste</fr>
+            <pl>Realistyczne Żniwa</pl>
+            <es>Cosecha Realista</es>
+            <it>Raccolta Realistica</it>
+            <cz>Realistická Sklizeň</cz>
+            <br>Colheita Realista</br>
             <uk>Реалістичний збір врожаю</uk>
             <ru>Реалистичный сбор урожая</ru>
         </text>
         
         <text name="rhm_difficulty_short">
             <en>Difficulty</en>
+            <de>Schwierigkeit</de>
+            <fr>Difficulté</fr>
+            <pl>Trudność</pl>
+            <es>Dificultad</es>
+            <it>Difficoltà</it>
+            <cz>Obtížnost</cz>
+            <br>Dificuldade</br>
             <uk>Складність</uk>
             <ru>Сложность</ru>
         </text>
         
         <text name="rhm_difficulty_long">
             <en>Arcade: No speed limits. Normal: Moderate limits (120%). Realistic: Strict limits (100%)</en>
+            <de>Arkade: Keine Limits. Normal: Moderate Limits (120%). Realistisch: Strikte Limits (100%)</de>
+            <fr>Arcade: Pas de limites. Normal: Limites modérées (120%). Réaliste: Limites strictes (100%)</fr>
+            <pl>Arkada: Bez limitów. Normalna: Umiarkowane limity (120%). Realistyczna: Ścisłe limity (100%)</pl>
+            <es>Arcade: Sin límites. Normal: Límites moderados (120%). Realista: Límites estrictos (100%)</es>
+            <it>Arcade: Nessun limite. Normale: Limiti moderati (120%). Realistica: Limiti rigorosi (100%)</it>
+            <cz>Arkáda: Bez limitů. Normální: Mírné limity (120%). Realistická: Přísné limity (100%)</cz>
+            <br>Arcade: Sem limites. Normal: Limites moderados (120%). Realista: Limites rigorosos (100%)</br>
             <uk>Аркада: Без обмежень. Нормальна: Помірні обмеження (120%). Реалістична: Жорсткі обмеження (100%)</uk>
             <ru>Аркада: Без ограничений. Обычная: Умеренные ограничения (120%). Реалистичная: Строгие ограничения (100%)</ru>
         </text>
         
         <text name="rhm_diff_1">
             <en>Arcade</en>
+            <de>Arkade</de>
+            <fr>Arcade</fr>
+            <pl>Arkada</pl>
+            <es>Arcade</es>
+            <it>Arcade</it>
+            <cz>Arkáda</cz>
+            <br>Arcade</br>
             <uk>Аркада</uk>
             <ru>Аркада</ru>
         </text>
         
         <text name="rhm_diff_2">
             <en>Normal</en>
+            <de>Normal</de>
+            <fr>Normal</fr>
+            <pl>Normalna</pl>
+            <es>Normal</es>
+            <it>Normale</it>
+            <cz>Normální</cz>
+            <br>Normal</br>
             <uk>Звичайна</uk>
             <ru>Обычная</ru>
         </text>
         
         <text name="rhm_diff_3">
             <en>Realistic</en>
+            <de>Realistisch</de>
+            <fr>Réaliste</fr>
+            <pl>Realistyczna</pl>
+            <es>Realista</es>
+            <it>Realistica</it>
+            <cz>Realistická</cz>
+            <br>Realista</br>
             <uk>Реалістична</uk>
             <ru>Реалистичная</ru>
         </text>
         
         <text name="rhm_hud_short">
             <en>Show HUD</en>
+            <de>HUD anzeigen</de>
+            <fr>Afficher HUD</fr>
+            <pl>Pokaż HUD</pl>
+            <es>Mostrar HUD</es>
+            <it>Mostra HUD</it>
+            <cz>Zobrazit HUD</cz>
+            <br>Mostrar HUD</br>
             <uk>Показувати HUD</uk>
             <ru>Показывать HUD</ru>
         </text>
         
         <text name="rhm_hud_long">
             <en>Display harvest info</en>
+            <de>Ernte-Informationen anzeigen</de>
+            <fr>Afficher les infos de récolte</fr>
+            <pl>Wyświetl informacje o żniwach</pl>
+            <es>Mostrar información de cosecha</es>
+            <it>Mostra info sul raccolto</it>
+            <cz>Zobrazit informace o sklizni</cz>
+            <br>Exibir informações de colheita</br>
             <uk>Відображати інформацію про збір</uk>
             <ru>Отображать информацию о сборе</ru>
         </text>
         
         <text name="rhm_speedlimit_short">
             <en>Speed Limiting</en>
+            <de>Geschwindigkeitsbegrenzung</de>
+            <fr>Limitation de vitesse</fr>
+            <pl>Ograniczenie prędkości</pl>
+            <es>Limitación de velocidad</es>
+            <it>Limitazione velocità</it>
+            <cz>Omezení rychlosti</cz>
+            <br>Limitação de velocidade</br>
             <uk>Обмеження швидкості</uk>
             <ru>Ограничение скорости</ru>
         </text>
         
         <text name="rhm_speedlimit_long">
             <en>Automatically limit combine speed based on engine load</en>
+            <de>Mähdrescher-Geschwindigkeit automatisch basierend auf Motorlast begrenzen</de>
+            <fr>Limiter automatiquement la vitesse de la moissonneuse en fonction de la charge du moteur</fr>
+            <pl>Automatycznie ogranicz prędkość kombajnu w zależności od obciążenia silnika</pl>
+            <es>Limitar automáticamente la velocidad de la cosechadora según la carga del motor</es>
+            <it>Limita automaticamente la velocità della mietitrice in base al carico del motore</it>
+            <cz>Automaticky omezit rychlost kombajnu podle zatížení motoru</cz>
+            <br>Limitar automaticamente a velocidade da colheitadeira com base na carga do motor</br>
             <uk>Автоматично обмежувати швидкість комбайна залежно від навантаження</uk>
             <ru>Автоматически ограничивать скорость комбайна в зависимости от нагрузки</ru>
         </text>
         
         <text name="rhm_croploss_short">
             <en>Crop Loss</en>
+            <de>Ernteverlust</de>
+            <fr>Perte de récolte</fr>
+            <pl>Straty plonów</pl>
+            <es>Pérdida de cosecha</es>
+            <it>Perdita di raccolto</it>
+            <cz>Ztráta úrody</cz>
+            <br>Perda de colheita</br>
             <uk>Втрати врожаю</uk>
             <ru>Потери урожая</ru>
         </text>
         
         <text name="rhm_croploss_long">
             <en>Calculate crop loss when overloaded</en>
+            <de>Ernteverlust bei Überlastung berechnen</de>
+            <fr>Calculer la perte de récolte en cas de surcharge</fr>
+            <pl>Oblicz straty plonów przy przeciążeniu</pl>
+            <es>Calcular pérdida de cosecha al sobrecargar</es>
+            <it>Calcola perdita di raccolto quando sovraccarico</it>
+            <cz>Vypočítat ztrátu úrody při přetížení</cz>
+            <br>Calcular perda de colheita quando sobrecarregado</br>
             <uk>Розраховувати втрати врожаю при перевантаженні комбайна</uk>
             <ru>Рассчитывать потери урожая при перегрузке комбайна</ru>
         </text>
