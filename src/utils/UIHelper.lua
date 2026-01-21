@@ -122,9 +122,19 @@ function UIHelper.createBinaryOption(layout, id, textId, state, callback)
     -- Додаємо елемент В ПЕРШУ ЧЕРГУ
     layout:addElement(row)
     
-    -- ТЕПЕР встановлюємо state (ПІСЛЯ додавання до layout)
+    -- КРИТИЧНО: Спочатку скидаємо state до базового
     if opt.setState then
-        opt:setState(state and 2 or 1) -- 2 = checked, 1 = unchecked
+        opt:setState(1) -- Спочатку завжди unchecked
+    end
+    
+    -- ТЕПЕР встановлюємо потрібний state
+    if state then
+        -- Використовуємо setIsChecked якщо доступний (правильніший спосіб)
+        if opt.setIsChecked then
+            opt:setIsChecked(true)
+        elseif opt.setState then
+            opt:setState(2)
+        end
     end
     
     -- ТЕПЕР встановлюємо tooltip (ПІСЛЯ додавання до layout)

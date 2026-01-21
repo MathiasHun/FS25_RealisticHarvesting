@@ -115,3 +115,18 @@ function Settings:save()
     -- Logging.info("RHM: Settings Saved. Difficulty: %s, HUD: %s", 
     --    self:getDifficultyName(), tostring(self.showHUD))
 end
+
+---Скидання налаштувань до значень за замовчуванням
+function Settings:resetToDefaults()
+    self.difficulty = Settings.DIFFICULTY_NORMAL
+    self.enableSpeedLimit = true
+    self.enableCropLoss = true
+    self.showHUD = true
+    self.hudOffsetX = 0
+    self.hudOffsetY = 350
+    
+    -- Зберігаємо
+    self:save()
+    
+    print("RHM: Settings reset to defaults")
+end

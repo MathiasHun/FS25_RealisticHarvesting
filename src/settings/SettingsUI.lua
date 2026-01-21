@@ -90,17 +90,52 @@ function SettingsUI:inject()
         end
     )
     
+    -- Зберігаємо посилання на UI елементи для можливості оновлення
+    self.difficultyOption = diffOpt
+    self.hudOption = hudOpt
+    self.speedLimitOption = speedLimitOpt
+    self.cropLossOption = cropLossOpt
+    
     self.injected = true
     -- Викликаємо invalidateLayout для правильного відображення елементів
     layout:invalidateLayout()
 end
 
+
 -- Допоміжна функція для безпечного отримання тексту
 function getTextSafe(key)
     local text = g_i18n:getText(key)
     if text == nil or text == "" then
-        Logging.warning("RHM: Missing translation for key: " .. tostring(key))
         return key
     end
     return text
+end
+
+---Оновлює UI елементи після зміни налаштувань
+function SettingsUI:refreshUI()
+    if not self.injected then
+        return
+    end
+    
+    -- Оновлюємо difficulty
+    if self.difficultyOption and self.difficultyOption.setState then
+        self.difficultyOption:setState(self.settings.difficulty)
+    end
+    
+    -- Оновлюємо HUD
+    if self.hudOption and self.hudOption.setIsChecked then
+        self.hudOption:setIsChecked(self.settings.showHUD)
+    end
+    
+    -- Оновлюємо Speed Limit
+    if self.speedLimitOption and self.speedLimitOption.setIsChecked then
+        self.speedLimitOption:setIsChecked(self.settings.enableSpeedLimit)
+    end
+    
+    -- Оновлюємо Crop Loss
+    if self.cropLossOption and self.cropLossOption.setIsChecked then
+        self.cropLossOption:setIsChecked(self.settings.enableCropLoss)
+    end
+    
+    print("RHM: UI refreshed")
 end

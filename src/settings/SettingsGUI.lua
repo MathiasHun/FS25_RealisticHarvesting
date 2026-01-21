@@ -32,8 +32,12 @@ function SettingsGUI:registerConsoleCommands()
     addConsoleCommand("rhmMoveHUDLeft", "Move HUD to the left by 10px", "consoleCommandMoveHUDLeft", self)
     addConsoleCommand("rhmMoveHUDRight", "Move HUD to the right by 10px", "consoleCommandMoveHUDRight", self)
     
+    -- Команда для скидання налаштувань
+    addConsoleCommand("rhmResetSettings", "Reset all settings to defaults", "consoleCommandResetSettings", self)
+    
     -- Logging.info("RHM: Console commands registered")
 end
+
 
 function SettingsGUI:consoleCommandSetDifficulty(difficulty)
     local diff = tonumber(difficulty)
@@ -157,3 +161,20 @@ function SettingsGUI:consoleCommandMoveHUDRight()
     
     return "Error: RHM not initialized"
 end
+
+---Консольна команда для скидання налаштувань
+function SettingsGUI:consoleCommandResetSettings()
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        g_realisticHarvestManager.settings:resetToDefaults()
+        
+        -- Оновлюємо UI якщо він ініціалізований
+        if g_realisticHarvestManager.settingsUI then
+            g_realisticHarvestManager.settingsUI:refreshUI()
+        end
+        
+        return "RHM: Settings reset to defaults! UI refreshed. (Difficulty: Normal, Speed Limit: ON, Crop Loss: ON, HUD: ON)"
+    end
+    
+    return "Error: RHM not initialized"
+end
+
