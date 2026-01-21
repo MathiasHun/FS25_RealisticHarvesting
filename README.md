@@ -28,7 +28,7 @@ In vanilla FS25, combines can harvest any crop at maximum speed, regardless of d
 This mod adds:
 - ✅ **Automatic speed limiting** based on real-time engine load
 - ✅ **Realistic productivity tracking** in tons per hour
-- 🚧 **Visual feedback** showing exactly what's happening with icon-based HUD
+- ✅ **Visual feedback** showing exactly what's happening with icon-based HUD
 - 🚧 **Crop loss visualization** (visual indicator only in v1.0 - full simulation coming soon!)
 
 ---
@@ -60,12 +60,11 @@ A **sleek, icon-based display** near your speedometer shows:
 
 ### ⚠️ Crop Loss System *(Coming Soon!)*
 
-> **Note:** In version 1.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
+> **Note:** In version 1.1.0.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
 
 **Planned for v1.1+:**
 - Real yield reduction when overloading
 - Loss calculation based on overload severity
-- Can be disabled for casual play
 
 ---
 
@@ -129,12 +128,8 @@ For the best MP experience, all players should use the **same difficulty setting
 - **New Feature:** Added "Reset Settings" button to the settings menu footer (Key: X).
 - **UX Improvement:** Added side descriptions for all settings in the menu (Tooltips).
 - **Localization:** Full translation support for 10 languages (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU).
-- **Fix:** Crop Loss is now disabled by default.
 - **Fix:** Improved settings menu stability.
 
-### v1.0.1.0
-- Added German translation.
-- Improved HUD scaling.
 
 ## 📥 Installation
 
@@ -178,7 +173,7 @@ For the best MP experience, all players should use the **same difficulty setting
 ## 🤝 Credits & Support
 
 **Created by:** exekx  
-**Version:** 1.0.0.0  
+**Version:** 1.1.0.0  
 **Compatible with:** Farming Simulator 25
 
 ### Support the Mod
@@ -223,7 +218,6 @@ Exciting features planned for upcoming versions:
 - 🌧️ Weather impact on crop density
 - 🔧 Combine-specific performance profiles
 - 📈 Advanced statistics and analytics
-- 🎨 Customizable HUD themes
 - 🌍 Full localization support
 
 ---
