@@ -102,7 +102,7 @@ Access via `ESC → Settings → Realistic Harvesting`:
 | **Difficulty** | Arcade / Normal / Realistic | Choose your physics model |
 | **Show HUD** | ON / OFF | Toggle info display |
 | **Speed Limiting** | ON / OFF | Enable automatic speed control |
-| **Crop Loss** | ON / OFF | Toggle loss indicator *(visual only in v1.0)* |
+| **Crop Loss** | ON / OFF | Toggle loss indicator *(visual only in v1.1)* |
 
 ---
 
