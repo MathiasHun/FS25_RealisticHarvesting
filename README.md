@@ -123,7 +123,20 @@ For the best MP experience, all players should use the **same difficulty setting
 
 ---
 
-## 📦 Installation
+## 📋 Changelog
+
+### v1.1.0.0
+- **New Feature:** Added "Reset Settings" button to the settings menu footer (Key: X).
+- **UX Improvement:** Added side descriptions for all settings in the menu (Tooltips).
+- **Localization:** Full translation support for 10 languages (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU).
+- **Fix:** Crop Loss is now disabled by default.
+- **Fix:** Improved settings menu stability.
+
+### v1.0.1.0
+- Added German translation.
+- Improved HUD scaling.
+
+## 📥 Installation
 
 1. Download from [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
 2. Extract `FS25_RealisticHarvesting.zip`
