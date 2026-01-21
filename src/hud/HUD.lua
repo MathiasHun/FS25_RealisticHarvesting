@@ -165,14 +165,14 @@ function HUD:draw()
             offsetX = offsetX + speedMeter:scalePixelToScreenWidth(self.settings.hudOffsetX)
         end
         
-        -- Встановлюємо позицію
+        -- Встановлюємо позицію (для сумісності, але фон не малюємо)
         self.backgroundOverlay:setPosition(baseX + offsetX, baseY + offsetY)
     end
     
-    -- Малюємо фон
-    self.backgroundOverlay:render()
+    -- НЕ малюємо старий загальний фон! Тепер кожен рядок має свій фон
+    -- self.backgroundOverlay:render()  -- ВИДАЛЕНО - створював зайвий прямокутник
     
-    -- Малюємо текст
+    -- Малюємо текст (з індивідуальними фонами для кожного рядка)
     self:drawText()
 end
 
@@ -188,39 +188,49 @@ function HUD:drawText()
     local baseX = speedMeter.speedBg.x
     local baseY = speedMeter.speedBg.y
     
-    local offsetX = speedMeter:scalePixelToScreenWidth(-145)
-    local offsetY = speedMeter:scalePixelToScreenHeight(15)
+    -- Базове зміщення HUD
+    local offsetX = speedMeter:scalePixelToScreenWidth(-160)  -- Трохи більше ліворуч (було -145)
+    local offsetY = speedMeter:scalePixelToScreenHeight(50)    -- Опустити вниз (було 15, потім 10)
     
-    -- ЩЕ БІЛЬШІ розміри
-    local iconSize = speedMeter:scalePixelToScreenHeight(36) -- 36px іконки
+    -- Icons: 36x36px (квадратні)
+    local iconSize = speedMeter:scalePixelToScreenHeight(36)
     local iconWidth = speedMeter:scalePixelToScreenWidth(36)
     
     local iconX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(6)
-    local textX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(46) -- Ближче до іконок
-    local startY = baseY + offsetY + speedMeter:scalePixelToScreenHeight(72) -- Вище
+    local textX = baseX + offsetX + speedMeter:scalePixelToScreenWidth(46)
+    local startY = baseY + offsetY + speedMeter:scalePixelToScreenHeight(80)
     
-    local textSize = speedMeter:scalePixelToScreenHeight(17) -- Більший текст
-    local lineHeight = speedMeter:scalePixelToScreenHeight(24) -- Більші відступи
+    local textSize = speedMeter:scalePixelToScreenHeight(17)
     
-    -- Розмір фону для рядка
-    local rowBgWidth = speedMeter:scalePixelToScreenWidth(132)
-    local rowBgHeight = speedMeter:scalePixelToScreenHeight(24)
+    -- Розмір фону - має вміщувати іконку 36px + padding
+    local bgPaddingX = speedMeter:scalePixelToScreenWidth(4)
+    local bgPaddingY = speedMeter:scalePixelToScreenHeight(2)
+    
+    local rowBgWidth = speedMeter:scalePixelToScreenWidth(160)
+    local rowBgHeight = iconSize + (bgPaddingY * 2)
+    
+    -- lineHeight = rowBgHeight БЕЗ зазору - фони стикаються
+    local lineHeight = rowBgHeight
     
     setTextAlignment(RenderText.ALIGN_LEFT)
     setTextBold(false)
     
     -- Функція для малювання фону та іконки
     local function drawRowWithIcon(icon, textY)
-        -- Фон
+        -- Фон - ЦЕНТРУЄМО по іконці
         if self.backgroundOverlay then
-            self.backgroundOverlay:setPosition(baseX + offsetX, textY)
+            -- textY - це позиція baseline тексту
+            -- Фон має бути centered по іконці
+            local bgY = textY + textSize / 2 - rowBgHeight / 2  -- Центр по baseline тексту
+            
+            self.backgroundOverlay:setPosition(baseX + offsetX - bgPaddingX, bgY)
             self.backgroundOverlay:setDimension(rowBgWidth, rowBgHeight)
             self.backgroundOverlay:render()
         end
         
         -- Іконка (центрувати по вертикалі з текстом)
         if icon then
-            local iconY = textY + textSize / 2 - iconSize / 2 -- Центр текста = центр іконки
+            local iconY = textY + textSize / 2 - iconSize / 2
             icon:setPosition(iconX, iconY)
             icon:render()
         end
@@ -269,8 +279,8 @@ function HUD:drawText()
             renderText(textX, textY, textSize, "0%")
         end
         
-        -- Рядок 4: Speed (якщо Loss включений І Speed потрібен)
-        if not self.settings.enableSpeedLimit and self.data.recommendedSpeed then
+        -- Рядок 4: Speed (ТІЛЬКИ якщо Loss включений І Speed потрібен)
+        if not self.settings.enableSpeedLimit and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
             textY = textY - lineHeight
             drawRowWithIcon(self.iconSpeed, textY)
             
@@ -292,8 +302,8 @@ function HUD:drawText()
             renderText(textX, textY, textSize, 
                 string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
         end
-    elseif not self.settings.enableSpeedLimit and self.data.recommendedSpeed then
-        -- Loss вимкнений, але Speed потрібен - показуємо Speed НА МІСЦІ Loss (рядок 3)
+    elseif not self.settings.enableSpeedLimit and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
+        -- Loss вимкнений, Speed потрібен І Є ДАНІ - показуємо Speed на місці Loss (рядок 3)
         drawRowWithIcon(self.iconSpeed, textY)
         
         local currentSpeed = 0
@@ -314,6 +324,7 @@ function HUD:drawText()
         renderText(textX, textY, textSize, 
             string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
     end
+    -- Інакше НЕ малюємо зайвий рядок!
     
     -- Скидання alignment
     setTextAlignment(RenderText.ALIGN_LEFT)
