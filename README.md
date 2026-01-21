@@ -1,9 +1,10 @@
 ﻿# 🌾 Realistic Harvesting - Farming Simulator 25
 
-[![Version](https://img.shields.io/badge/version-1.0.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Version](https://img.shields.io/badge/version-1.1.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![FS25](https://img.shields.io/badge/FS25-Compatible-blue.svg)](https://www.farming-simulator.com/)
 [![Multiplayer](https://img.shields.io/badge/Multiplayer-Supported-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE)
+[![Roadmap](https://img.shields.io/badge/📍-Roadmap-blue.svg)](ROADMAP.md)
 
 > **Transform your harvesting experience with realistic combine physics and authentic crop management!**
 
@@ -214,15 +215,16 @@ This mod is protected by copyright law. Here's what that means:
 
 ## 🚀 Future Roadmap
 
-Exciting features planned for upcoming versions:
-- 🌧️ Weather impact on crop density
-- 🔧 Combine-specific performance profiles
-- 📈 Advanced statistics and analytics
-- 🌍 Full localization support
+See our detailed development plan: **[ROADMAP.md](ROADMAP.md)**
+
+**Quick Preview:**
+- 🎯 **v1.2.0** - Game balance refinements + Nexat Pack support
+- 🔥 **v2.0.0** - Real crop loss system
+- 🎓 **v2.5/3.0** - Manual combine configuration (advanced simulation)
 
 ---
 
-## 📞 Contact
+## ⚠️ Distribution & License
 
 - **Issues:** [GitHub Issues](https://github.com/exekx/FS25_RealisticHarvesting/issues)
 - **Download:** [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
