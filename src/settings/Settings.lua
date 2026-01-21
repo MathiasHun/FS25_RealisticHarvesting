@@ -22,7 +22,7 @@ function Settings.new(manager)
     
     -- Feature toggles
     self.enableSpeedLimit = true
-    self.enableCropLoss = true
+    self.enableCropLoss = false
     self.showHUD = true
     
     -- HUD settings

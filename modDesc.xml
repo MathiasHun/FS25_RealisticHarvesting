@@ -28,6 +28,7 @@
         <ru>Добавляет реалистичную механику уборки урожая.</ru>
     </description>
     <iconFilename>icon.dds</iconFilename>
+    
     <multiplayer supported="true"/>
     
     <extraSourceFiles>
@@ -193,14 +194,41 @@
         
         <text name="rhm_speedindicator_short">
             <en>Speed Indicator</en>
+            <de>Geschwindigkeitsanzeige</de>
+            <fr>Indicateur de vitesse</fr>
+            <pl>Wskaźnik prędkości</pl>
+            <es>Indicador de velocidad</es>
+            <it>Indicatore velocità</it>
+            <cz>Ukazatel rychlosti</cz>
+            <br>Indicador de velocidade</br>
             <uk>Показник швидкості</uk>
             <ru>Показатель скорости</ru>
         </text>
         
         <text name="rhm_speedindicator_long">
             <en>Display recommended speed indicator in HUD</en>
+            <de>Empfohlene Geschwindigkeitsanzeige im HUD anzeigen</de>
+            <fr>Afficher l'indicateur de vitesse recommandée dans le HUD</fr>
+            <pl>Wyświetl wskaźnik zalecanej prędkości w HUD</pl>
+            <es>Mostrar indicador de velocidad recomendada en HUD</es>
+            <it>Mostra l'indicatore della velocità consigliata nell'HUD</it>
+            <cz>Zobrazit ukazatel doporučené rychlosti v HUD</cz>
+            <br>Exibir indicador de velocidade recomendado no HUD</br>
             <uk>Відображати рекомендовану швидкість в HUD</uk>
             <ru>Показывать рекомендуемую скорость в HUD</ru>
+        </text>
+
+        <text name="rhm_reset">
+            <en>Reset RH Settings</en>
+            <de>RH-Einstellungen zurücksetzen</de>
+            <fr>Réinitialiser les paramètres RH</fr>
+            <pl>Resetuj ustawienia RH</pl>
+            <es>Restablecer config. RH</es>
+            <it>Ripristina impostazioni RH</it>
+            <cz>Resetovat nastavení RH</cz>
+            <br>Restaurar configurações RH</br>
+            <uk>Скинути налаштування RH</uk>
+            <ru>Сбросить настройки RH</ru>
         </text>
     </l10n>
 </modDesc>

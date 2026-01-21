@@ -139,3 +139,42 @@ function SettingsUI:refreshUI()
     
     print("RHM: UI refreshed")
 end
+
+---Додає кнопку Reset в footer панель Settings меню (правильний підхід через menuButtonInfo)
+function SettingsUI:ensureResetButton(settingsFrame)
+    if not settingsFrame or not settingsFrame.menuButtonInfo then
+        print("RHM: ensureResetButton - settingsFrame invalid")
+        return
+    end
+    
+    -- Створюємо кнопку тільки раз
+    if not self._resetButton then
+        self._resetButton = {
+            inputAction = InputAction.MENU_EXTRA_1,  -- X key
+            text = g_i18n:getText("rhm_reset") or "Reset Settings",
+            callback = function()
+                print("RHM: Reset button clicked!")
+                if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+                    g_realisticHarvestManager.settings:resetToDefaults()
+                    if g_realisticHarvestManager.settingsUI then
+                        g_realisticHarvestManager.settingsUI:refreshUI()
+                    end
+                end
+            end,
+            showWhenPaused = true
+        }
+    end
+    
+    -- Перевіряємо чи кнопка вже додана (уникаємо дублікатів)
+    for _, btn in ipairs(settingsFrame.menuButtonInfo) do
+        if btn == self._resetButton then
+            print("RHM: Reset button already in menuButtonInfo")
+            return
+        end
+    end
+    
+    -- Додаємо кнопку до footer панелі
+    table.insert(settingsFrame.menuButtonInfo, self._resetButton)
+    settingsFrame:setMenuButtonInfoDirty()
+    print("RHM: Reset button added to footer! (X key)")
+end

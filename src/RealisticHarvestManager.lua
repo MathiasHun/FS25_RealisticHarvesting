@@ -21,6 +21,13 @@ function RealisticHarvestManager.new(mission, modDirectory, modName)
         InGameMenuSettingsFrame.onFrameOpen = Utils.appendedFunction(InGameMenuSettingsFrame.onFrameOpen, function()
             self.settingsUI:inject()
         end)
+        
+        -- Хук для додавання footer кнопки Reset (через menuButtonInfo API)
+        InGameMenuSettingsFrame.updateButtons = Utils.appendedFunction(InGameMenuSettingsFrame.updateButtons, function(frame)
+            if self.settingsUI then
+                self.settingsUI:ensureResetButton(frame)
+            end
+        end)
     end
     
     -- Реєструємо консольні команди для налаштувань

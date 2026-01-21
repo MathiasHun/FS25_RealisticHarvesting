@@ -160,6 +160,11 @@ function UIHelper.createBinaryOption(layout, id, textId, state, callback)
     end
     row.toolTipText = tooltipText
     
+    -- Спосіб 4 (FS25 side description style): встановити текст на перший child елемент самого контролу
+    if opt.elements and opt.elements[1] and opt.elements[1].setText then
+        opt.elements[1]:setText(tooltipText)
+    end
+    
     return opt
 end
 
@@ -244,6 +249,12 @@ function UIHelper.createMultiOption(layout, id, textId, options, state, callback
         row:setToolTipText(tooltipText)
     end
     row.toolTipText = tooltipText
+    
+    -- Спосіб 4 (FS25 side description style): встановити текст на перший child елемент самого контролу
+    -- Саме так працює в референсному моді MudSystemSettings
+    if opt.elements and opt.elements[1] and opt.elements[1].setText then
+        opt.elements[1]:setText(tooltipText)
+    end
     
     print(string.format("RHM: Set tooltip for %s: %s", textId, tooltipText))
     
