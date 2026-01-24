@@ -81,7 +81,7 @@ function HUD:createOverlay()
     local posY = speedMeter.speedBg.y
     
     -- Створюємо overlay з білою текстурою
-    local whiteTexture = self.modDirectory .. "textures/white.png"
+    local whiteTexture = self.modDirectory .. "textures/white.dds"
     self.backgroundOverlay = Overlay.new(whiteTexture, posX, posY, width, height)
     self.backgroundOverlay:setColor(0, 0, 0, 0.5) -- Чорний з 50% непрозорістю
     
@@ -90,10 +90,10 @@ function HUD:createOverlay()
     local iconWidth = speedMeter:scalePixelToScreenWidth(32)  -- Квадратні!
     
     -- Створюємо іконки з КВАДРАТНИМИ пропорціями
-    self.iconLoad = Overlay.new(self.modDirectory .. "textures/icon_load.png", 0, 0, iconWidth, iconSize)
-    self.iconProductivity = Overlay.new(self.modDirectory .. "textures/icon_productivity.png", 0, 0, iconWidth, iconSize)
-    self.iconLoss = Overlay.new(self.modDirectory .. "textures/icon_loss.png", 0, 0, iconWidth, iconSize)
-    self.iconSpeed = Overlay.new(self.modDirectory .. "textures/icon_speed.png", 0, 0, iconWidth, iconSize)
+    self.iconLoad = Overlay.new(self.modDirectory .. "textures/icon_load.dds", 0, 0, iconWidth, iconSize)
+    self.iconProductivity = Overlay.new(self.modDirectory .. "textures/icon_productivity.dds", 0, 0, iconWidth, iconSize)
+    self.iconLoss = Overlay.new(self.modDirectory .. "textures/icon_loss.dds", 0, 0, iconWidth, iconSize)
+    self.iconSpeed = Overlay.new(self.modDirectory .. "textures/icon_speed.dds", 0, 0, iconWidth, iconSize)
     
     -- Встановлюємо білий колір для іконок
     if self.iconLoad then self.iconLoad:setColor(1, 1, 1, 1) end
