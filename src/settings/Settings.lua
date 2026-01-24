@@ -3,12 +3,12 @@
 Settings = {}
 local Settings_mt = Class(Settings)
 
--- Константи рівнів складності (як у CombineXP)
+-- Константи рівнів складності
 Settings.DIFFICULTY_ARCADE = 1
 Settings.DIFFICULTY_NORMAL = 2
 Settings.DIFFICULTY_REALISTIC = 3
 
--- Power boost values (з CombineXP)
+-- Power boost values
 Settings.POWER_BOOST_ARCADE = 100     -- 100% boost → maxLoad = 200%
 Settings.POWER_BOOST_NORMAL = 20      -- 20% boost → maxLoad = 120%
 Settings.POWER_BOOST_REALISTIC = 0    -- 0% boost → maxLoad = 100%
@@ -24,7 +24,9 @@ function Settings.new(manager)
     self.enableSpeedLimit = true
     self.enableCropLoss = false
     self.showHUD = true
+    self.showSpeedometer = true  -- Показувати оптимальну швидкість в HUD
     
+
     -- HUD settings
     self.hudOffsetX = 0  -- Горизонтальне зміщення (-200 to 200)
     self.hudOffsetY = 350  -- Вертикальне зміщення (100 to 500)

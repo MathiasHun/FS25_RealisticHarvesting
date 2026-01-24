@@ -14,7 +14,7 @@ function LoadCalculator.new(modDirectory)
     self.CROP_FACTORS = {}
     self:loadCropFactorsFromXML()
     
-    -- Дані для розрахунку середнього навантаження (як у CombineXP)
+    -- Дані для розрахунку середнього навантаження
     self.totalDistance = 0
     self.totalArea = 0
     self.currentTime = 0
@@ -28,7 +28,7 @@ function LoadCalculator.new(modDirectory)
     -- Поточне навантаження
     self.engineLoad = 0
     
-    -- Обмеження швидкості (як у CombineXP)
+    -- Обмеження швидкості
     self.speedLimit = 15  -- Поточний ліміт швидкості в км/год
     self.genuineSpeedLimit = 15  -- Оригінальний ліміт швидкості комбайна
     
@@ -105,7 +105,7 @@ end
 ---Встановлює базову продуктивність комбайна
 ---@param basePerf number Базова продуктивність в га/год
 function LoadCalculator:setBasePerformance(basePerf)
-    -- Конвертуємо га/год в м²/с (як у CombineXP)
+    -- Конвертуємо га/год в м²/с 
     self.basePerfAvgArea = basePerf / 36
     
     if self.debug then
@@ -118,7 +118,7 @@ end
 ---@param vehicle table Комбайн
 ---@return number Базова продуктивність в га/год
 function LoadCalculator:getBasePerformanceFromPower(vehicle)
-    local coef = 1.2  -- Коефіцієнт як у CombineXP
+    local coef = 1.2
     local power = 0
     
     -- Спробувати отримати потужність з motorized spec
@@ -167,7 +167,7 @@ function LoadCalculator:update(vehicle, dt, area)
     -- Оновлюємо час
     self.currentTime = self.currentTime + dt
     
-    -- Перевіряємо чи час для нового виміру (як у CombineXP)
+    -- Перевіряємо чи час для нового виміру
     if self.currentTime > self.avgTime or self.totalDistance > self.distanceForMeasuring then
         self:calculateEngineLoad(vehicle)
         self:calculateSpeedLimit(vehicle)
@@ -193,11 +193,11 @@ function LoadCalculator:calculateEngineLoad(vehicle)
         cropFactor = self.CROP_FACTORS[spec_combine.lastValidInputFruitType] or 1.0
     end
     
-    -- Розраховуємо середню площу за секунду (як у CombineXP)
+    -- Розраховуємо середню площу за секунду
     -- 500 = 1000 / 2, де 2 - це коефіцієнт для врахування добрив
     local avgArea = 500 * self.totalArea * cropFactor * g_currentMission:getFruitPixelsToSqm() / self.currentTime
     
-    -- Згладжування (як у CombineXP)
+    -- Згладжування
     if self.currentAvgArea > (0.75 * self.basePerfAvgArea) then
         avgArea = 0.5 * self.currentAvgArea + 0.5 * avgArea
     end
@@ -227,7 +227,7 @@ function LoadCalculator:calculateEngineLoad(vehicle)
     end
 end
 
----Розраховує обмеження швидкості (як у CombineXP)
+---Розраховує обмеження швидкості
 ---@param vehicle table Комбайн
 function LoadCalculator:calculateSpeedLimit(vehicle)
     if self.currentAvgArea == 0 then
@@ -238,13 +238,13 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
     -- Отримуємо поточну швидкість
     local avgSpeed = 1000 * self.totalDistance / self.currentTime  -- м/с
     
-    -- Отримуємо power boost з налаштувань (як у CombineXP)
+    -- Отримуємо power boost з налаштувань
     local powerBoost = 0
     if g_realisticHarvestManager and g_realisticHarvestManager.settings then
         powerBoost = g_realisticHarvestManager.settings:getPowerBoost()
     end
     
-    -- Максимальна допустима площа з урахуванням power boost (як у CombineXP)
+    -- Максимальна допустима площа з урахуванням power boost
     -- Формула: maxAvgArea = (1 + 0.01 * powerBoost) * basePerfAvgArea
     local maxAvgArea = (1 + 0.01 * powerBoost) * self.basePerfAvgArea
     
@@ -253,7 +253,8 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
     --     self.currentAvgArea, maxAvgArea, (self.currentAvgArea / maxAvgArea) * 100)
     
     -- Розраховуємо прискорення площі (як у CombineXP)
-    local areaAcc = (self.currentAvgArea - self.basePerfAvgArea) / self.currentTime
+    -- ВИПРАВЛЕНО: порівнюємо з попереднім значенням, а не з константою
+    local areaAcc = (avgArea - self.currentAvgArea) / self.currentTime
     
     local predictLimitSet = false
     
@@ -271,12 +272,12 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
     end
     
     if not predictLimitSet then
-        -- ФІНАЛЬНА АГРЕСИВНА ЛОГІКА:
-        -- >90% → зменшити швидкість (високе навантаження)
-        -- 60-90% → тримати поточну (широка стабільна зона)
-        -- <60% → збільшити (великий запас)
+        -- ОПТИМІЗОВАНА ЛОГІКА (як у CombineXP):
+        -- >105% → зменшити швидкість (перевантаження з hysteresis)
+        -- 100-105% → стабільна зона (вузька для швидкої реакції)
+        -- <100% → збільшити (є запас потужності)
         
-        if self.currentAvgArea > (0.90 * maxAvgArea) then
+        if self.currentAvgArea > (1.05 * maxAvgArea) then
             -- Високе навантаження - зменшити швидкість
             local oldLimit = self.speedLimit
             self.speedLimit = math.max(2, math.min(self.speedLimit, avgSpeed * 3.6) - 10 * (1 - maxAvgArea / self.currentAvgArea)^2)
@@ -284,8 +285,8 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
                 -- Logging.info("RHM: [LoadCalc] HIGH LOAD (%.1f%%) - reducing speed %.1f -> %.1f km/h", 
                 --     (self.currentAvgArea / maxAvgArea) * 100, oldLimit, self.speedLimit)
             end
-        elseif self.currentAvgArea < (0.60 * maxAvgArea) then
-            -- Є великий запас - збільшити швидкість
+        elseif self.currentAvgArea < maxAvgArea then
+            -- Є запас потужності - збільшити швидкість
             local oldLimit = self.speedLimit
             self.speedLimit = math.min(self.genuineSpeedLimit, self.speedLimit + 0.1 * (maxAvgArea / self.currentAvgArea)^3)
             if oldLimit ~= self.speedLimit then

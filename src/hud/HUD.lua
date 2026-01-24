@@ -55,7 +55,7 @@ function HUD:setVehicle(vehicle)
     end
 end
 
--- Викликається після завантаження місії (як у CombineXP)
+-- Викликається після завантаження місії
 function HUD:load()
     if not g_currentMission or not g_currentMission.hud or not g_currentMission.hud.speedMeter then
         Logging.warning("RHM: SpeedMeter not available - cannot create HUD overlay!")
@@ -264,7 +264,7 @@ function HUD:drawText()
         renderText(textX, textY, textSize, "--")
     end
     
-    -- Рядок 3: Loss (якщо включений) АБО Speed (якщо Loss вимкнений і Speed потрібен)
+    -- Рядок 3: Loss (якщо включений) АБО Speed (якщо налаштовано показувати)
     textY = textY - lineHeight
     
     if self.settings.enableCropLoss then
@@ -279,8 +279,8 @@ function HUD:drawText()
             renderText(textX, textY, textSize, "0%")
         end
         
-        -- Рядок 4: Speed (ТІЛЬКИ якщо Loss включений І Speed потрібен)
-        if not self.settings.enableSpeedLimit and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
+        -- Рядок 4: Speed (якщо включений showSpeedometer)
+        if self.settings.showSpeedometer and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
             textY = textY - lineHeight
             drawRowWithIcon(self.iconSpeed, textY)
             
@@ -291,19 +291,19 @@ function HUD:drawText()
             
             local speedColor
             if currentSpeed > (self.data.recommendedSpeed + 2) then
-                speedColor = {1, 0.4, 0.4, 1}
+                speedColor = {1, 0.4, 0.4, 1}  -- червоний - дуже швидко
             elseif currentSpeed > self.data.recommendedSpeed then
-                speedColor = {1, 1, 0.4, 1}
+                speedColor = {1, 1, 0.4, 1}  -- жовтий - трохи швидко
             else
-                speedColor = {1, 1, 1, 1}
+                speedColor = {1, 1, 1, 1}  -- білий - ОК
             end
             
             setTextColor(speedColor[1], speedColor[2], speedColor[3], speedColor[4])
             renderText(textX, textY, textSize, 
                 string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
         end
-    elseif not self.settings.enableSpeedLimit and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
-        -- Loss вимкнений, Speed потрібен І Є ДАНІ - показуємо Speed на місці Loss (рядок 3)
+    elseif self.settings.showSpeedometer and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
+        -- Loss вимкнений, але Speed потрібен - показуємо Speed на місці Loss (рядок 3)
         drawRowWithIcon(self.iconSpeed, textY)
         
         local currentSpeed = 0

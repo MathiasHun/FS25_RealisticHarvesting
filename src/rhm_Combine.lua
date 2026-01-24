@@ -198,7 +198,7 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     return limit, doCheckSpeedLimit
 end
 
--- Викликається періодично для оновлення логіки (як у CombineXP)
+-- Викликається періодично для оновлення логіки
 function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelection, isSelected)
     if rhm_Combine.debug then
         print("RHM: rhm_Combine:onUpdateTick called")
@@ -226,7 +226,7 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         return
     end
     
-    -- Перевіряємо чи жатка працює (як у CombineXP)
+    -- Перевіряємо чи жатка працює
     local cutterIsTurnedOn = false
     for cutter, _ in pairs(spec_combine.attachedCutters) do
         if cutter.spec_cutter then
