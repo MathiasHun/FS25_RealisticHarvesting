@@ -217,6 +217,71 @@
             <uk>Відображати рекомендовану швидкість в HUD</uk>
             <ru>Показывать рекомендуемую скорость в HUD</ru>
         </text>
+        
+        <text name="rhm_units_short">
+            <en>Units</en>
+            <de>Einheiten</de>
+            <fr>Unités</fr>
+            <pl>Jednostki</pl>
+            <es>Unidades</es>
+            <it>Unità</it>
+            <cz>Jednotky</cz>
+            <br>Unidades</br>
+            <uk>Одиниці</uk>
+            <ru>Единицы</ru>
+        </text>
+        
+        <text name="rhm_units_long">
+            <en>Choose measurement system (speed, mass, area)</en>
+            <de>Wählen Sie das Messsystem (Geschwindigkeit, Masse, Fläche)</de>
+            <fr>Choisissez le système de mesure (vitesse, masse, superficie)</fr>
+            <pl>Wybierz system pomiarowy (prędkość, masa, powierzchnia)</pl>
+            <es>Elija el sistema de medición (velocidad, masa, área)</es>
+            <it>Scegli il sistema di misurazione (velocità, massa, area)</it>
+            <cz>Vyberte měrný systém (rychlost, hmotnost, plocha)</cz>
+            <br>Escolha o sistema de medição (velocidade, massa, área)</br>
+            <uk>Оберіть систему вимірювання (швидкість, маса, площа)</uk>
+            <ru>Выберите систему измерения (скорость, масса, площадь)</ru>
+        </text>
+        
+        <text name="rhm_unit_metric">
+            <en>Metric (km/h, t/h, ha)</en>
+            <de>Metrisch (km/h, t/h, ha)</de>
+            <fr>Métrique (km/h, t/h, ha)</fr>
+            <pl>Metryczny (km/h, t/h, ha)</pl>
+            <es>Métrico (km/h, t/h, ha)</es>
+            <it>Metrico (km/h, t/h, ha)</it>
+            <cz>Metrický (km/h, t/h, ha)</cz>
+            <br>Métrico (km/h, t/h, ha)</br>
+            <uk>Метричні (км/год, т/год, га)</uk>
+            <ru>Метрические (км/ч, т/ч, га)</ru>
+        </text>
+        
+        <text name="rhm_unit_imperial">
+            <en>Imperial (mph, ton/h, ac)</en>
+            <de>Imperial (mph, ton/h, ac)</de>
+            <fr>Impérial (mph, ton/h, ac)</fr>
+            <pl>Imperialny (mph, ton/h, ac)</pl>
+            <es>Imperial (mph, ton/h, ac)</es>
+            <it>Imperiale (mph, ton/h, ac)</it>
+            <cz>Imperiální (mph, ton/h, ac)</cz>
+            <br>Imperial (mph, ton/h, ac)</br>
+            <uk>Імперські (mph, ton/h, ac)</uk>
+            <ru>Имперские (mph, ton/h, ac)</ru>
+        </text>
+        
+        <text name="rhm_unit_bushels">
+            <en>Imperial with Bushels (mph, bu/h, ac)</en>
+            <de>Imperial mit Bushels (mph, bu/h, ac)</de>
+            <fr>Impérial avec boisseaux (mph, bu/h, ac)</fr>
+            <pl>Imperialny z buszelami (mph, bu/h, ac)</pl>
+            <es>Imperial con bushels (mph, bu/h, ac)</es>
+            <it>Imperiale con bushel (mph, bu/h, ac)</it>
+            <cz>Imperiální s bušly (mph, bu/h, ac)</cz>
+            <br>Imperial com bushels (mph, bu/h, ac)</br>
+            <uk>Імперські з бушелями (mph, bu/h, ac)</uk>
+            <ru>Имперские с бушелями (mph, bu/h, ac)</ru>
+        </text>
 
         <text name="rhm_reset">
             <en>Reset RH Settings</en>

@@ -13,6 +13,11 @@ Settings.POWER_BOOST_ARCADE = 100     -- 100% boost → maxLoad = 200%
 Settings.POWER_BOOST_NORMAL = 20      -- 20% boost → maxLoad = 120%
 Settings.POWER_BOOST_REALISTIC = 0    -- 0% boost → maxLoad = 100%
 
+-- Unit system constants
+Settings.UNIT_METRIC = 1     -- km/h, t/h, ha
+Settings.UNIT_IMPERIAL = 2   -- mph, ton/h, acres
+Settings.UNIT_BUSHELS = 3    -- mph, bu/h, acres
+
 function Settings.new(manager)
     local self = setmetatable({}, Settings_mt)
     self.manager = manager
@@ -30,6 +35,9 @@ function Settings.new(manager)
     -- HUD settings
     self.hudOffsetX = 0  -- Горизонтальне зміщення (-200 to 200)
     self.hudOffsetY = 350  -- Вертикальне зміщення (100 to 500)
+    
+    -- Unit system
+    self.unitSystem = Settings.UNIT_METRIC  -- Metric за замовчуванням
     
     Logging.info("RHM: Settings initialized with difficulty: Normal")
     
@@ -58,6 +66,12 @@ function Settings:getLossMultiplier()
     else
         return 1.0 -- Нормальні втрати
     end
+end
+
+---Отримує поточну систему одиниць вимірювання
+---@return number Unit system (1=metric, 2=imperial, 3=bushels)
+function Settings:getUnitSystem()
+    return self.unitSystem or Settings.UNIT_METRIC
 end
 
 ---Встановлює рівень складності

@@ -6,6 +6,7 @@ source(modDirectory .. "src/settings/SettingsManager.lua")
 source(modDirectory .. "src/settings/Settings.lua")
 source(modDirectory .. "src/settings/SettingsGUI.lua")  -- Console commands for settings
 source(modDirectory .. "src/utils/UIHelper.lua")
+source(modDirectory .. "src/utils/UnitConverter.lua")  -- Unit conversion utility
 source(modDirectory .. "src/settings/SettingsUI.lua")
 source(modDirectory .. "src/hud/HUDRenderer.lua")
 source(modDirectory .. "src/hud/HUD.lua")

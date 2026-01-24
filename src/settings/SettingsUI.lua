@@ -90,11 +90,31 @@ function SettingsUI:inject()
         end
     )
     
+    -- Додаємо Unit System selector (Multi)
+    local unitOptions = {
+        g_i18n:getText("rhm_unit_metric"),
+        g_i18n:getText("rhm_unit_imperial"),
+        g_i18n:getText("rhm_unit_bushels")
+    }
+    
+    local unitOpt = UIHelper.createMultiOption(
+        layout,
+        "rhm_units",
+        "rhm_units",
+        unitOptions,
+        self.settings.unitSystem,
+        function(val)
+            self.settings.unitSystem = val
+            self.settings:save()
+        end
+    )
+    
     -- Зберігаємо посилання на UI елементи для можливості оновлення
     self.difficultyOption = diffOpt
     self.hudOption = hudOpt
     self.speedLimitOption = speedLimitOpt
     self.cropLossOption = cropLossOpt
+    self.unitSystemOption = unitOpt
     
     self.injected = true
     -- Викликаємо invalidateLayout для правильного відображення елементів
@@ -135,6 +155,11 @@ function SettingsUI:refreshUI()
     -- Оновлюємо Crop Loss
     if self.cropLossOption and self.cropLossOption.setIsChecked then
         self.cropLossOption:setIsChecked(self.settings.enableCropLoss)
+    end
+    
+    -- Оновлюємо Unit System
+    if self.unitSystemOption and self.unitSystemOption.setState then
+        self.unitSystemOption:setState(self.settings.unitSystem)
     end
     
     print("RHM: UI refreshed")
