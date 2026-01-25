@@ -5,6 +5,22 @@ local SettingsManager_mt = Class(SettingsManager)
 SettingsManager.MOD_NAME = g_currentModName
 SettingsManager.XMLTAG = "realisticHarvestManager"
 
+-- Server-side settings (global, admin only)
+SettingsManager.SERVER_SETTINGS = {
+    "difficulty",
+    "powerBoost",
+    "enableSpeedLimit",
+    "enableCropLoss"
+}
+
+-- Client-side settings (personal, per-player)
+SettingsManager.CLIENT_SETTINGS = {
+    "showHUD",
+    "hudOffsetX",
+    "hudOffsetY",
+    "unitSystem"
+}
+
 SettingsManager.defaultConfig = {
     difficulty = 2,  -- Normal
     showHUD = true,
@@ -19,53 +35,138 @@ function SettingsManager.new()
     return setmetatable({}, SettingsManager_mt)
 end
 
-function SettingsManager:getSavegameXmlFilePath()
+-- Get path for server settings (in savegame directory)
+function SettingsManager:getServerXmlFilePath()
     if g_currentMission.missionInfo and g_currentMission.missionInfo.savegameDirectory then
-        return ("%s/%s.xml"):format(g_currentMission.missionInfo.savegameDirectory, SettingsManager.MOD_NAME)
+        return ("%s/%s_server.xml"):format(g_currentMission.missionInfo.savegameDirectory, SettingsManager.MOD_NAME)
     end
     return nil
 end
 
-function SettingsManager:loadSettings(settingsObject)
-    local xmlPath = self:getSavegameXmlFilePath()
+-- Get path for client settings (in user profile directory)
+function SettingsManager:getClientXmlFilePath()
+    local userDir = getUserProfileAppPath()
+    if userDir then
+        return ("%s%s_client.xml"):format(userDir, SettingsManager.MOD_NAME)
+    end
+    return nil
+end
+
+-- Legacy method for backward compatibility
+function SettingsManager:getSavegameXmlFilePath()
+    return self:getServerXmlFilePath()
+end
+
+-- Load server settings (everyone reads)
+function SettingsManager:loadServerSettings(settingsObject)
+    local xmlPath = self:getServerXmlFilePath()
     if xmlPath and fileExists(xmlPath) then
-        local xml = XMLFile.load("RHM_Config", xmlPath)
+        local xml = XMLFile.load("RHM_ServerConfig", xmlPath)
         if xml then
-            settingsObject.difficulty = xml:getInt(self.XMLTAG..".difficulty", self.defaultConfig.difficulty)
-            settingsObject.showHUD = xml:getBool(self.XMLTAG..".showHUD", self.defaultConfig.showHUD)
-            settingsObject.enableSpeedLimit = xml:getBool(self.XMLTAG..".enableSpeedLimit", self.defaultConfig.enableSpeedLimit)
-            settingsObject.enableCropLoss = xml:getBool(self.XMLTAG..".enableCropLoss", self.defaultConfig.enableCropLoss)
-            settingsObject.hudOffsetX = xml:getInt(self.XMLTAG..".hudOffsetX", self.defaultConfig.hudOffsetX)
-            settingsObject.hudOffsetY = xml:getInt(self.XMLTAG..".hudOffsetY", self.defaultConfig.hudOffsetY)
-            settingsObject.unitSystem = xml:getInt(self.XMLTAG..".unitSystem", self.defaultConfig.unitSystem)
+            for _, key in ipairs(self.SERVER_SETTINGS) do
+                local xmlKey = self.XMLTAG.."."..key
+                if key == "difficulty" or key == "powerBoost" or key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
+                    settingsObject[key] = xml:getInt(xmlKey, self.defaultConfig[key])
+                else
+                    settingsObject[key] = xml:getBool(xmlKey, self.defaultConfig[key])
+                end
+            end
             xml:delete()
             return
         end
     end
-    -- Fallback
-    settingsObject.difficulty = self.defaultConfig.difficulty
-    settingsObject.showHUD = self.defaultConfig.showHUD
-    settingsObject.enableSpeedLimit = self.defaultConfig.enableSpeedLimit
-    settingsObject.enableCropLoss = self.defaultConfig.enableCropLoss
-    settingsObject.hudOffsetX = self.defaultConfig.hudOffsetX
-    settingsObject.hudOffsetY = self.defaultConfig.hudOffsetY
-    settingsObject.unitSystem = self.defaultConfig.unitSystem
+    
+    -- Fallback to defaults
+    for _, key in ipairs(self.SERVER_SETTINGS) do
+        settingsObject[key] = self.defaultConfig[key]
+    end
 end
 
-function SettingsManager:saveSettings(settingsObject)
-    local xmlPath = self:getSavegameXmlFilePath()
+-- Load client settings (each client reads their own)
+function SettingsManager:loadClientSettings(settingsObject)
+    local xmlPath = self:getClientXmlFilePath()
+    if xmlPath and fileExists(xmlPath) then
+        local xml = XMLFile.load("RHM_ClientConfig", xmlPath)
+        if xml then
+            for _, key in ipairs(self.CLIENT_SETTINGS) do
+                local xmlKey = self.XMLTAG.."."..key
+                if key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
+                    settingsObject[key] = xml:getInt(xmlKey, self.defaultConfig[key])
+                else
+                    settingsObject[key] = xml:getBool(xmlKey, self.defaultConfig[key])
+                end
+            end
+            xml:delete()
+            return
+        end
+    end
+    
+    -- Fallback to defaults
+    for _, key in ipairs(self.CLIENT_SETTINGS) do
+        settingsObject[key] = self.defaultConfig[key]
+    end
+end
+
+-- Main load method (loads both server and client settings)
+function SettingsManager:loadSettings(settingsObject)
+    -- Everyone loads server settings
+    self:loadServerSettings(settingsObject)
+    
+    -- Each client loads their own client settings
+    if g_currentMission:getIsClient() then
+        self:loadClientSettings(settingsObject)
+    end
+end
+
+-- Save server settings (only server)
+function SettingsManager:saveServerSettings(settingsObject)
+    local xmlPath = self:getServerXmlFilePath()
     if not xmlPath then return end
     
-    local xml = XMLFile.create("RHM_Config", xmlPath, self.XMLTAG)
+    local xml = XMLFile.create("RHM_ServerConfig", xmlPath, self.XMLTAG)
     if xml then
-        xml:setInt(self.XMLTAG..".difficulty", settingsObject.difficulty)
-        xml:setBool(self.XMLTAG..".showHUD", settingsObject.showHUD)
-        xml:setBool(self.XMLTAG..".enableSpeedLimit", settingsObject.enableSpeedLimit)
-        xml:setBool(self.XMLTAG..".enableCropLoss", settingsObject.enableCropLoss)
-        xml:setInt(self.XMLTAG..".hudOffsetX", settingsObject.hudOffsetX)
-        xml:setInt(self.XMLTAG..".hudOffsetY", settingsObject.hudOffsetY)
-        xml:setInt(self.XMLTAG..".unitSystem", settingsObject.unitSystem)
+        for _, key in ipairs(self.SERVER_SETTINGS) do
+            local xmlKey = self.XMLTAG.."."..key
+            if key == "difficulty" or key == "powerBoost" then
+                xml:setInt(xmlKey, settingsObject[key])
+            else
+                xml:setBool(xmlKey, settingsObject[key])
+            end
+        end
         xml:save()
         xml:delete()
+    end
+end
+
+-- Save client settings (each client)
+function SettingsManager:saveClientSettings(settingsObject)
+    local xmlPath = self:getClientXmlFilePath()
+    if not xmlPath then return end
+    
+    local xml = XMLFile.create("RHM_ClientConfig", xmlPath, self.XMLTAG)
+    if xml then
+        for _, key in ipairs(self.CLIENT_SETTINGS) do
+            local xmlKey = self.XMLTAG.."."..key
+            if key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
+                xml:setInt(xmlKey, settingsObject[key])
+            else
+                xml:setBool(xmlKey, settingsObject[key])
+            end
+        end
+        xml:save()
+        xml:delete()
+    end
+end
+
+-- Main save method (saves server and/or client settings based on context)
+function SettingsManager:saveSettings(settingsObject)
+    -- Server saves server settings
+    if g_currentMission:getIsServer() then
+        self:saveServerSettings(settingsObject)
+    end
+    
+    -- Each client saves their own client settings
+    if g_currentMission:getIsClient() then
+        self:saveClientSettings(settingsObject)
     end
 end

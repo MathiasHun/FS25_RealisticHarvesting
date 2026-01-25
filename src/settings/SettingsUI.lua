@@ -33,26 +33,79 @@ function SettingsUI:inject()
         return
     end
     
-    -- Додаємо складність (Multi)
-    local diffOptions = {
-        getTextSafe("rhm_diff_1"),
-        getTextSafe("rhm_diff_2"),
-        getTextSafe("rhm_diff_3")
-    }
+    -- Перевіряємо права адміністратора
+    local isAdmin = self.settings:canChangeServerSettings()
     
-    local diffOpt = UIHelper.createMultiOption(
-        layout,
-        "rhm_diff",
-        "rhm_difficulty",
-        diffOptions,
-        self.settings.difficulty,
-        function(val)
-            self.settings.difficulty = val
-            self.settings:save()
-        end
-    )
+    -- === SERVER SETTINGS (тільки адмін може змінювати) ===
+    if isAdmin then
+        -- Адмін: показуємо редаговані опції
+        
+        -- Difficulty (Multi)
+        local diffOptions = {
+            getTextSafe("rhm_diff_1"),
+            getTextSafe("rhm_diff_2"),
+            getTextSafe("rhm_diff_3")
+        }
+        
+        local diffOpt = UIHelper.createMultiOption(
+            layout,
+            "rhm_diff",
+            "rhm_difficulty",
+            diffOptions,
+            self.settings.difficulty,
+            function(val)
+                self.settings.difficulty = val
+                self.settings:save()
+                -- Broadcast to clients if multiplayer
+                if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                    SettingsSync:sendToClients(self.settings)
+                end
+            end
+        )
+        self.difficultyOption = diffOpt
+        
+        -- Speed Limit (Binary)
+        local speedLimitOpt = UIHelper.createBinaryOption(
+            layout,
+            "rhm_speedlimit",
+            "rhm_speedlimit",
+            self.settings.enableSpeedLimit,
+            function(val)
+                self.settings.enableSpeedLimit = val
+                self.settings:save()
+                if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                    SettingsSync:sendToClients(self.settings)
+                end
+            end
+        )
+        self.speedLimitOption = speedLimitOpt
+        
+        -- Crop Loss (Binary)
+        local cropLossOpt = UIHelper.createBinaryOption(
+            layout,
+            "rhm_croploss",
+            "rhm_croploss",
+            self.settings.enableCropLoss,
+            function(val)
+                self.settings.enableCropLoss = val
+                self.settings:save()
+                if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                    SettingsSync:sendToClients(self.settings)
+                end
+            end
+        )
+        self.cropLossOption = cropLossOpt
+        
+    else
+        -- Не-адмін: показуємо read-only інформацію
+        -- TODO: Створити read-only text elements
+        -- Поки що просто не показуємо server settings для non-admins
+        print("RHM: Non-admin user - server settings hidden")
+    end
     
-    -- Додаємо HUD перемикач (Binary)
+    -- === CLIENT SETTINGS (всі можуть змінювати) ===
+    
+    -- HUD (Binary)
     local hudOpt = UIHelper.createBinaryOption(
         layout,
         "rhm_hud",
@@ -63,34 +116,9 @@ function SettingsUI:inject()
             self.settings:save()
         end
     )
+    self.hudOption = hudOpt
     
-    -- Додаємо Speed Limit перемикач (Binary)
-    local speedLimitOpt = UIHelper.createBinaryOption(
-        layout,
-        "rhm_speedlimit",
-        "rhm_speedlimit",
-        self.settings.enableSpeedLimit,
-        function(val)
-            self.settings.enableSpeedLimit = val
-            self.settings:save()
-            -- Logging.info("RHM: Speed Limiting %s", val and "enabled" or "disabled")
-        end
-    )
-    
-    -- Додаємо Crop Loss перемикач (Binary)
-    local cropLossOpt = UIHelper.createBinaryOption(
-        layout,
-        "rhm_croploss",
-        "rhm_croploss",
-        self.settings.enableCropLoss,
-        function(val)
-            self.settings.enableCropLoss = val
-            self.settings:save()
-            -- Logging.info("RHM: Crop Loss %s", val and "enabled" or "disabled")
-        end
-    )
-    
-    -- Додаємо Unit System selector (Multi)
+    -- Unit System (Multi)
     local unitOptions = {
         g_i18n:getText("rhm_unit_metric"),
         g_i18n:getText("rhm_unit_imperial"),
@@ -108,12 +136,6 @@ function SettingsUI:inject()
             self.settings:save()
         end
     )
-    
-    -- Зберігаємо посилання на UI елементи для можливості оновлення
-    self.difficultyOption = diffOpt
-    self.hudOption = hudOpt
-    self.speedLimitOption = speedLimitOpt
-    self.cropLossOption = cropLossOpt
     self.unitSystemOption = unitOpt
     
     self.injected = true

@@ -104,6 +104,38 @@ function Settings:getDifficultyName()
     end
 end
 
+---Перевіряє чи поточний гравець - адміністратор
+---@return boolean True якщо адмін
+function Settings:isAdmin()
+    -- В одиночній грі завжди адмін
+    if not g_currentMission.missionDynamicInfo.isMultiplayer then
+        return true
+    end
+    
+    -- В мультиплеєрі перевіряємо чи це сервер або master user
+    if g_currentMission:getIsServer() then
+        return true
+    end
+    
+    -- Перевіряємо чи гравець має права адміністратора
+    if g_currentMission.isMasterUser then
+        return true
+    end
+    
+    -- Перевіряємо через userManager (якщо доступний)
+    if g_currentMission.userManager and g_currentMission.playerUserId then
+        return g_currentMission.userManager:getIsUserAdmin(g_currentMission.playerUserId)
+    end
+    
+    return false
+end
+
+---Перевіряє чи можна змінювати server-side налаштування
+---@return boolean True якщо можна змінювати
+function Settings:canChangeServerSettings()
+    return self:isAdmin()
+end
+
 ---Завантажує налаштування
 function Settings:load()
     -- Перевіряємо що difficulty це число
@@ -128,6 +160,14 @@ function Settings:save()
     end
     
     self.manager:saveSettings(self)
+    
+    -- Broadcast server settings to clients if multiplayer and admin
+    if g_currentMission.missionDynamicInfo.isMultiplayer and 
+       self:isAdmin() and 
+       SettingsSync then
+        SettingsSync:sendToClients(self)
+    end
+    
     -- Logging.info("RHM: Settings Saved. Difficulty: %s, HUD: %s", 
     --    self:getDifficultyName(), tostring(self.showHUD))
 end

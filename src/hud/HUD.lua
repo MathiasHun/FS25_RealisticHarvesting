@@ -138,6 +138,16 @@ end
 
 ---Відображення HUD
 function HUD:draw()
+    -- DEDICATED SERVER FIX: Don't render on server
+    if not g_currentMission:getIsClient() then
+        return
+    end
+    
+    -- DEDICATED SERVER FIX: Don't render if no player (edge case)
+    if g_currentMission.player == nil then
+        return
+    end
+    
     self.drawCount = self.drawCount + 1
     
     -- Перевіряємо чи увімкнено HUD в налаштуваннях
