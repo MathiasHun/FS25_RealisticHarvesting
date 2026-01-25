@@ -75,7 +75,6 @@ function rhm_Combine:addCutterArea(superFunc, area, liters, inputFruitType, outp
         return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
     end
     
-    -- КРИТИЧНЕ ВИПРАВЛЕННЯ з CombineXP:
     -- Отримуємо lastMultiplier з workAreaParameters жатки
     -- Цей множник враховує добрива (0-100%), густину врожаю, вологість
     local multiplier = 1.0
@@ -159,7 +158,6 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     -- Перевіряємо чи genuineSpeedLimit ще не ініціалізований (дорівнює початковому значенню 15)
     -- І перевіряємо що limit - це реальне число (не inf)
     if spec.loadCalculator.genuineSpeedLimit == 15 and limit ~= math.huge then
-        -- КРИТИЧНЕ ВИПРАВЛЕННЯ з CombineXP:
         -- Використовуємо 1.5x від ліміту гри, мінімум 18 км/год
         -- Це дозволяє комбайну їхати швидше на легких полях!
         local genuineLimit = math.max(1.5 * limit, 18.0)
@@ -238,10 +236,10 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     end
     
     if not cutterIsTurnedOn then
-        -- Жатка не працює - скидаємо навантаження
-        spec.loadCalculator:reset()
+        -- Жатка не працює (але не скидаємо loadCalculator повністю, щоб уникнути стрибків при зупинках)
+        -- spec.loadCalculator:reset() -- ВИДАЛЕНО: Викликало нестабільність при короткочасних зупинках
         if spec.data then
-            spec.data.load = 0
+            -- spec.data.load = 0 -- Не обнуляємо візуально, хай показує останнє
         end
         spec.isSpeedLimitActive = false
         return

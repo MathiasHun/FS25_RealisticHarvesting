@@ -80,8 +80,8 @@ function HUD:createOverlay()
     local posX = speedMeter.speedBg.x
     local posY = speedMeter.speedBg.y
     
-    -- Створюємо overlay з білою текстурою
-    local whiteTexture = self.modDirectory .. "textures/white.dds"
+    -- Створюємо overlay з dds текстурою
+    local whiteTexture = self.modDirectory .. "textures/hud_background.dds"
     self.backgroundOverlay = Overlay.new(whiteTexture, posX, posY, width, height)
     self.backgroundOverlay:setColor(0, 0, 0, 0.5) -- Чорний з 50% непрозорістю
     
@@ -258,7 +258,12 @@ function HUD:drawText()
     
     if self.data.tonPerHour and self.data.tonPerHour > 0.01 then
         setTextColor(1, 1, 1, 0.95)
-        renderText(textX, textY, textSize, string.format("%.1f", self.data.tonPerHour))
+        local prodStr = string.format("%.1f t/h", self.data.tonPerHour)
+        if UnitConverter then
+             -- Use nil for fruitType (defaults to wheat) until we add it to data
+            prodStr = UnitConverter.formatProductivity(self.data.tonPerHour, self.settings.unitSystem, nil)
+        end
+        renderText(textX, textY, textSize, prodStr)
     else
         setTextColor(0.6, 0.6, 0.6, 0.8)
         renderText(textX, textY, textSize, "--")
@@ -298,9 +303,15 @@ function HUD:drawText()
                 speedColor = {1, 1, 1, 1}  -- білий - ОК
             end
             
+            local speedStr = string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed)
+            if UnitConverter then
+                local s1, suffix = UnitConverter.convertSpeed(currentSpeed, self.settings.unitSystem)
+                local s2 = UnitConverter.convertSpeed(self.data.recommendedSpeed, self.settings.unitSystem)
+                speedStr = string.format("%.1f / %.1f %s", s1, s2, suffix)
+            end
+            
             setTextColor(speedColor[1], speedColor[2], speedColor[3], speedColor[4])
-            renderText(textX, textY, textSize, 
-                string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
+            renderText(textX, textY, textSize, speedStr)
         end
     elseif self.settings.showSpeedometer and self.data.recommendedSpeed and self.data.recommendedSpeed > 0 then
         -- Loss вимкнений, але Speed потрібен - показуємо Speed на місці Loss (рядок 3)

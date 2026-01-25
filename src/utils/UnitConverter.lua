@@ -14,32 +14,38 @@ UnitConverter.HECTARE_TO_ACRE = 2.47105
 
 -- Bushel conversion coefficients (tonnes to bushels per hour)
 -- Based on standard USDA bushel weights for each crop
-UnitConverter.BUSHEL_COEFFICIENTS = {
-    -- Cereals
-    [FruitType.WHEAT] = 36.76,         -- 27.2 kg (60 lbs)
-    [FruitType.BARLEY] = 45.87,        -- 21.8 kg (48 lbs)
-    [FruitType.OAT] = 68.97,           -- 14.5 kg (32 lbs)
-    [FruitType.RICE] = 49.02,          -- 20.4 kg (45 lbs)
-    [FruitType.RICELONGGRAIN] = 49.02, -- 20.4 kg (45 lbs)
-    [FruitType.SORGHUM] = 39.37,       -- 25.4 kg (56 lbs)
+UnitConverter.BUSHEL_COEFFICIENTS = {}
+
+---Initialize bushel coefficients after FruitType is available
+function UnitConverter.initBushelCoefficients()
+    if not FruitType then
+        return
+    end
     
-    -- Oilseeds
-    [FruitType.SOYBEAN] = 36.76,       -- 27.2 kg (60 lbs)
-    [FruitType.CANOLA] = 44.05,        -- 22.7 kg (50 lbs)
-    [FruitType.SUNFLOWER] = 88.50,     -- 11.3 kg (25 lbs)
+    UnitConverter.BUSHEL_COEFFICIENTS = {} -- Initialize here
     
-    -- Row crops
-    [FruitType.MAIZE] = 39.37,         -- 25.4 kg (56 lbs)
-    [FruitType.COTTON] = 62.89,        -- 15.9 kg (35 lbs)
+    local function addCoef(name, val)
+        if FruitType[name] then UnitConverter.BUSHEL_COEFFICIENTS[FruitType[name]] = val end
+    end
+
+    addCoef("WHEAT", 36.76)
+    addCoef("BARLEY", 45.87)
+    addCoef("OAT", 68.97)
+    addCoef("RICE", 49.02)
+    addCoef("RICELONGGRAIN", 49.02)
+    addCoef("SORGHUM", 39.37)
+    addCoef("SOYBEAN", 36.76)
+    addCoef("CANOLA", 44.05)
+    addCoef("SUNFLOWER", 88.50)
+    addCoef("MAIZE", 39.37)
+    addCoef("COTTON", 62.89)
+    addCoef("SUGARBEET", 44.05)
+    addCoef("POTATO", 36.76)
+    addCoef("GRASS", 40.0)
+    addCoef("DRYGRASS", 40.0)
     
-    -- Root crops (estimates, not standard)
-    [FruitType.SUGARBEET] = 44.05,     -- ~22.7 kg (estimate)
-    [FruitType.POTATO] = 36.76,        -- ~27.2 kg (estimate)
-    
-    -- Forage (no standard, using average)
-    [FruitType.GRASS] = 40.0,          -- Approximate
-    [FruitType.DRYGRASS] = 40.0,       -- Approximate
-}
+    print("RHM: UnitConverter initialized")
+end
 
 -- Default bushel coefficient (if crop not found)
 UnitConverter.BUSHEL_DEFAULT = 36.76  -- Use wheat as default

@@ -30,6 +30,11 @@ local function loadedMission(mission, node)
         return
     end
     
+    -- Init units safely
+    if UnitConverter and UnitConverter.initBushelCoefficients then
+        UnitConverter.initBushelCoefficients()
+    end
+    
     rhm:onMissionLoaded()
 end
 
