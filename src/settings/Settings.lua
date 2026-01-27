@@ -122,10 +122,8 @@ function Settings:isAdmin()
         return true
     end
     
-    -- Перевіряємо через userManager (якщо доступний)
-    if g_currentMission.userManager and g_currentMission.playerUserId then
-        return g_currentMission.userManager:getIsUserAdmin(g_currentMission.playerUserId)
-    end
+    -- Note: userManager:getIsUserAdmin() не існує в FS25
+    -- Для dedicated server тільки master user має права
     
     return false
 end

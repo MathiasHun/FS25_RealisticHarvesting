@@ -37,7 +37,8 @@ function rhm_Combine:onLoad(savegame)
     end
     
     -- Створюємо LoadCalculator з modDirectory
-    spec.loadCalculator = LoadCalculator.new(g_currentModDirectory)
+    local modDir = g_realisticHarvestManager and g_realisticHarvestManager.modDirectory or g_currentModDirectory
+    spec.loadCalculator = LoadCalculator.new(modDir)
     
     if not spec.loadCalculator then
         Logging.error("RHM: Failed to create LoadCalculator for combine: %s", self:getFullName())

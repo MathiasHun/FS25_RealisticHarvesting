@@ -8,7 +8,6 @@ SettingsManager.XMLTAG = "realisticHarvestManager"
 -- Server-side settings (global, admin only)
 SettingsManager.SERVER_SETTINGS = {
     "difficulty",
-    "powerBoost",
     "enableSpeedLimit",
     "enableCropLoss"
 }
@@ -127,7 +126,7 @@ function SettingsManager:saveServerSettings(settingsObject)
     if xml then
         for _, key in ipairs(self.SERVER_SETTINGS) do
             local xmlKey = self.XMLTAG.."."..key
-            if key == "difficulty" or key == "powerBoost" then
+            if key == "difficulty" then
                 xml:setInt(xmlKey, settingsObject[key])
             else
                 xml:setBool(xmlKey, settingsObject[key])

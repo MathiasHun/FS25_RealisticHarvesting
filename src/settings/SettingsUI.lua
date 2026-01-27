@@ -97,10 +97,9 @@ function SettingsUI:inject()
         self.cropLossOption = cropLossOpt
         
     else
-        -- Не-адмін: показуємо read-only інформацію
-        -- TODO: Створити read-only text elements
-        -- Поки що просто не показуємо server settings для non-admins
-        print("RHM: Non-admin user - server settings hidden")
+        -- Не-адмін: server settings приховані
+        -- TODO: В майбутньому можна додати read-only відображення
+        print("RHM: Non-admin user - server settings hidden (editable by admin only)")
     end
     
     -- === CLIENT SETTINGS (всі можуть змінювати) ===
