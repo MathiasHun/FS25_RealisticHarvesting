@@ -79,6 +79,7 @@ function SettingsManager:loadServerSettings(settingsObject)
     for _, key in ipairs(self.SERVER_SETTINGS) do
         settingsObject[key] = self.defaultConfig[key]
     end
+
 end
 
 -- Load client settings (each client reads their own)

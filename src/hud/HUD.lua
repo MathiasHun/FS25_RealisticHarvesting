@@ -46,11 +46,9 @@ function HUD:setVehicle(vehicle)
             self.data.load = spec.data.load
             self.data.cropLoss = spec.data.cropLoss
             self.data.tonPerHour = spec.data.tonPerHour
-        end
-        
-        -- Отримуємо рекомендовану швидкість з LoadCalculator
-        if spec and spec.loadCalculator then
-            self.data.recommendedSpeed = spec.loadCalculator:getSpeedLimit()
+            -- Читаємо recommendedSpeed з синхронізованих даних (onReadUpdateStream)
+            -- На сервері це значення встановлюється в onUpdateTick
+            self.data.recommendedSpeed = spec.data.recommendedSpeed or 0
         end
     end
 end
@@ -122,16 +120,15 @@ function HUD:updateData()
         return
     end
     
-    -- Оновлюємо load з loadCalculator
-    if spec.loadCalculator then
-        self.data.load = spec.loadCalculator:getCurrentLoad()
-        self.data.recommendedSpeed = spec.loadCalculator:getRecommendedSpeed()
-        self.data.tonPerHour = spec.loadCalculator:getTonPerHour()
-        
-        -- Crop loss (якщо є)
-        if spec.loadCalculator.getCropLoss then
-            self.data.cropLoss = spec.loadCalculator:getCropLoss()
-        end
+    -- Отримуємо швидкість (завжди синхронізовано грою)
+    self.data.speed = self.vehicle:getLastSpeed() or 0
+    
+    -- Читаємо дані з spec.data (синхронізовано через multiplayer)
+    if spec.data then
+        self.data.load = spec.data.load or 0
+        self.data.cropLoss = spec.data.cropLoss or 0
+        self.data.tonPerHour = spec.data.tonPerHour or 0
+        self.data.recommendedSpeed = spec.data.recommendedSpeed or 0
     end
 end
 

@@ -20,6 +20,12 @@ function rhm_Combine.registerEventListeners(vehicleType)
     SpecializationUtil.registerEventListener(vehicleType, "onLoad", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onUpdateTick", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onDraw", rhm_Combine)
+    
+    -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
+    SpecializationUtil.registerEventListener(vehicleType, "onReadStream", rhm_Combine)
+    SpecializationUtil.registerEventListener(vehicleType, "onWriteStream", rhm_Combine)
+    SpecializationUtil.registerEventListener(vehicleType, "onReadUpdateStream", rhm_Combine)
+    SpecializationUtil.registerEventListener(vehicleType, "onWriteUpdateStream", rhm_Combine)
 end
 
 -- Викликається при завантаженні комбайна
@@ -54,7 +60,8 @@ function rhm_Combine:onLoad(savegame)
         speed = 0,
         load = 0,
         cropLoss = 0,
-        tonPerHour = 0
+        tonPerHour = 0,
+        recommendedSpeed = 0  -- Буде оновлено в onUpdateTick на сервері та синхронізовано до клієнтів
     }
     
     -- Лічильник для збереження площі з addCutterArea
@@ -66,6 +73,9 @@ function rhm_Combine:onLoad(savegame)
     
     -- Прапорець чи активне обмеження швидкості
     spec.isSpeedLimitActive = false
+    
+    -- MULTIPLAYER: Dirty flag для синхронізації
+    spec.dirtyFlag = self:getNextDirtyFlag()
 end
 
 -- Перехоплюємо addCutterArea для отримання площі
@@ -266,7 +276,11 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         spec.data.load = spec.loadCalculator:getEngineLoad()
         spec.data.cropLoss = spec.loadCalculator:calculateCropLoss()
         spec.data.tonPerHour = spec.loadCalculator:getTonPerHour()
+        spec.data.recommendedSpeed = spec.loadCalculator:getSpeedLimit()
     end
+    
+    -- MULTIPLAYER: Позначаємо що дані змінились для синхронізації
+    self:raiseDirtyFlags(spec.dirtyFlag)
     
     if rhm_Combine.debug then
         print(string.format("RHM: Engine load updated: %.1f%%, Speed limit: %.1f km/h", 
@@ -318,3 +332,103 @@ function rhm_Combine:onDraw(isActiveForInput, isActiveForInputIgnoreSelection, i
         print(string.format("RHM: HUD drawn - Speed: %.1f km/h, Load: %.0f%%", spec.data.speed or 0, spec.data.load or 0))
     end
 end
+
+-- ============================================================================
+-- MULTIPLAYER SYNCHRONIZATION
+-- ============================================================================
+
+---Початкова синхронізація: Сервер пише дані коли клієнт підключається
+function rhm_Combine:onWriteStream(streamId, connection)
+    local spec = self.spec_rhm_Combine
+    if not spec or not spec.data then
+        -- Пишемо нулі якщо немає даних
+        streamWriteFloat32(streamId, 0)
+        streamWriteFloat32(streamId, 0)
+        streamWriteFloat32(streamId, 0)
+        streamWriteFloat32(streamId, 0)
+        return
+    end
+    
+    streamWriteFloat32(streamId, spec.data.load or 0)
+    streamWriteFloat32(streamId, spec.data.cropLoss or 0)
+    streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
+    streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
+end
+
+---Початкова синхронізація: Клієнт читає дані при підключенні
+function rhm_Combine:onReadStream(streamId, connection)
+    local spec = self.spec_rhm_Combine
+    if not spec then
+        -- Пропускаємо дані якщо немає spec
+        streamReadFloat32(streamId)
+        streamReadFloat32(streamId)
+        streamReadFloat32(streamId)
+        streamReadFloat32(streamId)
+        return
+    end
+    
+    if not spec.data then
+        spec.data = {}
+    end
+    
+    spec.data.load = streamReadFloat32(streamId)
+    spec.data.cropLoss = streamReadFloat32(streamId)
+    spec.data.tonPerHour = streamReadFloat32(streamId)
+    spec.data.recommendedSpeed = streamReadFloat32(streamId)
+end
+
+---Постійна синхронізація: Клієнт читає оновлення від сервера
+function rhm_Combine:onReadUpdateStream(streamId, timestamp, connection)
+    if connection:getIsServer() then  -- Клієнт читає від сервера
+        local spec = self.spec_rhm_Combine
+        if not spec then 
+            return 
+        end
+        
+        -- Перевіряємо чи є оновлення (dirtyFlag)
+        local hasUpdate = streamReadBool(streamId)
+        
+        if hasUpdate then
+            if not spec.data then
+                spec.data = {}
+            end
+            
+            spec.data.load = streamReadFloat32(streamId)
+            spec.data.cropLoss = streamReadFloat32(streamId)
+            spec.data.tonPerHour = streamReadFloat32(streamId)
+            spec.data.recommendedSpeed = streamReadFloat32(streamId)
+
+        end
+    end
+end
+
+---Постійна синхронізація: Сервер пише оновлення до клієнта
+function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
+    if not connection:getIsServer() then  -- Сервер пише до клієнта
+        local spec = self.spec_rhm_Combine
+        if not spec then
+            streamWriteBool(streamId, false)
+            return
+        end
+        
+        -- Перевіряємо чи є зміни
+        local hasChanges = bitAND(dirtyMask, spec.dirtyFlag) ~= 0
+        
+        if streamWriteBool(streamId, hasChanges) then
+            if not spec.data then
+                streamWriteFloat32(streamId, 0)
+                streamWriteFloat32(streamId, 0)
+                streamWriteFloat32(streamId, 0)
+                streamWriteFloat32(streamId, 0)
+                return
+            end
+
+            
+            streamWriteFloat32(streamId, spec.data.load or 0)
+            streamWriteFloat32(streamId, spec.data.cropLoss or 0)
+            streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
+            streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
+        end
+    end
+end
+

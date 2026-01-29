@@ -144,8 +144,6 @@ function Settings:load()
     end
     
     self.manager:loadSettings(self)
-    Logging.info("RHM: Settings Loaded. Difficulty: %s, HUD: %s", 
-        self:getDifficultyName(), tostring(self.showHUD))
 end
 
 ---Зберігає налаштування
@@ -165,9 +163,7 @@ function Settings:save()
        SettingsSync then
         SettingsSync:sendToClients(self)
     end
-    
-    -- Logging.info("RHM: Settings Saved. Difficulty: %s, HUD: %s", 
-    --    self:getDifficultyName(), tostring(self.showHUD))
+
 end
 
 ---Скидання налаштувань до значень за замовчуванням

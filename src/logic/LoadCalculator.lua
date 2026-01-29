@@ -468,6 +468,12 @@ function LoadCalculator:getEngineLoad()
     return self.engineLoad * 100
 end
 
+---Отримує поточний ліміт швидкості
+---@return number Ліміт швидкості в км/год
+function LoadCalculator:getSpeedLimit()
+    return self.speedLimit or 0
+end
+
 ---Отримує поточне обмеження швидкості
 ---@return number Обмеження швидкості в км/год
 function LoadCalculator:getSpeedLimit()
