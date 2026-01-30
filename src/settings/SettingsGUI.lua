@@ -40,41 +40,60 @@ end
 
 
 function SettingsGUI:consoleCommandSetDifficulty(difficulty)
+    if not g_realisticHarvestManager or not g_realisticHarvestManager.settings then
+        return "Error: RHM not initialized"
+    end
+    
+    local settings = g_realisticHarvestManager.settings
+    
+    -- PERMISSION CHECK: Only admins can change server settings
+    if not settings:canChangeServerSettings() then
+        return "Error: Admin only - you cannot change server settings"
+    end
+    
     local diff = tonumber(difficulty)
     if not diff or diff < 1 or diff > 3 then
         Logging.warning("RHM: Invalid difficulty. Use 1 (Arcade), 2 (Normal), or 3 (Realistic)")
-        return "Invalid difficulty"
+        return "Invalid difficulty. Use 1 (Arcade), 2 (Normal), or 3 (Realistic)"
     end
     
-    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
-        g_realisticHarvestManager.settings:setDifficulty(diff)
-        g_realisticHarvestManager.settings:save()
-        return string.format("Difficulty set to: %s", g_realisticHarvestManager.settings:getDifficultyName())
-    end
-    
-    return "Error: RHM not initialized"
+    settings:setDifficulty(diff)
+    settings:save()
+    return string.format("Difficulty set to: %s", settings:getDifficultyName())
 end
 
 function SettingsGUI:consoleCommandToggleSpeedLimit()
-    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
-        local settings = g_realisticHarvestManager.settings
-        settings.enableSpeedLimit = not settings.enableSpeedLimit
-        settings:save()
-        return string.format("Speed Limiting: %s", settings.enableSpeedLimit and "ON" or "OFF")
+    if not g_realisticHarvestManager or not g_realisticHarvestManager.settings then
+        return "Error: RHM not initialized"
     end
     
-    return "Error: RHM not initialized"
+    local settings = g_realisticHarvestManager.settings
+    
+    -- PERMISSION CHECK: Only admins can change server settings
+    if not settings:canChangeServerSettings() then
+        return "Error: Admin only - you cannot change server settings"
+    end
+    
+    settings.enableSpeedLimit = not settings.enableSpeedLimit
+    settings:save()
+    return string.format("Speed Limiting: %s", settings.enableSpeedLimit and "ON" or "OFF")
 end
 
 function SettingsGUI:consoleCommandToggleCropLoss()
-    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
-        local settings = g_realisticHarvestManager.settings
-        settings.enableCropLoss = not settings.enableCropLoss
-        settings:save()
-        return string.format("Crop Loss: %s", settings.enableCropLoss and "ON" or "OFF")
+    if not g_realisticHarvestManager or not g_realisticHarvestManager.settings then
+        return "Error: RHM not initialized"
     end
     
-    return "Error: RHM not initialized"
+    local settings = g_realisticHarvestManager.settings
+    
+    -- PERMISSION CHECK: Only admins can change server settings
+    if not settings:canChangeServerSettings() then
+        return "Error: Admin only - you cannot change server settings"
+    end
+    
+    settings.enableCropLoss = not settings.enableCropLoss
+    settings:save()
+    return string.format("Crop Loss: %s", settings.enableCropLoss and "ON" or "OFF")
 end
 
 function SettingsGUI:consoleCommandToggleHUD()
@@ -89,26 +108,36 @@ function SettingsGUI:consoleCommandToggleHUD()
 end
 
 function SettingsGUI:consoleCommandShowSettings()
-    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
-        local settings = g_realisticHarvestManager.settings
-        local info = string.format(
-            "=== RHM Settings ===\n" ..
-            "Difficulty: %s\n" ..
-            "Speed Limiting: %s\n" ..
-            "Crop Loss: %s\n" ..
-            "Show HUD: %s\n" ..
-            "HUD Offset Y: %d",
-            settings:getDifficultyName(),
-            settings.enableSpeedLimit and "ON" or "OFF",
-            settings.enableCropLoss and "ON" or "OFF",
-            settings.showHUD and "ON" or "OFF",
-            settings.hudOffsetY
-        )
-        print(info)
-        return info
+    if not g_realisticHarvestManager or not g_realisticHarvestManager.settings then
+        return "Error: RHM not initialized"
     end
     
-    return "Error: RHM not initialized"
+    local settings = g_realisticHarvestManager.settings
+    local userRole = settings:isAdmin() and "Administrator" or "User"
+    
+    local info = string.format(
+        "=== RHM Settings ===\n" ..
+        "Role: %s\n" ..
+        "\n[Server Settings]\n" ..
+        "Difficulty: %s\n" ..
+        "Speed Limiting: %s\n" ..
+        "Crop Loss: %s\n" ..
+        "\n[Personal Settings]\n" ..
+        "Show HUD: %s\n" ..
+        "HUD Offset X: %d\n" ..
+        "HUD Offset Y: %d\n" ..
+        "Unit System: %s",
+        userRole,
+        settings:getDifficultyName(),
+        settings.enableSpeedLimit and "ON" or "OFF",
+        settings.enableCropLoss and "ON" or "OFF",
+        settings.showHUD and "ON" or "OFF",
+        settings.hudOffsetX or 0,
+        settings.hudOffsetY,
+        settings.unitSystem == 1 and "Metric" or (settings.unitSystem == 2 and "Imperial" or "Bushels")
+    )
+    print(info)
+    return info
 end
 
 function SettingsGUI:consoleCommandSetHUDOffset(offset)

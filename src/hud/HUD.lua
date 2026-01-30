@@ -334,8 +334,18 @@ function HUD:drawText()
         end
         
         setTextColor(speedColor[1], speedColor[2], speedColor[3], speedColor[4])
-        renderText(textX, textY, textSize, 
-            string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed))
+        
+        local speedStr
+        if UnitConverter then
+            local s1, suffix = UnitConverter.convertSpeed(currentSpeed, self.settings.unitSystem)
+            local s2 = UnitConverter.convertSpeed(self.data.recommendedSpeed, self.settings.unitSystem)
+            speedStr = string.format("%.1f / %.1f %s", s1, s2, suffix)
+        else
+            -- Fallback purely for safety
+            speedStr = string.format("%.1f / %.1f", currentSpeed, self.data.recommendedSpeed)
+        end
+        
+        renderText(textX, textY, textSize, speedStr)
     end
     -- Інакше НЕ малюємо зайвий рядок!
     

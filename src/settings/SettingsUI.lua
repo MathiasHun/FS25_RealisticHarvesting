@@ -37,70 +37,79 @@ function SettingsUI:inject()
     local isAdmin = self.settings:canChangeServerSettings()
     
     -- === SERVER SETTINGS (тільки адмін може змінювати) ===
-    if isAdmin then
-        -- Адмін: показуємо редаговані опції
-        
-        -- Difficulty (Multi)
-        local diffOptions = {
-            getTextSafe("rhm_diff_1"),
-            getTextSafe("rhm_diff_2"),
-            getTextSafe("rhm_diff_3")
-        }
-        
-        local diffOpt = UIHelper.createMultiOption(
-            layout,
-            "rhm_diff",
-            "rhm_difficulty",
-            diffOptions,
-            self.settings.difficulty,
-            function(val)
-                self.settings.difficulty = val
-                self.settings:save()
-                -- Broadcast to clients if multiplayer
-                if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
-                    SettingsSync:sendToClients(self.settings)
-                end
+    -- === SERVER SETTINGS (visible to all, editable by admin only) ===
+    
+    -- Difficulty (Multi)
+    local diffOptions = {
+        getTextSafe("rhm_diff_1"),
+        getTextSafe("rhm_diff_2"),
+        getTextSafe("rhm_diff_3")
+    }
+    
+    local diffOpt = UIHelper.createMultiOption(
+        layout,
+        "rhm_diff",
+        "rhm_difficulty",
+        diffOptions,
+        self.settings.difficulty,
+        function(val)
+            -- Double check permission in callback
+            if not self.settings:canChangeServerSettings() then return end
+
+            self.settings.difficulty = val
+            self.settings:save()
+            -- Broadcast to clients if multiplayer
+            if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                SettingsSync:sendToClients(self.settings)
             end
-        )
-        self.difficultyOption = diffOpt
-        
-        -- Speed Limit (Binary)
-        local speedLimitOpt = UIHelper.createBinaryOption(
-            layout,
-            "rhm_speedlimit",
-            "rhm_speedlimit",
-            self.settings.enableSpeedLimit,
-            function(val)
-                self.settings.enableSpeedLimit = val
-                self.settings:save()
-                if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
-                    SettingsSync:sendToClients(self.settings)
-                end
-            end
-        )
-        self.speedLimitOption = speedLimitOpt
-        
-        -- Crop Loss (Binary)
-        local cropLossOpt = UIHelper.createBinaryOption(
-            layout,
-            "rhm_croploss",
-            "rhm_croploss",
-            self.settings.enableCropLoss,
-            function(val)
-                self.settings.enableCropLoss = val
-                self.settings:save()
-                if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
-                    SettingsSync:sendToClients(self.settings)
-                end
-            end
-        )
-        self.cropLossOption = cropLossOpt
-        
-    else
-        -- Не-адмін: server settings приховані
-        -- TODO: В майбутньому можна додати read-only відображення
-        print("RHM: Non-admin user - server settings hidden (editable by admin only)")
+        end
+    )
+    if diffOpt.setDisabled then
+        diffOpt:setDisabled(not isAdmin)
     end
+    self.difficultyOption = diffOpt
+    
+    -- Speed Limit (Binary)
+    local speedLimitOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_speedlimit",
+        "rhm_speedlimit",
+        self.settings.enableSpeedLimit,
+        function(val)
+            if not self.settings:canChangeServerSettings() then return end
+            
+            self.settings.enableSpeedLimit = val
+            self.settings:save()
+            if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                SettingsSync:sendToClients(self.settings)
+            end
+        end
+    )
+    if speedLimitOpt.setDisabled then
+        speedLimitOpt:setDisabled(not isAdmin)
+    end
+    self.speedLimitOption = speedLimitOpt
+    
+    -- Crop Loss (Binary)
+    local cropLossOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_croploss",
+        "rhm_croploss",
+        self.settings.enableCropLoss,
+        function(val)
+            if not self.settings:canChangeServerSettings() then return end
+            
+            self.settings.enableCropLoss = val
+            self.settings:save()
+            if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                SettingsSync:sendToClients(self.settings)
+            end
+        end
+    )
+    if cropLossOpt.setDisabled then
+        cropLossOpt:setDisabled(not isAdmin)
+    end
+    self.cropLossOption = cropLossOpt
     
     -- === CLIENT SETTINGS (всі можуть змінювати) ===
     
