@@ -71,16 +71,38 @@ end
 function UIHelper.createBinaryOption(layout, id, textId, state, callback)
     local template = nil
     
-    -- Шукаємо шаблон
-    for _, el in ipairs(layout.elements) do
-        if el.elements and #el.elements >= 2 then
-            local firstChild = el.elements[1]
-            if firstChild.id and (
-                string.find(firstChild.id, "^check") or 
-                string.find(firstChild.id, "Check")
-            ) then
-                template = el
-                break
+    -- Safe generic vanilla IDs to try first
+    local safeIds = {"checkUseMiles", "checkRadio", "checkVolumeMaster", "checkHelpIcon"}
+    
+    -- 1. Try finding a specific safe vanilla ID
+    for _, safeId in ipairs(safeIds) do
+        for _, el in ipairs(layout.elements) do
+            if el.elements and #el.elements >= 2 then
+                local firstChild = el.elements[1]
+                if firstChild.id and firstChild.id == safeId then
+                    template = el
+                    break
+                end
+            end
+        end
+        if template then break end
+    end
+    
+    -- 2. Fallback to generic search if vanilla not found
+    if not template then
+        for _, el in ipairs(layout.elements) do
+            if el.elements and #el.elements >= 2 then
+                local firstChild = el.elements[1]
+                if firstChild.id and (
+                    string.find(firstChild.id, "^check") or 
+                    string.find(firstChild.id, "Check")
+                ) then
+                    -- Avoid known mod conflicts (e.g. AdditionalCurrencies)
+                    if not string.find(firstChild.id, "Currency") then
+                        template = el
+                        break
+                    end
+                end
             end
         end
     end
@@ -117,6 +139,14 @@ function UIHelper.createBinaryOption(layout, id, textId, state, callback)
     -- Встановлюємо тексти
     if lbl and lbl.setText then
         lbl:setText(getTextSafe(textId .. "_short"))
+    end
+    
+    -- Explicitly set texts to Off/On (override inherited texts like "Kilometers"/"Miles")
+    if opt.setTexts then
+        opt:setTexts({
+            g_i18n:getText("ui_off") or "Off",
+            g_i18n:getText("ui_on") or "On"
+        })
     end
     
     -- Додаємо елемент В ПЕРШУ ЧЕРГУ

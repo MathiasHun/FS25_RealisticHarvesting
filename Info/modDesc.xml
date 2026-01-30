@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<modDesc descVersion="96">
+	<author>Rockstar</author>
+
+	<version>1.0.0.1</version>
+
+	<title>
+		<en>Additional Currencies</en>
+		<de>Zusätzliche Währungen</de>
+		<fr>Devises Supplémentaires</fr>
+		<pl>Dodatkowe Waluty</pl>
+		<uk>Додаткові Валюти</uk>
+	</title>
+
+	<description>
+		<en>
+			<![CDATA[Mod that adds new currencies, not originally available in the game: Brazilian Real, Chinese Yuan, Czech Koruna, Hungarian Forint, Japanese Yen, Norwegian Krone, Polish Zloty, Romanian Leu, Russian Ruble, South Korean Won, Swiss Franc, Turkish Lira, Ukrainian Hryvnia.
+
+Changelog 1.0.0.1:
+- Fixed problem with positioning of HUD elements,
+- Added Ukrainian translation (thanks garik_59).]]></en>
+		<de>
+			<![CDATA[Ein Mod, der neue Währungen hinzufügt, die ursprünglich nicht im Spiel verfügbar sind: Brasilianischer Real, Chinesische Yuan, Tschechische Krone, Ungarischer Forint, Japanischer Yen, Norwegische Krone, Polnischer Zloty, Rumänischer Leu, Russischer Rubel, Südkoreanischer Won, Schweizerfranken, Türkische Lira, Ukrainische Griwna.
+
+Changelog 1.0.0.1:
+- Problem mit der Positionierung von HUD-Elementen behoben,
+- Ukrainische Übersetzung hinzugefügt (danke garik_59).]]></de>
+		<fr>
+			<![CDATA[Mod qui ajoute de nouvelles devises, non disponibles à l'origine dans le jeu: Real brésilien, Le yuan chinois, Couronne tchèque, Forint hongrois, Yen japonais, Couronne norvégienne, Zloty polonais, Leu roumain, Rouble russe, Won sud-coréen, Franc suisse, Lire turque, Hryvnia ukrainienne.
+
+Changelog 1.0.0.1:
+- Correction d'un problème de positionnement des éléments du HUD,
+- Ajout de la traduction en ukrainien (merci garik_59).]]></fr>
+		<pl>
+			<![CDATA[Mod dodający nowe waluty, niedostępne oryginalnie w grze: Real brazylijski, Juan chiński, Korona czeska, Forint węgierski, Jen japoński, Korona norweska, Polski złoty, Lej rumuński, Rubel rosyjski, Won południowokoreański, Frank szwajcarski, Lira turecka, Hrywna ukraińska.
+
+Changelog 1.0.0.1:
+- Naprawiono problem z pozycjonowaniem elementów HUD,
+- Dodano ukraińskie tłumaczenie (dzięki garik_59).]]></pl>
+		<uk>
+			<![CDATA[Мод додає нові валюти, які не доступні в оригінальній грі: Бразильский реал, Китайский юань, Чеська крона, Угорський форинт, Японська єна, Норвежська крона, Польський злотий, Румунський лей, Російський рубль, Південнокорейський вон, Швейцарський франк, Турецька ліра, Українська гривня.
+
+Changelog 1.0.0.1:
+- Виправлено проблему з позиціонуванням елементів HUD,
+- Додано український переклад (дякуємо garik_59).]]></uk>
+	</description>
+
+	<iconFilename>icon_additionalCurrencies.png</iconFilename>
+
+	<multiplayer supported="true"/>
+
+	<extraSourceFiles>
+		<sourceFile filename="scripts/utils/AdditionalCurrenciesUtil.lua"/>
+		<sourceFile filename="scripts/AdditionalCurrencies.lua"/>
+	</extraSourceFiles>
+
+	<l10n>
+		<text name="setting_currencyConverter">
+			<en>Currency converter</en>
+			<de>Währungsrechner</de>
+			<it>Convertitore di valuta</it>
+			<fr>Convertisseur de devises</fr>
+			<es>Convertidor de moneda</es>
+			<br>Conversor de moeda</br>
+			<cs>货币换算</cs>
+			<ct>貨幣換算</ct>
+			<cz>Převodník měn</cz>
+			<hu>Valutaváltó</hu>
+			<jp>通貨換算</jp>
+			<kr>환율 계산기</kr>
+			<pl>Przelicznik walut</pl>
+			<nl>Valuta-omzetter</nl>
+			<pt>Conversor de moeda</pt>
+			<ro>Convertor valutar</ro>
+			<ru>Конвертер валют</ru>
+			<tr>Döviz Çevirici</tr>
+			<sv>Valutaomvandlare</sv>
+			<no>Valutakalkulator</no>
+			<fi>Valuuttamuunnin</fi>
+			<fc>Convertisseur de devises</fc>
+			<da>Valutaomregner</da>
+			<uk>Конвертер валют</uk>
+		</text>
+		<text name="toolTip_currencyConverter">
+			<en>Enable/disable currency conversion.</en>
+			<de>Aktivieren/Deaktivieren der Währungsumrechnung.</de>
+			<it>Abilita/disabilita la conversione di valuta.</it>
+			<fr>Activer/désactiver la conversion de devise.</fr>
+			<es>Activar/desactivar la conversión de moneda.</es>
+			<br>Habilite/desabilite a conversão de moeda.</br>
+			<cs>启用/禁用货币转换。</cs>
+			<ct>啟用/禁用貨幣轉換。</ct>
+			<cz>Povolit/zakázat převod měn.</cz>
+			<hu>Pénznemek átváltásának engedélyezése/letiltása.</hu>
+			<jp>通貨換算を有効/無効にします。</jp>
+			<kr>통화 변환을 활성화/비활성화합니다.</kr>
+			<pl>Włącza/wyłącza przeliczanie waluty.</pl>
+			<nl>Schakel valutaconversie in/uit.</nl>
+			<pt>Habilite / desabilite a conversão de moeda.</pt>
+			<ro>Activați/dezactivați conversia valutară.</ro>
+			<ru>Включение/отключение конвертации валюты.</ru>
+			<tr>Para birimi dönüştürmeyi etkinleştirin/devre dışı bırakın.</tr>
+			<sv>Aktivera/inaktivera valutaomvandling.</sv>
+			<no>Aktiver/deaktiver valutakonvertering.</no>
+			<fi>Ota valuuttamuunnos käyttöön/poista se käytöstä.</fi>
+			<fc>Activer/désactiver la conversion de devise.</fc>
+			<da>Aktiver/deaktiver valutaomregning.</da>
+			<uk>Вімкнення/вимкнення конвертації валют.</uk>
+		</text>
+		<text name="unit_brazilianReal">
+			<en>Brazilian real</en>
+			<de>Brasilianischer Real</de>
+			<it>Real brasiliano</it>
+			<fr>Real brésilien</fr>
+			<es>Real brasileño</es>
+			<br>Real brasileiro</br>
+			<cs>巴西雷亚尔</cs>
+			<ct>巴西雷亞爾</ct>
+			<cz>Brazilský real</cz>
+			<hu>Brazil igazi</hu>
+			<jp>ブラジルレアル</jp>
+			<kr>브라질 헤알</kr>
+			<pl>Real brazylijski</pl>
+			<nl>Braziliaanse real</nl>
+			<pt>Real brasileiro</pt>
+			<ro>Real brazilian</ro>
+			<ru>Бразильский реал</ru>
+			<tr>Brezilya gerçek</tr>
+			<sv>Brasiliansk real</sv>
+			<no>Brasiliansk real</no>
+			<fi>Brasilian real</fi>
+			<fc>Real brésilien</fc>
+			<da>Brasiliansk real</da>
+			<uk>Бразильский реал</uk>
+		</text>
+		<text name="unit_chineseYuan">
+			<en>Chinese yuan</en>
+			<de>Chinesische Yuan</de>
+			<it>Yuan cinese</it>
+			<fr>Le yuan chinois</fr>
+			<es>Yuan chino</es>
+			<br>Yuan chinês</br>
+			<cs>人民币元</cs>
+			<ct>人民幣元</ct>
+			<cz>Čínský jüan</cz>
+			<hu>Kínai jüan</hu>
+			<jp>人民元</jp>
+			<kr>중국 위안</kr>
+			<pl>Juan chiński</pl>
+			<nl>Chinese yuan</nl>
+			<pt>Yuan chinês</pt>
+			<ro>Yuan chinezesc</ro>
+			<ru>Китайский юань</ru>
+			<tr>Çin Yuanı</tr>
+			<sv>Kinesiska yuan</sv>
+			<no>Kinesisk yuan</no>
+			<fi>Kiinan juania</fi>
+			<fc>Le yuan chinois</fc>
+			<da>Kinesiske yuan</da>
+			<uk>Китайский юань</uk>
+		</text>
+		<text name="unit_czechKoruna">
+			<en>Czech koruna</en>
+			<de>Tschechische Krone</de>
+			<it>Corona ceca</it>
+			<fr>Couronne tchèque</fr>
+			<es>Corona checa</es>
+			<br>Coroa checa</br>
+			<cs>捷克王冠</cs>
+			<ct>捷克王冠</ct>
+			<cz>Koruna česká</cz>
+			<hu>Cseh korona</hu>
+			<jp>チェコ・コルナ</jp>
+			<kr>체코 코루나</kr>
+			<pl>Korona czeska</pl>
+			<nl>Tsjechische kroon</nl>
+			<pt>Coroa checa</pt>
+			<ro>Coroană cehă</ro>
+			<ru>Чешская крона</ru>
+			<tr>Çek korunası</tr>
+			<sv>Tjeckisk koruna</sv>
+			<no>Tsjekkiske koruna</no>
+			<fi>Tšekin koruna</fi>
+			<fc>Couronne tchèque</fc>
+			<da>Tjekkiske koruna</da>
+			<uk>Чеська крона</uk>
+		</text>
+		<text name="unit_hungarianForint">
+			<en>Hungarian forint</en>
+			<de>Ungarischer Forint</de>
+			<it>Fiorino ungherese</it>
+			<fr>Forint hongrois</fr>
+			<es>Forinto húngaro</es>
+			<br>Florim húngaro</br>
+			<cs>匈牙利福林</cs>
+			<ct>匈牙利福林</ct>
+			<cz>Maďarský forint</cz>
+			<hu>Magyar forint</hu>
+			<jp>ハンガリーフォリント</jp>
+			<kr>헝가리 포린트</kr>
+			<pl>Forint węgierski</pl>
+			<nl>Hongaarse forint</nl>
+			<pt>Florim húngaro</pt>
+			<ro>Magyar forint</ro>
+			<ru>Венгерский форинт</ru>
+			<tr>Macar forinti</tr>
+			<sv>Ungersk forint</sv>
+			<no>Ungarsk forint</no>
+			<fi>Ungarskin forintti</fi>
+			<fc>Forint hongrois</fc>
+			<da>Ungarske forint</da>
+			<uk>Угорський форинт</uk>
+		</text>
+		<text name="unit_japaneseYen">
+			<en>Japanese yen</en>
+			<de>Japanischer Yen</de>
+			<it>Yen Giapponese</it>
+			<fr>Yen japonais</fr>
+			<es>Yen japonés</es>
+			<br>Yen japonês</br>
+			<cs>日圆</cs>
+			<ct>日圓</ct>
+			<cz>Japonský jen</cz>
+			<hu>Japán jen</hu>
+			<jp>日本円</jp>
+			<kr>일본 엔</kr>
+			<pl>Jen japoński</pl>
+			<nl>Japanse yen</nl>
+			<pt>Yen japonês</pt>
+			<ro>Yeni japonezi</ro>
+			<ru>Японская иена</ru>
+			<tr>Japon yeni</tr>
+			<sv>Japanska yen</sv>
+			<no>Japansk yen</no>
+			<fi>Japanin jeniä</fi>
+			<fc>Yen japonais</fc>
+			<da>Japanske yen</da>
+			<uk>Японська єна</uk>
+		</text>
+		<text name="unit_norwegianKrone">
+			<en>Norwegian krone</en>
+			<de>Norwegische Krone</de>
+			<it>Corona norvegese</it>
+			<fr>Couronne norvégienne</fr>
+			<es>Corona noruega</es>
+			<br>Coroa norueguesa</br>
+			<cs>挪威克朗</cs>
+			<ct>挪威克朗</ct>
+			<cz>Norská koruna</cz>
+			<hu>Norvég korona</hu>
+			<jp>ノルウェークローネ</jp>
+			<kr>노르웨이 크로네</kr>
+			<pl>Korona norweska</pl>
+			<nl>Noorse kroon</nl>
+			<pt>Coroa norueguesa</pt>
+			<ro>Coroana norvegiană</ro>
+			<ru>Норвежская крона</ru>
+			<tr>Norveç kronu</tr>
+			<sv>Norska kronan</sv>
+			<no>Norska krona</no>
+			<fi>Norjan kruunu</fi>
+			<fc>Couronne norvégienne</fc>
+			<da>Norske kroner</da>
+			<uk>Норвежська крона</uk>
+		</text>
+		<text name="unit_polishZloty">
+			<en>Polish zloty</en>
+			<de>Polnischer Zloty</de>
+			<it>Zloty polacco</it>
+			<fr>Zloty polonais</fr>
+			<es>Zloty polaco</es>
+			<br>Zloty polonês</br>
+			<cs>波兰兹罗提</cs>
+			<ct>波蘭茲羅提</ct>
+			<cz>Polský zlotý</cz>
+			<hu>Lengyel złoty</hu>
+			<jp>ポーランドズウォティ</jp>
+			<kr>폴란드 즈워티</kr>
+			<pl>Polski złoty</pl>
+			<nl>Poolse złoty</nl>
+			<pt>Zloty polonês</pt>
+			<ro>Zlot polonez</ro>
+			<ru>Польский злотый</ru>
+			<tr>Polonya zlotisi</tr>
+			<sv>Polska zloty</sv>
+			<no>Polske zloty</no>
+			<fi>Puolan zloty</fi>
+			<fc>Zloty polonais</fc>
+			<da>Polske zloty</da>
+			<uk>Польський злотий</uk>
+		</text>
+		<text name="unit_romanianLeu">
+			<en>Romanian leu</en>
+			<de>Rumänischer Leu</de>
+			<it>Leu romeno</it>
+			<fr>Leu roumain</fr>
+			<es>Leu rumano</es>
+			<br>Leu romeno</br>
+			<cs>罗马尼亚列伊</cs>
+			<ct>羅馬尼亞列伊</ct>
+			<cz>Rumunský lei</cz>
+			<hu>Román lej</hu>
+			<jp>ルーマニア・レウ</jp>
+			<kr>루마니아 레우</kr>
+			<pl>Lej rumuński</pl>
+			<nl>Roemeense leu</nl>
+			<pt>Leu romeno</pt>
+			<ro>Leu românesc</ro>
+			<ru>Румынский лей</ru>
+			<tr>Rumen leyi</tr>
+			<sv>Rumänska leu</sv>
+			<no>Rumensk leu</no>
+			<fi>Romanian leu</fi>
+			<fc>Leu roumain</fc>
+			<da>Rumænske leu</da>
+			<uk>Румунський лей</uk>
+		</text>
+		<text name="unit_russianRuble">
+			<en>Russian ruble</en>
+			<de>Russischer Rubel</de>
+			<it>Rublo russo</it>
+			<fr>Rouble russe</fr>
+			<es>Rublo ruso</es>
+			<br>Rublo russo</br>
+			<cs>俄罗斯卢布</cs>
+			<ct>俄羅斯盧布</ct>
+			<cz>Ruský rubl</cz>
+			<hu>Orosz rubel</hu>
+			<jp>ロシア・ルーブル</jp>
+			<kr>러시아 루블</kr>
+			<pl>Rubel rosyjski</pl>
+			<nl>Russische roebel</nl>
+			<pt>Rublo russo</pt>
+			<ro>Rublă rusă</ro>
+			<ru>Российский рубль</ru>
+			<tr>Rus rublesi</tr>
+			<sv>Rysk rubel</sv>
+			<no>Russisk rubel</no>
+			<fi>Venäjän rupla</fi>
+			<fc>Rouble russe</fc>
+			<da>Russisk rubel</da>
+			<uk>Російський рубль</uk>
+		</text>
+		<text name="unit_southKoreanWon">
+			<en>South Korean won</en>
+			<de>Südkoreanischer Won</de>
+			<it>Won sudcoreano</it>
+			<fr>Won sud-coréen</fr>
+			<es>Won surcoreano</es>
+			<br>Won sul-coreano</br>
+			<cs>韩元</cs>
+			<ct>韓元</ct>
+			<cz>Jihokorejský won</cz>
+			<hu>Dél-koreai von</hu>
+			<jp>大韓民国ウォン</jp>
+			<kr>대한민국 원</kr>
+			<pl>Won południowokoreański</pl>
+			<nl>Zuid-Koreaanse won</nl>
+			<pt>Won sul-coreano</pt>
+			<ro>Won sud-coreean</ro>
+			<ru>Южнокорейская вона</ru>
+			<tr>Güney Kore wonu</tr>
+			<sv>Sydkoreansk won</sv>
+			<no>Sørkoreansk vunnet</no>
+			<fi>Etelä-Korea voitti</fi>
+			<fc>Won sud-coréen</fc>
+			<da>Sydkoreansk won</da>
+			<uk>Південнокорейський вон</uk>
+		</text>
+		<text name="unit_swissFranc">
+			<en>Swiss franc</en>
+			<de>Schweizerfranken</de>
+			<it>Franco svizzero</it>
+			<fr>Franc suisse</fr>
+			<es>Franco suizo</es>
+			<br>Franco suíço</br>
+			<cs>瑞士法郎</cs>
+			<ct>瑞士法郎</ct>
+			<cz>Švýcarský frank</cz>
+			<hu>Svájci frank</hu>
+			<jp>スイスフラン</jp>
+			<kr>스위스 프랑</kr>
+			<pl>Frank szwajcarski</pl>
+			<nl>Zwitserse frank</nl>
+			<pt>Franco suíço</pt>
+			<ro>Franc elvetian</ro>
+			<ru>Швейцарский франк</ru>
+			<tr>İsviçre frangı</tr>
+			<sv>Schweiziska franc</sv>
+			<no>Sveitsiske franc</no>
+			<fi>Sveitsin Frangi</fi>
+			<fc>Franc suisse</fc>
+			<da>Schweizerfranc</da>
+			<uk>Швейцарський франк</uk>
+		</text>
+		<text name="unit_turkishLira">
+			<en>Turkish lira</en>
+			<de>Türkische Lira</de>
+			<it>Lira turca</it>
+			<fr>Lire turque</fr>
+			<es>Lira turca</es>
+			<br>Lira turca</br>
+			<cs>土耳其里拉</cs>
+			<ct>土耳其里拉</ct>
+			<cz>Turecká lira</cz>
+			<hu>Török líra</hu>
+			<jp>トルコリラ</jp>
+			<kr>터키 리라</kr>
+			<pl>Lira turecka</pl>
+			<nl>Turkse lira</nl>
+			<pt>Lira turca</pt>
+			<ro>Liră turcească</ro>
+			<ru>Турецкая лира</ru>
+			<tr>Türk lirası</tr>
+			<sv>Turkisk lira</sv>
+			<no>Tyrkisk lira</no>
+			<fi>Turkin liira</fi>
+			<fc>Lire turque</fc>
+			<da>Tyrkiske lira</da>
+			<uk>Турецька ліра</uk>
+		</text>
+		<text name="unit_ukrainianHryvnia">
+			<en>Ukrainian hryvnia</en>
+			<de>Ukrainische Griwna</de>
+			<it>Grivnia ucraina</it>
+			<fr>Hryvnia ukrainienne</fr>
+			<es>Jrivnia ucraniana</es>
+			<br>Hryvnia ucraniana</br>
+			<cs>乌克兰格里夫纳汇率</cs>
+			<ct>烏克蘭格里夫納匯率</ct>
+			<cz>Ukrajinská hřivna</cz>
+			<hu>Ukrán hrivnya</hu>
+			<jp>ウクライナグリブナ</jp>
+			<kr>우크라이나 흐 리브 냐</kr>
+			<pl>Hrywna ukraińska</pl>
+			<nl>Oekraïense hryvnia</nl>
+			<pt>Hryvnia ucraniana</pt>
+			<ro>Grivna ucraineană</ro>
+			<ru>Украинская гривна</ru>
+			<tr>Ukrayna grivnası</tr>
+			<sv>Ukrainska hryvnian</sv>
+			<no>Ukrainsk hryvnia</no>
+			<fi>Ukrainan grivnia</fi>
+			<fc>Hryvnia ukrainienne</fc>
+			<da>Ukrainsk Hryvnia</da>
+			<uk>Українська гривня</uk>
+		</text>
+		<text name="g_button_borrow5000">
+			<en>Borrow %s</en>
+			<de>%s leihen</de>
+			<it>Chiedi %s</it>
+			<fr>Emprunter %s</fr>
+			<es>Pedir %s</es>
+			<br>Pedir %s</br>
+			<cs>借 %s</cs>
+			<ct>借款 %s</ct>
+			<cz>Půjčit si %s</cz>
+			<hu>%s felvétele</hu>
+			<jp>%s 借りる</jp>
+			<kr>%s 대출</kr>
+			<pl>Pożycz %s</pl>
+			<nl>%s lenen</nl>
+			<pt>Pedir %s</pt>
+			<ro>Împrumută %s</ro>
+			<ru>Взять кредит %s</ru>
+			<tr>%s Borç Al</tr>
+			<sv>Låna %s</sv>
+			<no>Lån %s</no>
+			<fi>Lainaa %s</fi>
+			<fc>Emprunter %s</fc>
+			<da>Lån %s</da>
+			<uk>Взяти кредит %s</uk>
+		</text>
+		<text name="g_button_repay5000">
+			<en>Repay %s</en>
+			<de>%s zurückzahlen</de>
+			<it>Restituisci %s</it>
+			<fr>Rembourser %s</fr>
+			<es>Devolver %s</es>
+			<br>Pagar %s</br>
+			<cs>还 %s</cs>
+			<ct>還款 %s</ct>
+			<cz>Splatit %s</cz>
+			<hu>%s visszafizetése</hu>
+			<jp>%s 返済する</jp>
+			<kr>%s 상환</kr>
+			<pl>Spłać %s</pl>
+			<nl>%s terugbetalen</nl>
+			<pt>Devolver %s</pt>
+			<ro>Plătește împrumut %s</ro>
+			<ru>Уплатить %s</ru>
+			<tr>%s Geri Öde</tr>
+			<sv>Återbetala %s</sv>
+			<no>Betal tilbake %s</no>
+			<fi>Maksa takaisin %s</fi>
+			<fc>Rembourser %s</fc>
+			<da>Betal %s tilbage</da>
+			<uk>Заплатити %s</uk>
+		</text>
+		<text name="g_helpLine_Economy_MakingMoney_FinanceScreen">
+			<en>On the finance screen, you can see all income and expenditures for the current day and the previous 4 months. The loan you have taken from the bank is also displayed here.
+If you need more money urgently, you can take loans from the bank in increments of %s. However, at the end of each day, you will have to pay any excess interest on the loans you have taken out.</en>
+			<de>Im Bildschirm „Finanzen“ erhältst du eine Übersicht über sämtliche deiner Einnahmen und Ausgaben für den aktuellen Tag, sowie die der letzten 4 Monate. Außerdem kannst du hier sehen, wie viel Geld du dir von der Bank geliehen hast.
+Solltest du dringend mehr Geld benötigen, kannst du Kredite in Höhe von %s bei der Bank aufnehmen. Allerdings musst du dafür am Tagesende Zinsen zahlen.</de>
+			<it>Nella schermata delle finanze sono elencate le entrate e le spese sostenute nella giornata in corso e nei quattro mesi precedenti. Qui compaiono anche i prestiti concessi dalla banca.
+Se hai urgente bisogno di liquidità, puoi richiedere alla banca prestiti di %s. Tuttavia, a fine giornata dovrai saldare gli interessi per ciascun prestito ottenuto.</it>
+			<fr>L&apos;écran Finances montre tous les revenus et les dépenses du jour, ainsi que des 4 mois précédents. Le prêt que vous avez contracté auprès de la banque y est aussi affiché.
+Si vous avez un besoin urgent d&apos;argent, vous pouvez en emprunter auprès de la banque par tranches de %s. Cependant, à la fin de chaque jour, vous devrez payer des intérêts additionnels sur les prêts contractés.</fr>
+			<es>En la pantalla de finanzas puedes ver todos los ingresos y gastos del día actual y de los 4 meses anteriores. Si has pedido algún préstamo al banco, también aparecerá aquí.
+Si necesitas más dinero con urgencia, puedes pedir préstamos al banco en tandas de %s. Sin embargo, al final de cada día tendrás que pagar intereses por los préstamos que tengas concedidos.</es>
+			<br>Na tela de finanças, você pode ver todas as receitas e despesas do dia atual e dos 4 meses anteriores. O empréstimo que você pegou com o banco também é exibido aqui.
+Se precisar de mais dinheiro com urgência, você pode fazer empréstimos no banco em lotes de %s. Porém, ao final de cada dia, você pagará juros pelos empréstimos contraídos.</br>
+			<cs>你在财务画面上可以看到当天和前四个月的所有收入和支出。你从银行获得的贷款也会显示在这里。
+如果你急需用钱，可以在银行以 %s 为增量贷款。但是每天结算时，你必须支付贷款的额外利息。</cs>
+			<ct>"在財務畫面中，你能看到目前和前四個月的所有收入和支出。你的銀行貸款也會在此顯示。
+如果你急需更多金錢，可以從銀行貸款 %s。但是每天結帳時，你都必須要多付任何的貸款利息。</ct>
+			<cz>Na obrazovce financí si můžeš prohlédnout veškeré příjmy a výdaje aktuálního dne a čtyř předchozích měsíců. Zobrazuje se zde i případná půjčka z banky.
+Pokud urgentně potřebuješ více peněz, můžeš si vzít od banky úvěry ve výši %s. Z každého úvěru nicméně budeš muset platit úroky.</cz>
+			<hu>A pénzügy képernyőn láthatod az adott, valamint az előző 4 hónap kiadásait és bevételeit. Itt jelenik meg a banktól felvett kölcsön is.
+Ha sürgősen több pénzre van szükséged, %s értékű részletekben hitelt kaphatsz a banktól. Azonban minden nap végén ki kell fizetned a kamatot minden felvett kölcsönöd után.</hu>
+			<jp>財務状況画面では当日と4か月前までの収支が表示されます。銀行から借りたローンもここに表示されます。
+急に資金が必要になった場合は、銀行から%s単位で借り入れることができます。1日の終わりに借入金に対する利子を支払わなければなりません。</jp>
+			<kr>재무 화면에서 당일과 전 4개월 동안의 모든 수입과 지출을 확인할 수 있습니다. 은행에서 받은 대출금도 여기에 표시됩니다.
+급하게 돈이 더 필요하면 은행에서 %s 단위로 대출을 받을 수 있습니다. 하지만 하루가 지날 때마다 과도한 대출 이자를 지급해야 합니다.</kr>
+			<pl>Na ekranie finansów możesz zobaczyć łączny dochód i wydatki za dany dzień, a także za poprzednie cztery miesiące. Tutaj zobaczysz również pożyczkę zaciągniętą przez ciebie w banku.
+Jeśli pilnie potrzebujesz pieniędzy, możesz wziąć z banku pożyczkę, której wysokość będzie wielokrotnością %s. Pod koniec każdego dnia trzeba jednak zapłacić odsetki od pożyczonych pieniędzy.</pl>
+			<nl>In het financiënscherm kun je alle inkomsten en uitgaven van de huidige dag en de 4 voorafgaande maanden zien. De lening van de bank wordt ook hier weergegeven.
+Als je dringend meer geld nodig hebt, kun je leningen bij de bank afsluiten in veelvouden van %s. Aan het einde van elke dag moet je echter een hoge rente betalen op de leningen die je afsluit.</nl>
+			<pt>No ecrã de finanças, é possível ver todas as receitas e despesas do dia atual e dos 4 meses anteriores. O empréstimo que pediste ao banco também é apresentado aqui.
+Se precisares urgentemente de dinheiro, podes pedir um empréstimo ao banco em prestações de %s. No entanto, no final de cada dia terás de pagar juros adicionais em relação aos empréstimos contraídos.</pt>
+			<ro>În ecranul de finanțe, poți vedea veniturile și cheltuielile pentru ziua actuală și ultimele 4 luni. Și împrumuturile de la bancă sunt afișate aici.
+Dacă ai nevoie urgentă de mai mulți bani, poți lua împrumuturi de la bancă în valoare de %s. Totuși, la sfârșitul fiecărei zile, va trebui să plătești o dobândă pentru împrumuturile luate.</ro>
+			<ru>"На экране финансов можно следить за доходами и расходами этого дня и предыдущих четырёх месяцев. Здесь же показана взятая в банке ссуда.
+Если срочно нужны деньги, можно брать в банке ссуду, кратную %s. В конце каждого дня придётся выплачивать проценты по ссудам.</ru>
+			<tr>Mali kayıtlar ekranında bugüne ve geçmiş dört aya ait gelir ve gider kayıtlarını görebilirsin. Bankadan aldığın borç da burada görüntülenir.
+Acil paraya ihtiyacın olduğunda bankadan %s artırarak borç alabilirsin. Ancak her günün sonunda aldığın borçlar için fazladan faiz ödemen gerekecek.</tr>
+			<sv>På finansskärmen ser du alla inkomster och utgifter för den aktuella dagen och de tidigare fyra månaderna. Lånet du tagit från banken visas också här.
+Om du behöver mer pengar snabbt kan du låna hos banken i ökningar om %s. Men vid varje dags slut måste du betala ränta på de lån du har.</sv>
+			<no>På økonomi-skjermbildet kan du se all inntekt og alle utgifter for den inneværende dagen og de siste 4 månedene. Her kan du også se eventuelle lån du har i banken.
+Hvis du trenger penger med en gang, kan du ta opp lån i banken – inntil %s av gangen. Men når dagen er omme, må du betale rente på lånene dine.</no>
+			<fi>Raha-asioiden ruudussa näkyvät kaikki kuluvan päivän ja neljän edellisen kuukauden tulot ja menot. Tässä näkyy myös pankista mahdollisesti otettu laina.
+Jos tarvitset äkkiä lisää rahaa, voit ottaa pankista lainaa %s:n erissä. Jokaisen päivän lopuksi sinun tulee kuitenkin maksaa korkoa ottamistasi lainoista.</fi>
+			<fc>L&apos;écran des finances montre tous les revenus et les dépenses du jour, ainsi que ceux des quatre mois précédents. Le montant que vous avez emprunté à la banque y est aussi affiché.
+Si vous avez un besoin d&apos;argent urgent, vous pouvez en emprunter auprès de la banque par tranches de %s. Cependant, à la fin de chaque jour, vous devrez payer tout intérêt excessif sur les prêts contractés.</fc>
+			<da>På økonomiskærmen kan du se alle indtægter og udgifter for den aktuelle dag samt de foregående fire måneder. Dit banklån vises også her.
+Hvis du har brug for flere penge her og nu, kan du låne i banken i rater af %s. Ved afslutningen på hver dag skal du imidlertid betale renter på alle dine lån.</da>
+			<uk>На екрані фінансів, можна слідкувати за доходами і розходами цього дня і попередніх чотирьох місяців. Тут же, показаний, взятий кредит в банку.</uk>
+		</text>
+		<text name="g_hint_17">
+			<en>On the finance screen, you can see all the income and expenditure for the current month and previous four months. If you need more money urgently, you can borrow some from the bank in increments of %s.</en>
+			<de>Im Bildschirm &apos;Finanzen&apos; erhältst du eine Übersicht über sämtliche deiner Einnahmen und Ausgaben für den aktuellen Monat sowie die letzten 4 Monate. Solltest du dringend mehr Geld benötigen, kannst du Kredite in Höhe von %s bei der Bank aufnehmen.</de>
+			<it>Nella schermata delle finanze sono elencate le entrate e le spese sostenute nel mese in corso e nei quattro precedenti. Se hai urgente bisogno di liquidità, puoi richiedere alla banca prestiti di %s.</it>
+			<fr>L&apos;écran Finances montre tous les revenus et les dépenses du mois en cours, ainsi que des quatre mois précédents. Si vous avez un besoin d&apos;argent urgent, vous pouvez en emprunter auprès de la banque par tranches de %s.</fr>
+			<es>En la pantalla de finanzas puedes ver todos los ingresos y gastos del mes actual y de los cuatro anteriores. Si necesitas más dinero con urgencia, puedes pedir préstamos al banco en tandas de %s.</es>
+			<br>Na tela de finanças, você pode ver todas as receitas e despesas do mês atual e dos quatro meses anteriores. Se precisar de mais dinheiro com urgência, você pode fazer um empréstimo no banco em lotes de %s.</br>
+			<cs>你在财务画面上可以看到当月和前四月的所有收入和支出。如果你急需用钱，可以在银行以 %s 为增量贷款。</cs>
+			<ct>在財務畫面上可以看到本月和前四個月的所有收入和支出。如果您急需用錢，可以從銀行貸款 %s。</ct>
+			<cz>Na obrazovce financí si můžeš prohlédnout veškeré příjmy a výdaje aktuálního měsíce a čtyř předchozích měsíců. Pokud urgentně potřebuješ více peněz, můžeš si nějaké půjčit od banky v půjčkách o objemu %s.</cz>
+			<hu>A pénzügy képernyőn láthatod az adott, valamint az előző négy hónap kiadásait és bevételeit. Ha sürgősen több pénzre van szükséged, %s értékű részletekben hitelt kaphatsz a banktól.</hu>
+			<jp>財務状況画面では当月と4カ月前までの収支が表示されます。急に資金が必要になった場合は、銀行から%s単位で借り入れることができます。</jp>
+			<kr>재무 상태 화면에서는 해당 월 및 이전 4개월 동안의 모든 수입과 지출을 볼 수 있습니다. 급하게 돈이 필요하다면 은행에서 %s 정도를 대출받을 수 있습니다.</kr>
+			<pl>Na ekranie finansów możesz zobaczyć łączny przychód i wydatki za dany miesiąc, a także za poprzednie cztery miesiące. Jeśli pilnie potrzebujesz pieniędzy, możesz wziąć z banku pożyczkę będącą wielokrotnością %s.</pl>
+			<nl>In het financiënscherm kun je alle inkomsten en uitgaven van de huidige maand en de vier voorafgaande maanden zien. Als je dringend meer geld nodig hebt, kun je hier geld lenen van de bank in veelvouden van %s.</nl>
+			<pt>No ecrã de finanças, é possível ver todas as receitas e despesas do mês atual e dos quatro meses anteriores. Se precisares urgentemente de dinheiro, poderás pedir algum emprestado ao banco em prestações de %s.</pt>
+			<ro>În ecranul Finanțe, poți vedea toate veniturile și cheltuielile pentru luna actuală și pentru ultimele patru luni. Dacă ai nevoie urgentă de mai mulți bani, poți lua împrumuturi de la bancă în valoare de %s.</ro>
+			<ru>На экране финансов показаны доходы и расходы текущего и четырёх предыдущих месяцев. Если срочно нужны деньги, можно взять в банке ссуду, кратную %s.</ru>
+			<tr>Mali kayıtlar ekranında bu aya ve geçmiş dört aya ait gelir ve gider kayıtlarını görebilirsin. Acilen daha fazla paraya ihtiyacın varsa bankadan %s ve katları şeklinde kredi alabilirsin.</tr>
+			<sv>På finansskärmen kan du se alla inkomster och alla utgifter för den aktuella månaden och de tidigare fyra månaderna. Om du behöver mer pengar snabbt kan du låna hos banken i lån på %s.</sv>
+			<no>På økonomi-skjermen kan du se all inntekt og alle utgifter for den inneværende måneden og de siste fire månedene. Hvis du trenger penger med en gang, kan du låne i banken – inntil %s om gangen.</no>
+			<fi>Raha-asioiden ruudussa näkyvät kaikki kuluvan kuukauden ja neljän edellisen kuukauden tulot ja menot. Jos tarvitset äkkiä lisää rahaa, voit ottaa pankista lainaa %s:n erissä.</fi>
+			<fc>L&apos;écran Finances montre tous les revenus et les dépenses du mois en cours, ainsi que des quatre mois précédents. Si vous avez un besoin d&apos;argent urgent, vous pouvez en emprunter auprès de la banque par tranches de %s.</fc>
+			<da>På skærmen Økonomi kan du se alle indtægter og udgifter for den aktuelle måned samt de foregående fire måneder. Hvis du har brug for flere penge her og nu, kan du låne i banken i rater af %s.</da>
+			<uk>На екрані фінансів, можна слідкувати за доходами і розходами цього дня і попередніх чотирьох місяців. Якщо, терміново потрібні гроші, можна взяти кредит в банку, кратний %s.</uk>
+		</text>
+	</l10n>
+</modDesc>

@@ -17,17 +17,24 @@ function RealisticHarvestManager.new(mission, modDirectory, modName)
     if mission:getIsClient() and g_gui then
         self.settingsUI = SettingsUI.new(self.settings)
         
-        -- Хук для створення меню
-        InGameMenuSettingsFrame.onFrameOpen = Utils.appendedFunction(InGameMenuSettingsFrame.onFrameOpen, function()
-            self.settingsUI:inject()
-        end)
+        -- Hook for menu creation (INSTANCE HOOK to avoid conflicts)
+        local settingsPage = g_gui.screenControllers[InGameMenu].pageSettings
+        if settingsPage then
+            settingsPage.onFrameOpen = Utils.appendedFunction(settingsPage.onFrameOpen, function()
+                self.settingsUI:inject()
+            end)
+            
+            -- Hook for footer buttons (reset)
+            settingsPage.updateButtons = Utils.appendedFunction(settingsPage.updateButtons, function(frame)
+                if self.settingsUI then
+                    self.settingsUI:ensureResetButton(frame)
+                end
+            end)
+        else
+            Logging.error("RHM: InGameMenuSettingsFrame (pageSettings) not found!")
+        end
         
-        -- Хук для додавання footer кнопки Reset (через menuButtonInfo API)
-        InGameMenuSettingsFrame.updateButtons = Utils.appendedFunction(InGameMenuSettingsFrame.updateButtons, function(frame)
-            if self.settingsUI then
-                self.settingsUI:ensureResetButton(frame)
-            end
-        end)
+
     end
     
     -- Реєструємо консольні команди для налаштувань
