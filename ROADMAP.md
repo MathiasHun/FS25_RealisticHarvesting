@@ -1,7 +1,7 @@
 # 🚜 Realistic Harvesting - Development Roadmap
 
-[![Current Version](https://img.shields.io/badge/Current-v1.1.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
-[![In Development](https://img.shields.io/badge/Next-v1.2.0-blue.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Current Version](https://img.shields.io/badge/Current-v1.2.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![In Development](https://img.shields.io/badge/Next-v1.3.0.0-blue.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![Planned](https://img.shields.io/badge/Future-v2.0.0%20Crop%20Loss-orange.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 
@@ -9,48 +9,49 @@ This roadmap outlines our vision for making Realistic Harvesting the most immers
 
 ---
 
-## 📍 Current Version: v1.1.0.0 ✅
+## 📍 Current Version: v1.2.0.0 ✅
 
 **Released:** January 2026
 
+**New Features:**
+- ✅ **Multiplayer Synchronization:** Full two-way sync for settings (Admin <-> Server <-> Clients).
+- ✅ **Permissions System:** Server settings locked to Admins.
+- ✅ **Extended Support:** Cotton, Root, and partial Forage Harvester support.
+- ✅ **Game Balance Refinements:** Fine-tuned difficulty and load calculations.
+- ✅ **Code Quality:** Optimized performance and fixed UI conflicts.
+
+**Core Features:**
 - ✅ Automatic speed limiting based on engine load
 - ✅ Real-time productivity tracking (tons/hour)
 - ✅ Icon-based HUD with load indicators
 - ✅ 3 difficulty modes (Arcade, Normal, Realistic)
 - ✅ Full localization (10 languages)
-- ✅ Settings menu with reset button
-- ✅ Console commands for advanced users
 
 ---
 
-## 🎯 Next Release: v1.2.0 - Polish & Compatibility
+## 🎯 Next Release: v1.3.0.0 - Hardware Expansion
 
-**Status:** In Development  
+**Status:** Planned
 
-### Core Focus: Perfecting the Foundation
-Before adding major features, we're ensuring everything works flawlessly:
-
-**1. Game Balance Refinements**
-- Fine-tuning all 3 difficulty levels
-- Optimizing crop parameters (yield, density, resistance)
-- Perfecting speed limiting formulas
-- Final calibration of load calculations
-
-**2. Nexat Pack Support**
+**1. Nexat Pack Support**
 - Full compatibility with modular harvesters
 - HUD display for Nexat carrier vehicles
 - Speed limiting for harvester modules
 
-**3. Code Quality**
-- Performance optimizations
-- Stability improvements
-- Enhanced multiplayer compatibility
+**2. MacDon DLC Support**
+- Full compatibility with MacDon swathers and headers
+- Specialized load calculations for swath harvesting
+
+**3. Full Forage Harvester Support**
+- Comprehensive load calculations for chaff/silage
+- Optimized HUD for continuous flow harvesting
+- Support for various crop processors (Cracker/Kernel Processor)
 
 ---
 
 ## 🔥 Major Update: v2.0.0 - Real Crop Loss
 
-**Status:** Planned  
+**Status:** Planned
 
 Finally, the highly requested feature!
 
@@ -69,7 +70,7 @@ This will completely transform the gameplay - you'll need to find the balance be
 
 ## 🎓 Future: v2.5/3.0 - Advanced Simulation
 
-**Status:** Research Phase  
+**Status:** Research Phase
 
 For hardcore simulation fans who want the ultimate realism:
 
@@ -133,5 +134,5 @@ We're listening to your feedback! These suggestions are being evaluated:
 
 ---
 
-*Last Updated: January 21, 2026*  
+*Last Updated: January 30, 2026*
 *Subject to change based on community feedback and technical feasibility*
