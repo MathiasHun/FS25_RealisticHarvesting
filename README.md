@@ -1,6 +1,6 @@
 ﻿# 🌾 Realistic Harvesting - Farming Simulator 25
 
-[![Version](https://img.shields.io/badge/version-1.1.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Version](https://img.shields.io/badge/version-1.2.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![FS25](https://img.shields.io/badge/FS25-Compatible-blue.svg)](https://www.farming-simulator.com/)
 [![Multiplayer](https://img.shields.io/badge/Multiplayer-Supported-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE)
@@ -61,9 +61,9 @@ A **sleek, icon-based display** near your speedometer shows:
 
 ### ⚠️ Crop Loss System *(Coming Soon!)*
 
-> **Note:** In version 1.1.0.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
+> **Note:** In version 1.2.0.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
 
-**Planned for v1.1+:**
+**Planned for v1.3+:**
 - Real yield reduction when overloading
 - Loss calculation based on overload severity
 
@@ -103,7 +103,7 @@ Access via `ESC → Settings → Realistic Harvesting`:
 | **Difficulty** | Arcade / Normal / Realistic | Choose your physics model |
 | **Show HUD** | ON / OFF | Toggle info display |
 | **Speed Limiting** | ON / OFF | Enable automatic speed control |
-| **Crop Loss** | ON / OFF | Toggle loss indicator *(visual only in v1.1)* |
+| **Crop Loss** | ON / OFF | Toggle loss indicator *(visual only in v1.2)* |
 
 ---
 
@@ -122,15 +122,6 @@ Access via `ESC → Settings → Realistic Harvesting`:
 For the best MP experience, all players should use the **same difficulty setting**.
 
 ---
-
-## 📋 Changelog
-
-### v1.1.0.0
-- **New Feature:** Added "Reset Settings" button to the settings menu footer (Key: X).
-- **UX Improvement:** Added side descriptions for all settings in the menu (Tooltips).
-- **Localization:** Full translation support for 10 languages (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU).
-- **Fix:** Improved settings menu stability.
-
 
 ## 📥 Installation
 
@@ -174,7 +165,7 @@ For the best MP experience, all players should use the **same difficulty setting
 ## 🤝 Credits & Support
 
 **Created by:** exekx  
-**Version:** 1.1.0.0  
+**Version:** 1.2.0.0  
 **Compatible with:** Farming Simulator 25
 
 ### Support the Mod
@@ -216,11 +207,6 @@ This mod is protected by copyright law. Here's what that means:
 ## 🚀 Future Roadmap
 
 See our detailed development plan: **[ROADMAP.md](ROADMAP.md)**
-
-**Quick Preview:**
-- 🎯 **v1.2.0** - Game balance refinements + Nexat Pack support
-- 🔥 **v2.0.0** - Real crop loss system
-- 🎓 **v2.5/3.0** - Manual combine configuration (advanced simulation)
 
 ---
 
