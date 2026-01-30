@@ -14,6 +14,7 @@
         <br>Colheita Realista</br>
         <uk>Реалістичний збір врожаю</uk>
         <ru>Реалистичный сбор урожая</ru>
+        <hu>Realisztikus betakarítás</hu>
     </title>
     <description>
         <en>Adds realistic harvesting mechanics.</en>
@@ -26,6 +27,7 @@
         <br>Adiciona mecânicas de colheita realistas.</br>
         <uk>Додає реалістичну механіку збору врожаю.</uk>
         <ru>Добавляет реалистичную механику уборки урожая.</ru>
+        <hu>Realisztikus betakarítási mechanikákat ad hozzá.</hu>
     </description>
     <iconFilename>icon.dds</iconFilename>
     
@@ -47,6 +49,7 @@
             <br>Colheita Realista</br>
             <uk>Реалістичний збір врожаю</uk>
             <ru>Реалистичный сбор урожая</ru>
+            <hu>Realisztikus betakarítás</hu>
         </text>
         
         <text name="rhm_difficulty_short">
@@ -60,6 +63,7 @@
             <br>Dificuldade</br>
             <uk>Складність</uk>
             <ru>Сложность</ru>
+            <hu>Nehézség</hu>
         </text>
         
         <text name="rhm_difficulty_long">
@@ -73,6 +77,7 @@
             <br>Arcade: Sem limites. Normal: Limites moderados (120%). Realista: Limites rigorosos (100%)</br>
             <uk>Аркада: Без обмежень. Нормальна: Помірні обмеження (120%). Реалістична: Жорсткі обмеження (100%)</uk>
             <ru>Аркада: Без ограничений. Обычная: Умеренные ограничения (120%). Реалистичная: Строгие ограничения (100%)</ru>
+            <hu>Könnyű: Nincs sebességkorlát. Normál: Mérsékelt korlátok (120%). Realisztikus: Szigorú korlátok (100%)</hu>
         </text>
         
         <text name="rhm_diff_1">
@@ -86,6 +91,7 @@
             <br>Arcade</br>
             <uk>Аркада</uk>
             <ru>Аркада</ru>
+            <hu>Könnyű</hu>
         </text>
         
         <text name="rhm_diff_2">
@@ -99,6 +105,7 @@
             <br>Normal</br>
             <uk>Звичайна</uk>
             <ru>Обычная</ru>
+            <hu>Normál</hu>
         </text>
         
         <text name="rhm_diff_3">
@@ -112,6 +119,7 @@
             <br>Realista</br>
             <uk>Реалістична</uk>
             <ru>Реалистичная</ru>
+            <hu>Realisztikus</hu>
         </text>
         
         <text name="rhm_hud_short">
@@ -125,6 +133,7 @@
             <br>Mostrar HUD</br>
             <uk>Показувати HUD</uk>
             <ru>Показывать HUD</ru>
+            <hu>HUD megjelenítése</hu>
         </text>
         
         <text name="rhm_hud_long">
@@ -138,6 +147,7 @@
             <br>Exibir informações de colheita</br>
             <uk>Відображати інформацію про збір</uk>
             <ru>Отображать информацию о сборе</ru>
+            <hu>Betakarítási információk megjelenítése</hu>
         </text>
         
         <text name="rhm_speedlimit_short">
@@ -151,6 +161,7 @@
             <br>Limitação de velocidade</br>
             <uk>Обмеження швидкості</uk>
             <ru>Ограничение скорости</ru>
+            <hu>Sebességkorlátozás</hu>
         </text>
         
         <text name="rhm_speedlimit_long">
@@ -164,6 +175,7 @@
             <br>Limitar automaticamente a velocidade da colheitadeira com base na carga do motor</br>
             <uk>Автоматично обмежувати швидкість комбайна залежно від навантаження</uk>
             <ru>Автоматически ограничивать скорость комбайна в зависимости от нагрузки</ru>
+            <hu>A kombájn sebességének automatikus korlátozása a motor terhelése alapján</hu>
         </text>
         
         <text name="rhm_croploss_short">
@@ -177,6 +189,7 @@
             <br>Perda de colheita</br>
             <uk>Втрати врожаю</uk>
             <ru>Потери урожая</ru>
+            <hu>Termésveszteség</hu>
         </text>
         
         <text name="rhm_croploss_long">
@@ -190,6 +203,7 @@
             <br>Calcular perda de colheita quando sobrecarregado</br>
             <uk>Розраховувати втрати врожаю при перевантаженні комбайна</uk>
             <ru>Рассчитывать потери урожая при перегрузке комбайна</ru>
+            <hu>Túlterhelés esetén termésveszteség számítása</hu>
         </text>
         
         <text name="rhm_speedindicator_short">
@@ -203,6 +217,7 @@
             <br>Indicador de velocidade</br>
             <uk>Показник швидкості</uk>
             <ru>Показатель скорости</ru>
+            <hu>Sebességjelző</hu>
         </text>
         
         <text name="rhm_speedindicator_long">
@@ -216,6 +231,7 @@
             <br>Exibir indicador de velocidade recomendado no HUD</br>
             <uk>Відображати рекомендовану швидкість в HUD</uk>
             <ru>Показывать рекомендуемую скорость в HUD</ru>
+            <hu>Ajánlott sebesség megjelenítése a HUD-on</hu>
         </text>
         
         <text name="rhm_units_short">
@@ -229,6 +245,7 @@
             <br>Unidades</br>
             <uk>Одиниці</uk>
             <ru>Единицы</ru>
+            <hu>Mértékegységek</hu>
         </text>
         
         <text name="rhm_units_long">
@@ -242,6 +259,7 @@
             <br>Escolha o sistema de medição (velocidade, massa, área)</br>
             <uk>Оберіть систему вимірювання (швидкість, маса, площа)</uk>
             <ru>Выберите систему измерения (скорость, масса, площадь)</ru>
+            <hu>Mérési rendszer kiválasztása (sebesség, tömeg, terület)</hu>
         </text>
         
         <text name="rhm_unit_metric">
@@ -255,6 +273,7 @@
             <br>Métrico (km/h, t/h, ha)</br>
             <uk>Метричні (км/год, т/год, га)</uk>
             <ru>Метрические (км/ч, т/ч, га)</ru>
+            <hu>Metrikus (km/h, t/h, ha)</hu>
         </text>
         
         <text name="rhm_unit_imperial">
@@ -268,6 +287,7 @@
             <br>Imperial (mph, ton/h, ac)</br>
             <uk>Імперські (mph, ton/h, ac)</uk>
             <ru>Имперские (mph, ton/h, ac)</ru>
+            <hu>Angolszász (mph, tonna/óra, ac)</hu>
         </text>
         
         <text name="rhm_unit_bushels">
@@ -281,6 +301,7 @@
             <br>Imperial com bushels (mph, bu/h, ac)</br>
             <uk>Імперські з бушелями (mph, bu/h, ac)</uk>
             <ru>Имперские с бушелями (mph, bu/h, ac)</ru>
+            <hu>Angolszász bushellel (mph, bu/óra, ac)</hu>
         </text>
 
         <text name="rhm_reset">
@@ -294,6 +315,7 @@
             <br>Restaurar configurações RH</br>
             <uk>Скинути налаштування RH</uk>
             <ru>Сбросить настройки RH</ru>
+            <hu>RH beállítások visszaállítása</hu>
         </text>
     </l10n>
 </modDesc>
