@@ -15,6 +15,7 @@
         <br>Colheita Realista</br>
         <uk>Реалістичний Збір Врожаю</uk>
         <ru>Реалистичный Сбор Урожая</ru>
+        <hu>Realisztikus betakarítás</hu>
     </title>
     <description>
         <en><![CDATA[Adds realistic harvesting mechanics to your combines.
@@ -277,6 +278,32 @@ Changelog 1.1.0.0:
 - Улучшения интерфейса: Боковые описания для всех настроек (подсказки)
 - Локализация: Полная поддержка перевода для 10 языков (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
 - Исправления ошибок: Улучшена стабильность меню настроек]]></ru>
+        <hu><![CDATA[Valósághű betakarítási mechanikákat ad hozzá a kombájnjaidhoz.
+
+Funkciók:
+- Dinamikus motor­terhelés-számítás a termény sűrűsége és a vágóasztal szélessége alapján
+- Automatikus sebességkorlátozás a túlterhelés elkerülése érdekében
+- Terményveszteség-jelző (csak vizuális – a teljes szimuláció hamarosan érkezik)
+- Testreszabható HUD valós idejű adatokkal
+- Teljes többjátékos támogatás, szerveroldali beállításokkal
+- Támogatás gyapotbetakarítókhoz, gyökérnövény-betakarítókhoz, valamint részleges támogatás silózó betakarítókhoz
+
+Változások 1.2.1.0:
+- Javítva a teljesítményszámítás, amely hibás értékeket mutatott (1000× túl alacsony volt)
+- Pontosabb tömeg–térfogat átváltás a valós terménysűrűség használatával
+
+Változások 1.2.0.0:
+- Gyapotbetakarítók támogatásának hozzáadása
+- Részleges támogatás a silózó betakarítókhoz
+- Többjátékos szinkronizációs problémák javítása
+- Beállítási menü ütközésének javítása más modokkal
+- Egységrendszer megjelenítésének javítása (Imperiális/Metrikus)
+
+Változások 1.1.0.0:
+- Új funkció: „Beállítások visszaállítása” gomb hozzáadása a beállítási menü aljához (billentyű: X)
+- Felhasználói felület fejlesztések: Oldalsó leírások minden beállításhoz (tooltippek)
+- Lokalizáció: Teljes fordítási támogatás 10 nyelven (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Hibajavítások: A beállítási menü stabilitásának javítása]]></hu>
     </description>
     <iconFilename>icon_FS25_RealisticHarvesting.dds</iconFilename>
     
@@ -438,6 +465,7 @@ Changelog 1.1.0.0:
             <br>Perda de colheita</br>
             <uk>Втрати врожаю</uk>
             <ru>Потери урожая</ru>
+            <hu>Termésveszteség</hu>
         </text>
         
         <text name="rhm_croploss_long">
@@ -451,6 +479,7 @@ Changelog 1.1.0.0:
             <br>Calcular perda de colheita quando sobrecarregado</br>
             <uk>Розраховувати втрати врожаю при перевантаженні комбайна</uk>
             <ru>Рассчитывать потери урожая при перегрузке комбайна</ru>
+            <hu>Túlterhelés esetén termésveszteség számítása</hu>
         </text>
         
         <text name="rhm_speedindicator_short">
