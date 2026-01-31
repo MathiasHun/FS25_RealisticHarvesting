@@ -13,8 +13,8 @@
         <it>Raccolta Realistica</it>
         <cz>Realistická Sklizeň</cz>
         <br>Colheita Realista</br>
-        <uk>Реалістичний збір врожаю</uk>
-        <ru>Реалистичный сбор урожая</ru>
+        <uk>Реалістичний Збір Врожаю</uk>
+        <ru>Реалистичный Сбор Урожая</ru>
     </title>
     <description>
         <en><![CDATA[Adds realistic harvesting mechanics to your combines.
@@ -22,7 +22,7 @@
 Features:
 - Dynamic engine load calculation based on crop density and header width
 - Automatic speed limiting to prevent overloading
-- Realistic crop loss simulation
+- Crop loss indicator (visual only - full simulation coming soon)
 - Customizable HUD with real-time metrics
 - Full multiplayer support with server-side settings
 - Support for Cotton Harvesters, Root Crop Harvesters, and partial Forage Harvester support
@@ -48,7 +48,7 @@ Changelog 1.1.0.0:
 Funktionen:
 - Dynamische Motorlastberechnung basierend auf Erntedichte und Schneidwerksbreite
 - Automatische Geschwindigkeitsbegrenzung zur Vermeidung von Überlastung
-- Realistische Ernteverlustsimulation
+- Ernteverlustanzeige (nur visuell - vollständige Simulation kommt bald)
 - Anpassbares HUD mit Echtzeit-Metriken
 - Volle Multiplayer-Unterstützung mit serverseitigen Einstellungen
 - Unterstützung für Baumwollernter, Hackfruchternter und teilweise Feldhäcksler
