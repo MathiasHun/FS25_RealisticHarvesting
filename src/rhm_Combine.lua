@@ -262,29 +262,32 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     end
     
     -- Оновлюємо LoadCalculator
-    -- Використовуємо lastArea з spec_combine (встановлюється в addCutterArea)
-    local area = spec.lastArea or 0
-    spec.loadCalculator:update(self, dt, area)
+    -- Спершу розраховуємо масу, бо тепер вона головна!
+    local massKg = 0
+    local liters = spec.lastLiters or 0
     
-    -- Оновлюємо продуктивність з накопичених літрів
-    if spec.lastLiters and spec.lastLiters > 0 then
-        -- Розраховуємо реальну масу
-        local massKg = 0
-        local liters = spec.lastLiters
-        
+    if liters > 0 then
         if spec.lastFillType and g_fillTypeManager then
             local fillType = g_fillTypeManager:getFillTypeByIndex(spec.lastFillType)
             if fillType and fillType.massPerLiter then
                 -- ВАЖЛИВО: massPerLiter в грі зберігається в ТОННАХ на літр, тому множимо на 1000
                 massKg = liters * fillType.massPerLiter * 1000
             else
-                massKg = liters * 0.75 -- Fallback, як було раніше
+                massKg = liters * 0.75 -- Fallback
             end
         else
             massKg = liters * 0.75 -- Fallback
         end
-        
-        -- Передаємо і масу, і літри
+    end
+    
+    -- Використовуємо lastArea з spec_combine (встановлюється в addCutterArea)
+    -- local area = spec.lastArea or 0 -- Більше не використовується для основного розрахунку
+    
+    -- Передаємо МАСУ в LoadCalculator!
+    spec.loadCalculator:update(self, dt, massKg)
+    
+    -- Оновлюємо продуктивність (логіку продуктивності теж залишаємо, вона використовує ті самі дані)
+    if liters > 0 then
         spec.loadCalculator:updateProductivity(massKg, liters, dt) 
     end
     

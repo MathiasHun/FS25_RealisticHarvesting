@@ -21,10 +21,10 @@ function LoadCalculator.new(modDirectory)
     self.distanceForMeasuring = 3  -- 3 метри
     
     -- Базова продуктивність (буде встановлена в onLoad)
-    self.basePerfAvgArea = 0  -- м² на секунду
-    self.currentAvgArea = 0
-    self.lastAvgArea = 0  -- Попереднє середнє (для розрахунку прискорення)
-    self.rawAvgArea = 0  -- Сире (незгладжене) значення для аварійного гальмування
+    self.basePerfMass = 0  -- кг на секунду
+    self.currentAvgMass = 0
+    self.lastAvgMass = 0  -- Попереднє середнє (для розрахунку прискорення)
+    self.rawAvgMass = 0  -- Сире (незгладжене) значення для аварійного гальмування
     
     -- Поточне навантаження
     self.engineLoad = 0
@@ -45,6 +45,9 @@ function LoadCalculator.new(modDirectory)
     self.productivityLiters = 0  -- Накопичений об'єм за поточний період (л)
     self.productivityTime = 0  -- Час накопичення (мс)
     self.productivityUpdateInterval = 3000  -- Оновлювати кожні 3 секунди
+    
+    -- Накопичувач для розрахунку навантаження
+    self.loadAccumulatedMass = 0 -- кг
     
     print("RHM: LoadCalculator initialized")
     
@@ -98,31 +101,83 @@ function LoadCalculator:loadCropFactorsFromXML()
     print(string.format("RHM: Loaded %d crop factors from fruitTypes.xml", i))
 end
 
----Завантажує crop factors за замовчуванням
+---Завантажує стандартні коефіцієнти (Fallback)
 function LoadCalculator:loadDefaultCropFactors()
     -- Fallback до базових значень
+    -- 1.0 = Стандарт (Пшениця)
     self.CROP_FACTORS[FruitType.WHEAT] = 1.0
-    self.CROP_FACTORS[FruitType.BARLEY] = 1.05
-    self.CROP_FACTORS[FruitType.MAIZE] = 1.8
-end
+    self.CROP_FACTORS[FruitType.BARLEY] = 1.0 -- Barley same/slightly easier than wheat
+    
+    -- Кукурудза: Маємо залишити низьким, бо в таблиці (CombineXP) коефіцієнт для об'єму/площі
+    -- Для МАСИ, кукурудза містить мало незернової частини (MOG), але для 6 км/год треба 0.85
+    self.CROP_FACTORS[FruitType.MAIZE] = 0.85
+    
+    -- Соя: В таблиці 0.7 vs 0.8 Wheat -> легше. АЛЕ в FS25 вона дуже легка за вагою. 
+    -- Щоб отримати реалістичну швидкість (6-7 км/год), треба підняти до 1.8
+    self.CROP_FACTORS[FruitType.SOYBEAN] = 1.8
+    
+    -- Соняшник: Дуже легкий за масою (0.18 kg/m2). Треба фактор 2.0 для швидкості 9-10 км/год.
+    self.CROP_FACTORS[FruitType.SUNFLOWER] = 2.0
+    
+    -- Ріпак: Легший за пшеницю, але густий. Фактор 1.3 -> ~7 км/год.
+    self.CROP_FACTORS[FruitType.CANOLA] = 1.3
+    
+     -- Овес: Дуже легкий (0.57 l/m2), тому треба великий фактор (2.2), щоб не літати під 14 км/год
+    self.CROP_FACTORS[FruitType.OAT] = 2.2
+    
+    -- Other cereals (standard extensions)
+    if FruitType.RYE then self.CROP_FACTORS[FruitType.RYE] = 1.0 end
+    if FruitType.SPELT then self.CROP_FACTORS[FruitType.SPELT] = 1.0 end
+    if FruitType.TRITICALE then self.CROP_FACTORS[FruitType.TRITICALE] = 1.0 end
+    if FruitType.MILLET then self.CROP_FACTORS[FruitType.MILLET] = 0.9 end
+    
+    -- Sorghum (mass similar to wheat but grain header use). 0.9 -> ~6-7 km/h
+    if FruitType.SORGHUM then self.CROP_FACTORS[FruitType.SORGHUM] = 0.9 end
+    
+    -- Rice (Tough) - Factor 2.3 for ~4 km/h
+    if FruitType.RICE then self.CROP_FACTORS[FruitType.RICE] = 2.3 end
+    -- Rice Long - Factor 1.5 for ~5 km/h
+    if FruitType.RICELONGGRAIN then self.CROP_FACTORS[FruitType.RICELONGGRAIN] = 1.5 end
+    
+    -- Pulses
+    if FruitType.PEA then self.CROP_FACTORS[FruitType.PEA] = 1.0 end
+    
+    -- Root Crops (Massive Mass -> Low Factors)
+    if FruitType.SUGARBEET then self.CROP_FACTORS[FruitType.SUGARBEET] = 0.2 end
+    if FruitType.POTATO then self.CROP_FACTORS[FruitType.POTATO] = 0.25 end
+    if FruitType.CARROT then self.CROP_FACTORS[FruitType.CARROT] = 0.15 end
+    if FruitType.PARSNIP then self.CROP_FACTORS[FruitType.PARSNIP] = 0.15 end
+    if FruitType.BEETROOT then self.CROP_FACTORS[FruitType.BEETROOT] = 0.15 end
+    
+    -- Special
+    if FruitType.COTTON then self.CROP_FACTORS[FruitType.COTTON] = 3.0 end -- Light but slow
+    if FruitType.SUGARCANE then self.CROP_FACTORS[FruitType.SUGARCANE] = 0.1 end -- Massive mass
+    
+    -- Other
+    if FruitType.POPLAR then self.CROP_FACTORS[FruitType.POPLAR] = 0.5 end 
+    if FruitType.OILSEEDRADISH then self.CROP_FACTORS[FruitType.OILSEEDRADISH] = 0.5 end
 
----Встановлює базову продуктивність комбайна
----@param basePerf number Базова продуктивність в га/год
-function LoadCalculator:setBasePerformance(basePerf)
-    -- Конвертуємо га/год в м²/с 
-    self.basePerfAvgArea = basePerf / 36
+---Встановлює базову продуктивність комбайна mass-based
+---@param basePerfMass number Базова продуктивність в кг/с
+function LoadCalculator:setBasePerformance(basePerfMass)
+    self.basePerfMass = basePerfMass
     
     if self.debug then
-        print(string.format("RHM: Base performance set to %.1f ha/h (%.2f m²/s)", 
-            basePerf, self.basePerfAvgArea))
+        print(string.format("RHM: Base performance set to %.2f kg/s (%.1f t/h)", 
+            self.basePerfMass, self.basePerfMass * 3.6))
     end
 end
 
 ---Отримує базову продуктивність з потужності двигуна
 ---@param vehicle table Комбайн
----@return number Базова продуктивність в га/год
+---@return number Базова продуктивність в кг/сек
 function LoadCalculator:getBasePerformanceFromPower(vehicle)
-    local coef = 1.2  -- Стандартний коефіцієнт для зернозбиральних комбайнів
+    -- NEW LOGIC: Calculate throughput based on Horsepower
+    -- Approximation: 1 HP ~= 0.035 kg/s throughput for Grain
+    -- Example: 790 HP (X9 1100) -> 27.65 kg/s -> ~100 t/h
+    -- Example: 500 HP (S780) -> 17.5 kg/s -> ~63 t/h
+    
+    local coef = 0.035  -- Стандартний коефіцієнт для зернозбиральних комбайнів (kg/s per HP)
     local power = 0
     
     -- Визначаємо тип техніки за категорією
@@ -130,11 +185,13 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
     local category = vehicle.xmlFile:getValue(keyCategory)
     
     if category == "forageHarvesters" or category == "forageHarvesterCutters" then
-        coef = 12.0  -- Кормозбиральні комбайни обробляють набагато більше матеріалу
+        coef = 0.150  -- Кормозбиральні: ~150-200 t/h -> 0.15 kg/s per HP
     elseif category == "beetVehicles" or category == "beetHarvesting" then
-        coef = 0.6  -- Бурякозбиральні комбайни
+        coef = 0.080  -- Бурякозбиральні: very high throughput
     elseif category == "potatoVehicles" then
-        coef = 0.3  -- Картоплезбиральні комбайни
+        coef = 0.060  -- Картоплезбиральні
+    elseif category == "cottonVehicles" then
+        coef = 0.015  -- Бавовна (легка, повільна обробка)
     end
     
     -- Спробувати отримати потужність з motorized spec
@@ -163,25 +220,25 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
     
     if power and tonumber(power) > 0 then
         local basePerf = tonumber(power) * coef
-        print(string.format("RHM: BasePerf computed for %s (category: %s, coef: %.1f): %d hp × %.1f = %.1f ha/h", 
-            vehicle:getFullName(), category or "unknown", coef, power, coef, basePerf))
+        print(string.format("RHM: BasePerf Mass computed for %s (cat: %s, coef: %.3f): %d hp -> %.2f kg/s (%.1f t/h)", 
+            vehicle:getFullName(), category or "unknown", coef, power, basePerf, basePerf * 3.6))
         return basePerf
     end
     
     print("RHM: Warning - Could not determine combine power, using default basePerf")
-    return 100  -- Значення за замовчуванням
+    return 10.0  -- Default ~36 t/h
 end
 
 ---Оновлює дані для розрахунку навантаження
 ---@param vehicle table Комбайн
 ---@param dt number Delta time в мс
----@param area number Площа що була зібрана
-function LoadCalculator:update(vehicle, dt, area)
+---@param mass number Маса зібраного врожаю (кг) - НОВИЙ ПАРАМЕТР
+function LoadCalculator:update(vehicle, dt, mass)
     -- Оновлюємо відстань
     self.totalDistance = self.totalDistance + vehicle.lastMovedDistance
     
-    -- Оновлюємо площу
-    self.totalArea = self.totalArea + area
+    -- Оновлюємо масу (замість площі)
+    self.loadAccumulatedMass = (self.loadAccumulatedMass or 0) + mass
     
     -- Оновлюємо час
     self.currentTime = self.currentTime + dt
@@ -193,12 +250,12 @@ function LoadCalculator:update(vehicle, dt, area)
         
         -- Скидаємо лічильники
         self.currentTime = 0
-        self.totalArea = 0
+        self.loadAccumulatedMass = 0
         self.totalDistance = 0
     end
 end
 
----Розраховує навантаження на двигун
+---Розраховує навантаження на двигун (Mass-based)
 ---@param vehicle table Комбайн
 function LoadCalculator:calculateEngineLoad(vehicle)
     if self.currentTime <= 0 then
@@ -212,25 +269,26 @@ function LoadCalculator:calculateEngineLoad(vehicle)
         cropFactor = self.CROP_FACTORS[spec_combine.lastValidInputFruitType] or 1.0
     end
     
-    -- Розраховуємо RAW середню площу за секунду (без згладжування)
-    -- 500 = 1000 / 2, де 2 - це коефіцієнт для врахування добрив
-    local rawAvgArea = 500 * self.totalArea * cropFactor * g_currentMission:getFruitPixelsToSqm() / self.currentTime
+    -- Розраховуємо RAW середню масу за секунду (кг/с)
+    -- currentTime в мс, тому 1000/currentTime для секунд
+    -- Використовуємо accumulatedMass
+    local rawAvgMass = (self.loadAccumulatedMass or 0) * (1000 / self.currentTime) * cropFactor
     
     -- ADAPTIVE SMOOTHING: більше згладжування при високому навантаженні
-    local loadRatio = self.currentAvgArea / math.max(0.01, self.basePerfAvgArea)
+    local loadRatio = self.currentAvgMass / math.max(0.01, self.basePerfMass)
     local smoothFactor = 0.3 + 0.4 * math.min(1.0, loadRatio)
     smoothFactor = math.min(0.7, smoothFactor)  -- Max 70% smoothing
     
     -- Застосовуємо згладжування тільки якщо є попереднє значення
-    local avgArea = rawAvgArea
-    if self.currentAvgArea > (0.75 * self.basePerfAvgArea) then
-        avgArea = (1 - smoothFactor) * rawAvgArea + smoothFactor * self.currentAvgArea
+    local avgMass = rawAvgMass
+    if self.currentAvgMass > (0.5 * self.basePerfMass) then
+        avgMass = (1 - smoothFactor) * rawAvgMass + smoothFactor * self.currentAvgMass
     end
     
     -- Зберігаємо обидва значення для різних цілей
-    self.lastAvgArea = self.currentAvgArea
-    self.currentAvgArea = avgArea
-    self.rawAvgArea = rawAvgArea  -- Для аварійного гальмування
+    self.lastAvgMass = self.currentAvgMass
+    self.currentAvgMass = avgMass
+    self.rawAvgMass = rawAvgMass  -- Для аварійного гальмування
     
     -- Отримуємо power boost для розрахунку навантаження
     local powerBoost = 0
@@ -238,27 +296,27 @@ function LoadCalculator:calculateEngineLoad(vehicle)
         powerBoost = g_realisticHarvestManager.settings:getPowerBoost()
     end
     
-    -- Максимальна допустима площа з урахуванням power boost
-    local maxAvgArea = (1 + 0.01 * powerBoost) * self.basePerfAvgArea
+    -- Максимальна допустима маса з урахуванням power boost
+    local maxAvgMass = (1 + 0.01 * powerBoost) * self.basePerfMass
     
-    -- Розраховуємо навантаження відносно maxAvgArea
-    if maxAvgArea > 0 then
-        self.engineLoad = self.currentAvgArea / maxAvgArea
+    -- Розраховуємо навантаження відносно maxAvgMass
+    if maxAvgMass > 0 then
+        self.engineLoad = self.currentAvgMass / maxAvgMass
     else
         self.engineLoad = 0
     end
     
     if self.debug then
-        print(string.format("RHM: Load: %.1f%% (Raw: %.2f, Smooth: %.2f, SmoothFactor: %.2f)", 
-            self.engineLoad * 100, rawAvgArea, self.currentAvgArea, smoothFactor))
+        print(string.format("RHM: Load: %.1f%% (Raw: %.2f kg/s, Smooth: %.2f kg/s)", 
+            self.engineLoad * 100, rawAvgMass, self.currentAvgMass))
     end
 end
 
 ---Розраховує обмеження швидкості
 ---@param vehicle table Комбайн
 function LoadCalculator:calculateSpeedLimit(vehicle)
-    -- Якщо не збираємо врожай (area = 0), не обмежуємо швидкість
-    if self.currentAvgArea == 0 then
+    -- Якщо не збираємо врожай (mass = 0), не обмежуємо швидкість
+    if self.currentAvgMass == 0 then
         -- Зберігаємо поточний робочий ліміт перед скиданням
         if self.speedLimit < self.genuineSpeedLimit then
             self.workingSpeedLimit = self.speedLimit
@@ -310,17 +368,17 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
         powerBoost = g_realisticHarvestManager.settings:getPowerBoost()
     end
     
-    local maxAvgArea = (1 + 0.01 * powerBoost) * self.basePerfAvgArea
+    local maxAvgMass = (1 + 0.01 * powerBoost) * self.basePerfMass
     
     -- Розраховуємо прискорення (derivative of smoothed value)
-    local areaAcc = 0
-    if self.currentTime > 0 and self.lastAvgArea > 0 then
-        areaAcc = (self.currentAvgArea - self.lastAvgArea) / self.currentTime
+    local massAcc = 0
+    if self.currentTime > 0 and self.lastAvgMass > 0 then
+        massAcc = (self.currentAvgMass - self.lastAvgMass) / self.currentTime
     end
     
     -- === THREE-ZONE CONTROL SYSTEM ===
-    local loadRatio = self.currentAvgArea / maxAvgArea
-    local rawLoadRatio = (self.rawAvgArea or self.currentAvgArea) / maxAvgArea
+    local loadRatio = self.currentAvgMass / maxAvgMass
+    local rawLoadRatio = (self.rawAvgMass or self.currentAvgMass) / maxAvgMass
     local newSpeedLimit = self.speedLimit
     local controlZone = "HOLD"
     
@@ -396,16 +454,15 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
         
         -- Check prediction before accelerating
         local predictLimitSet = false
-        if areaAcc > 0 then
+        if massAcc > 0 then
             -- Adaptive prediction horizon (shorter at high load)
             local predictHorizon = 2500 + 500 * (1 - loadRatio)
-            local predictAvgArea = self.currentAvgArea + areaAcc * predictHorizon
+            local predictAvgMass = self.currentAvgMass + massAcc * predictHorizon
             
-            -- FIXED: Підняли поріг з 1.3 до 1.5
-            -- Це запобігає передчасному гальмуванню при 90% load
+            -- RAW PREDICTION CHECK
             local predictThreshold = 1.5
             
-            if predictAvgArea > predictThreshold * maxAvgArea then
+            if predictAvgMass > predictThreshold * maxAvgMass then
                 -- Predictive brake
                 newSpeedLimit = math.max(2, math.min(0.96 * self.speedLimit, avgSpeed * 3.6))
                 predictLimitSet = true
@@ -421,20 +478,20 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
             if loadRatio > 0.70 and loadRatio < 0.80 then
                 -- 70-80%: Обережний розгін (не хочемо перевищити 85%)
                 -- Розганяємось тільки якщо є великий запас
-                local capacityRatio = (maxAvgArea - self.currentAvgArea) / maxAvgArea
+                local capacityRatio = (maxAvgMass - self.currentAvgMass) / maxAvgMass
                 if capacityRatio > 0.25 then  -- Тільки якщо запас >25%
                     local accelFactor = 0.05  -- Повільний розгін
                     newSpeedLimit = math.min(self.genuineSpeedLimit, 
-                        self.speedLimit + accelFactor * (maxAvgArea / self.currentAvgArea)^2)
+                        self.speedLimit + accelFactor * (maxAvgMass / self.currentAvgMass)^2)
                 end
                 -- else: запас малий - тримаємо поточну швидкість
                 
             elseif loadRatio <= 0.70 then
                 -- <70%: Нормальний розгін (далеко від стелі)
-                local capacityRatio = (maxAvgArea - self.currentAvgArea) / maxAvgArea
+                local capacityRatio = (maxAvgMass - self.currentAvgMass) / maxAvgMass
                 local accelFactor = 0.08 + 0.05 * capacityRatio  -- 0.08-0.13 range
                 newSpeedLimit = math.min(self.genuineSpeedLimit, 
-                    self.speedLimit + accelFactor * (maxAvgArea / self.currentAvgArea)^2.5)
+                    self.speedLimit + accelFactor * (maxAvgMass / self.currentAvgMass)^2.5)
             end
             -- else: 80%+ в SAFE зоні - тримаємо (не розганяємо, не гальмуємо)
         end
@@ -460,7 +517,7 @@ function LoadCalculator:calculateSpeedLimit(vehicle)
     if self.debug then
         print(string.format("RHM: [%s] Load: %.1f%% (Raw: %.1f%%) | Speed: %.1f→%.1f | Acc: %.4f", 
             controlZone, loadRatio * 100, rawLoadRatio * 100, 
-            avgSpeed * 3.6, self.speedLimit, areaAcc))
+            avgSpeed * 3.6, self.speedLimit, massAcc))
     end
 end
 
@@ -494,7 +551,7 @@ function LoadCalculator:reset()
     self.totalDistance = 0
     self.totalArea = 0
     self.currentTime = 0
-    self.currentAvgArea = 0
+    self.currentAvgMass = 0
     self.engineLoad = 0
     self.cropLoss = 0
     -- Скидаємо speedLimit до genuineSpeedLimit (коли не косимо)

@@ -2,7 +2,7 @@
 <modDesc descVersion="105">
     <author>exekx</author>
     <manufacturer>exekx</manufacturer>
-    <version>1.2.1.0</version>
+    <version>1.3.0.0</version>
     <modName>FS25_RealisticHarvesting</modName>
     <title>
         <en>Realistic Harvesting</en>
@@ -21,12 +21,20 @@
         <en><![CDATA[Adds realistic harvesting mechanics to your combines.
 
 Features:
-- Dynamic engine load calculation based on crop density and header width
+- Dynamic engine load calculation based on throughput (mass/sec)
 - Automatic speed limiting to prevent overloading
-- Crop loss indicator (visual only - full simulation coming soon)
+- Visual Crop Loss indicator (LOW/MED/HIGH)
 - Customizable HUD with real-time metrics
 - Full multiplayer support with server-side settings
-- Support for Cotton Harvesters, Root Crop Harvesters, and partial Forage Harvester support
+- Support for all harvest types (Grain, Forage, Roots, Cotton)
+- Pickup Header support (Swathing)
+
+Changelog 1.3.0.0:
+- NEW: Completely rewritten load calculation logic based on Mass Throughput (t/h) instead of area. Fixing issues with high-yield maps causing unrealistic slow speeds.
+- NEW: Added support for Pickup Headers (Swathing) - now correctly registers load based on swath volume.
+- NEW: Visual Crop Loss Indicator (LOW/MED/HIGH) instead of percentages for better readability.
+- IMPROVED: HUD now shows Green/Yellow/Red indicators for loss.
+- IMPROVED: Adaptive smoothing for more stable speed control.
 
 Changelog 1.2.1.0:
 - Fixed productivity calculation displaying incorrect values (was 1000x too low)
@@ -328,32 +336,41 @@ Változások 1.1.0.0:
             <hu>Realisztikus betakarítás</hu>
         </text>
         
-        <text name="rhm_difficulty_short">
-            <en>Difficulty</en>
-            <de>Schwierigkeit</de>
-            <fr>Difficulté</fr>
-            <pl>Trudność</pl>
-            <es>Dificultad</es>
-            <it>Difficoltà</it>
-            <cz>Obtížnost</cz>
-            <br>Dificuldade</br>
-            <uk>Складність</uk>
-            <ru>Сложность</ru>
-            <hu>Nehézség</hu>
+        <text name="rhm_difficulty"><en>Difficulty</en><uk>Складність</uk><de>Schwierigkeit</de><fr>Difficulté</fr><pl>Trudność</pl><es>Dificultad</es><it>Difficoltà</it><cz>Obtížnost</cz><br>Dificuldade</br><ru>Сложность</ru><hu>Nehézség</hu></text>
+        <text name="rhm_difficulty_motor"><en>Engine Power Limit</en><uk>Обмеження Потужності</uk><de>Motorleistung</de><fr>Puissance moteur</fr><pl>Moc silnika</pl><es>Potencia del motor</es><it>Potenza del motore</it><cz>Výkon motoru</cz><br>Potência do motor</br><ru>Мощность двигателя</ru><hu>Motorteljesítmény</hu></text>
+        <text name="rhm_difficulty_motor_short"><en>Engine Limit</en><uk>Потужність</uk><de>Motor</de><fr>Moteur</fr><pl>Silnik</pl><es>Motor</es><it>Motore</it><cz>Motor</cz><br>Motor</br><ru>Мотор</ru><hu>Motor</hu></text>
+        <text name="rhm_difficulty_motor_long"><en>Determines how much extra power is available. Arcade = +100%, Normal = +20%, Realistic = 0%.</en><uk>Визначає додаткову потужність. Аркада = +100%, Норма = +20%, Реалізм = 0%.</uk><de>Bestimmt die verfügbare Zusatzleistung.</de><fr>Détermine la puissance supplémentaire disponible.</fr><pl>Określa dostępną dodatkową moc.</pl><es>Determina la potencia extra disponible.</es><it>Determina la potenza extra disponibile.</it><cz>Určuje dostupný výkon navíc.</cz><br>Determina a potência extra disponível.</br><ru>Определяет дополнительную мощность.</ru><hu>Meghatározza a többletteljesítményt.</hu></text>
+        
+        <text name="rhm_difficulty_loss"><en>Crop Loss Penalty</en><uk>Штраф за Втрати</uk><de>Ernteverlust</de><fr>Perte de récolte</fr><pl>Strata plonów</pl><es>Pérdida de cultivo</es><it>Perdita raccolto</it><cz>Ztráta úrody</cz><br>Perda de colheita</br><ru>Потеря урожая</ru><hu>Termésveszteség</hu></text>
+        <text name="rhm_difficulty_loss_short"><en>Loss Penalty</en><uk>Втрати</uk><de>Verlust</de><fr>Perte</fr><pl>Strata</pl><es>Pérdida</es><it>Perdita</it><cz>Ztráta</cz><br>Perda</br><ru>Потеря</ru><hu>Veszteség</hu></text>
+        <text name="rhm_difficulty_loss_long"><en>Determines crop loss severity when overloaded. Realistic = High penalty.</en><uk>Визначає суворість втрат при перевантаженні. Реалізм = Високий штраф.</uk><de>Bestimmt die Schwere des Ernteverlusts.</de><fr>Détermine la sévérité de la perte.</fr><pl>Określa dotkliwość strat.</pl><es>Determina la severidad de la pérdida.</es><it>Determina la gravità della perdita.</it><cz>Určuje závažnost ztráty.</cz><br>Determina a gravidade da perda.</br><ru>Определяет строгость потерь.</ru><hu>Meghatározza a veszteség súlyosságát.</hu></text>
+        
+        <text name="rhm_diff_1">
+            <en>Arcade</en>
+            <de>Arkade</de>
+            <fr>Arcade</fr>
+            <pl>Zręcznościowy</pl>
+            <es>Arcade</es>
+            <it>Arcade</it>
+            <cz>Arkáda</cz>
+            <br>Arcade</br>
+            <uk>Аркада</uk>
+            <ru>Аркада</ru>
+            <hu>Árkád</hu>
         </text>
         
         <text name="rhm_difficulty_long">
-            <en>Arcade: No speed limits. Normal: Moderate limits (120%). Realistic: Strict limits (100%)</en>
-            <de>Arkade: Keine Limits. Normal: Moderate Limits (120%). Realistisch: Strikte Limits (100%)</de>
-            <fr>Arcade: Pas de limites. Normal: Limites modérées (120%). Réaliste: Limites strictes (100%)</fr>
-            <pl>Arkada: Bez limitów. Normalna: Umiarkowane limity (120%). Realistyczna: Ścisłe limity (100%)</pl>
-            <es>Arcade: Sin límites. Normal: Límites moderados (120%). Realista: Límites estrictos (100%)</es>
-            <it>Arcade: Nessun limite. Normale: Limiti moderati (120%). Realistica: Limiti rigorosi (100%)</it>
-            <cz>Arkáda: Bez limitů. Normální: Mírné limity (120%). Realistická: Přísné limity (100%)</cz>
-            <br>Arcade: Sem limites. Normal: Limites moderados (120%). Realista: Limites rigorosos (100%)</br>
-            <uk>Аркада: Без обмежень. Нормальна: Помірні обмеження (120%). Реалістична: Жорсткі обмеження (100%)</uk>
-            <ru>Аркада: Без ограничений. Обычная: Умеренные ограничения (120%). Реалистичная: Строгие ограничения (100%)</ru>
-            <hu>Könnyű: Nincs sebességkorlát. Normál: Mérsékelt korlátok (120%). Realisztikus: Szigorú korlátok (100%)</hu>
+            <en>Arcade: High limits (+100%). Normal: Moderate (+20%). Realistic: Strict (0%)</en>
+            <de>Arkade: Hohe Limits (+100%). Normal: Moderat (+20%). Realistisch: Strikt (0%)</de>
+            <fr>Arcade: Limites élevées (+100%). Normal: Modéré (+20%). Réaliste: Strict (0%)</fr>
+            <pl>Arkada: Wysokie limity (+100%). Normalna: Umiarkowane (+20%). Realistyczna: Ścisłe (0%)</pl>
+            <es>Arcade: Límites altos (+100%). Normal: Moderado (+20%). Realista: Estricto (0%)</es>
+            <it>Arcade: Limiti alti (+100%). Normale: Moderato (+20%). Realistica: Rigorosi (0%)</it>
+            <cz>Arkáda: Vysoké limity (+100%). Normální: Mírné (+20%). Realistická: Přísné (0%)</cz>
+            <br>Arcade: Limites altos (+100%). Normal: Moderado (+20%). Realista: Rigorosos (0%)</br>
+            <uk>Аркада: Високі ліміти (+100%). Нормальна: Помірні (+20%). Реалістична: Жорсткі (0%)</uk>
+            <ru>Аркада: Высокие лимиты (+100%). Обычная: Умеренные (+20%). Реалистичная: Строгие (0%)</ru>
+            <hu>Könnyű: Magas korlátok (+100%). Normál: Mérsékelt (+20%). Realisztikus: Szigorú (0%)</hu>
         </text>
         
         <text name="rhm_diff_1">
@@ -592,6 +609,48 @@ Változások 1.1.0.0:
             <uk>Скинути налаштування RH</uk>
             <ru>Сбросить настройки RH</ru>
             <hu>RH beállítások visszaállítása</hu>
+        </text>
+
+        <text name="rhm_loss_low">
+            <en>LOW</en>
+            <de>NIEDRIG</de>
+            <fr>FAIBLE</fr>
+            <pl>NISKIE</pl>
+            <es>BAJO</es>
+            <it>BASSO</it>
+            <cz>NÍZKÉ</cz>
+            <br>BAIXO</br>
+            <uk>НИЗЬКІ</uk>
+            <ru>НИЗКИЕ</ru>
+            <hu>ALACSONY</hu>
+        </text>
+
+        <text name="rhm_loss_med">
+            <en>MED</en>
+            <de>MITTEL</de>
+            <fr>MOYEN</fr>
+            <pl>ŚREDNIE</pl>
+            <es>MEDIO</es>
+            <it>MEDIO</it>
+            <cz>STŘEDNÍ</cz>
+            <br>MÉDIO</br>
+            <uk>СЕРЕДНІ</uk>
+            <ru>СРЕДНИЕ</ru>
+            <hu>KÖZEPES</hu>
+        </text>
+
+        <text name="rhm_loss_high">
+            <en>HIGH</en>
+            <de>HOCH</de>
+            <fr>ÉLEVÉ</fr>
+            <pl>WYSOKIE</pl>
+            <es>ALTO</es>
+            <it>ALTO</it>
+            <cz>VYSOKÉ</cz>
+            <br>ALTO</br>
+            <uk>ВИСОКІ</uk>
+            <ru>ВЫСОКИЕ</ru>
+            <hu>MAGAS</hu>
         </text>
     </l10n>
 </modDesc>

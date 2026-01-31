@@ -39,35 +39,49 @@ function SettingsUI:inject()
     -- === SERVER SETTINGS (тільки адмін може змінювати) ===
     -- === SERVER SETTINGS (visible to all, editable by admin only) ===
     
-    -- Difficulty (Multi)
+    -- Difficulty Motor (Throughput Capacity)
     local diffOptions = {
         getTextSafe("rhm_diff_1"),
         getTextSafe("rhm_diff_2"),
         getTextSafe("rhm_diff_3")
     }
     
-    local diffOpt = UIHelper.createMultiOption(
+    local diffMotorOpt = UIHelper.createMultiOption(
         layout,
-        "rhm_diff",
-        "rhm_difficulty",
+        "rhm_diff_motor",
+        "rhm_difficulty_motor", -- New key
         diffOptions,
-        self.settings.difficulty,
+        self.settings.difficultyMotor,
         function(val)
-            -- Double check permission in callback
             if not self.settings:canChangeServerSettings() then return end
-
-            self.settings.difficulty = val
+            self.settings.difficultyMotor = val
             self.settings:save()
-            -- Broadcast to clients if multiplayer
             if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
                 SettingsSync:sendToClients(self.settings)
             end
         end
     )
-    if diffOpt.setDisabled then
-        diffOpt:setDisabled(not isAdmin)
-    end
-    self.difficultyOption = diffOpt
+    if diffMotorOpt.setDisabled then diffMotorOpt:setDisabled(not isAdmin) end
+    self.difficultyMotorOption = diffMotorOpt
+    
+    -- Difficulty Loss (Penalty)
+    local diffLossOpt = UIHelper.createMultiOption(
+        layout,
+        "rhm_diff_loss",
+        "rhm_difficulty_loss", -- New key
+        diffOptions,
+        self.settings.difficultyLoss,
+        function(val)
+            if not self.settings:canChangeServerSettings() then return end
+            self.settings.difficultyLoss = val
+            self.settings:save()
+            if g_currentMission.missionDynamicInfo.isMultiplayer and SettingsSync then
+                SettingsSync:sendToClients(self.settings)
+            end
+        end
+    )
+    if diffLossOpt.setDisabled then diffLossOpt:setDisabled(not isAdmin) end
+    self.difficultyLossOption = diffLossOpt
     
     -- Speed Limit (Binary)
     local speedLimitOpt = UIHelper.createBinaryOption(
@@ -167,9 +181,12 @@ function SettingsUI:refreshUI()
         return
     end
     
-    -- Оновлюємо difficulty
-    if self.difficultyOption and self.difficultyOption.setState then
-        self.difficultyOption:setState(self.settings.difficulty)
+    -- Оновлюємо difficulty (Motor & Loss)
+    if self.difficultyMotorOption and self.difficultyMotorOption.setState then
+        self.difficultyMotorOption:setState(self.settings.difficultyMotor)
+    end
+    if self.difficultyLossOption and self.difficultyLossOption.setState then
+        self.difficultyLossOption:setState(self.settings.difficultyLoss)
     end
     
     -- Оновлюємо HUD

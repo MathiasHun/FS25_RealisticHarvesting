@@ -8,10 +8,10 @@ Settings.DIFFICULTY_ARCADE = 1
 Settings.DIFFICULTY_NORMAL = 2
 Settings.DIFFICULTY_REALISTIC = 3
 
--- Power boost values
-Settings.POWER_BOOST_ARCADE = 100     -- 100% boost → maxLoad = 200%
-Settings.POWER_BOOST_NORMAL = 20      -- 20% boost → maxLoad = 120%
-Settings.POWER_BOOST_REALISTIC = 0    -- 0% boost → maxLoad = 100%
+-- Power boost values (Modified per user request)
+Settings.POWER_BOOST_ARCADE = 100     -- 100% boost (2x speed)
+Settings.POWER_BOOST_NORMAL = 20      -- 20% boost
+Settings.POWER_BOOST_REALISTIC = 0    -- 0% boost (True Realism)
 
 -- Unit system constants
 Settings.UNIT_METRIC = 1     -- km/h, t/h, ha
@@ -22,46 +22,47 @@ function Settings.new(manager)
     local self = setmetatable({}, Settings_mt)
     self.manager = manager
     
-    -- Difficulty settings
-    self.difficulty = Settings.DIFFICULTY_NORMAL -- Normal за замовчуванням
+    -- Difficulty settings (SPLIT)
+    self.difficultyLoss = Settings.DIFFICULTY_NORMAL    -- Втрати
+    self.difficultyMotor = Settings.DIFFICULTY_NORMAL   -- Потужність
     
     -- Feature toggles
     self.enableSpeedLimit = true
     self.enableCropLoss = false
     self.showHUD = true
-    self.showSpeedometer = true  -- Показувати оптимальну швидкість в HUD
+    self.showSpeedometer = true
     
 
     -- HUD settings
-    self.hudOffsetX = 0  -- Горизонтальне зміщення (-200 to 200)
-    self.hudOffsetY = 350  -- Вертикальне зміщення (100 to 500)
+    self.hudOffsetX = 0
+    self.hudOffsetY = 350
     
     -- Unit system
-    self.unitSystem = Settings.UNIT_METRIC  -- Metric за замовчуванням
+    self.unitSystem = Settings.UNIT_METRIC
     
-    Logging.info("RHM: Settings initialized with difficulty: Normal")
+    Logging.info("RHM: Settings initialized (Split Difficulty)")
     
     return self
 end
 
----Отримує поточний power boost залежно від складності
+---Отримує поточний power boost залежно від налаштувань двигуна
 ---@return number Power boost (0-100)
 function Settings:getPowerBoost()
-    if self.difficulty == Settings.DIFFICULTY_ARCADE then
+    if self.difficultyMotor == Settings.DIFFICULTY_ARCADE then
         return Settings.POWER_BOOST_ARCADE
-    elseif self.difficulty == Settings.DIFFICULTY_REALISTIC then
+    elseif self.difficultyMotor == Settings.DIFFICULTY_REALISTIC then
         return Settings.POWER_BOOST_REALISTIC
     else
         return Settings.POWER_BOOST_NORMAL
     end
 end
 
----Отримує множник втрат залежно від складності
+---Отримує множник втрат залежно від налаштувань втрат
 ---@return number Loss multiplier
 function Settings:getLossMultiplier()
-    if self.difficulty == Settings.DIFFICULTY_ARCADE then
+    if self.difficultyLoss == Settings.DIFFICULTY_ARCADE then
         return 0.5 -- Менші втрати
-    elseif self.difficulty == Settings.DIFFICULTY_REALISTIC then
+    elseif self.difficultyLoss == Settings.DIFFICULTY_REALISTIC then
         return 2.0 -- Більші втрати
     else
         return 1.0 -- Нормальні втрати
@@ -74,34 +75,40 @@ function Settings:getUnitSystem()
     return self.unitSystem or Settings.UNIT_METRIC
 end
 
----Встановлює рівень складності
----@param difficulty number Рівень складності (1-3)
-function Settings:setDifficulty(difficulty)
+---Встановлює рівень складності втрат
+function Settings:setDifficultyLoss(difficulty)
     if difficulty >= Settings.DIFFICULTY_ARCADE and difficulty <= Settings.DIFFICULTY_REALISTIC then
-        self.difficulty = difficulty
-        
-        local difficultyName = "Normal"
-        if difficulty == Settings.DIFFICULTY_ARCADE then
-            difficultyName = "Arcade"
-        elseif difficulty == Settings.DIFFICULTY_REALISTIC then
-            difficultyName = "Realistic"
-        end
-        
-        Logging.info("RHM: Difficulty changed to: %s (powerBoost: %d%%)", 
-            difficultyName, self:getPowerBoost())
+        self.difficultyLoss = difficulty
+        Logging.info("RHM: Loss Difficulty changed to: %d", self.difficultyLoss)
     end
 end
 
----Отримує назву поточного рівня складності
+---Встановлює рівень складності двигуна
+function Settings:setDifficultyMotor(difficulty)
+    if difficulty >= Settings.DIFFICULTY_ARCADE and difficulty <= Settings.DIFFICULTY_REALISTIC then
+        self.difficultyMotor = difficulty
+        Logging.info("RHM: Motor Difficulty changed to: %d", self.difficultyMotor)
+    end
+end
+
+---Застаріла функція (для сумісності)
+---@param difficulty number Рівень складності (1-3)
+function Settings:setDifficulty(difficulty)
+    self:setDifficultyLoss(difficulty)
+    self:setDifficultyMotor(difficulty)
+end
+
+---Отримує назву поточного рівня складності (Loss)
 ---@return string Назва рівня
 function Settings:getDifficultyName()
-    if self.difficulty == Settings.DIFFICULTY_ARCADE then
-        return "Arcade"
-    elseif self.difficulty == Settings.DIFFICULTY_REALISTIC then
-        return "Realistic"
-    else
-        return "Normal"
-    end
+    -- Return Combo string for console output
+    local loss = "Normal"
+    local motor = "Normal"
+    
+    if self.difficultyLoss == 1 then loss = "Arcade" elseif self.difficultyLoss == 3 then loss = "Real" end
+    if self.difficultyMotor == 1 then motor = "Arcade" elseif self.difficultyMotor == 3 then motor = "Real" end
+    
+    return string.format("Loss:%s / Motor:%s", loss, motor)
 end
 
 ---Перевіряє чи поточний гравець - адміністратор
@@ -136,25 +143,18 @@ end
 
 ---Завантажує налаштування
 function Settings:load()
-    -- Перевіряємо що difficulty це число
-    if type(self.difficulty) ~= "number" then
-        Logging.warning("RHM: difficulty is not a number! Type: %s, Value: %s", 
-            type(self.difficulty), tostring(self.difficulty))
-        self.difficulty = Settings.DIFFICULTY_NORMAL -- fallback
-    end
+    -- Legacy migration: if 'difficulty' exists in XML but not split ones, use it
+    -- (This logic will be in SettingsManager usually, but we set defaults here)
     
     self.manager:loadSettings(self)
+    
+    -- Validation
+    if type(self.difficultyLoss) ~= "number" then self.difficultyLoss = Settings.DIFFICULTY_NORMAL end
+    if type(self.difficultyMotor) ~= "number" then self.difficultyMotor = Settings.DIFFICULTY_NORMAL end
 end
 
 ---Зберігає налаштування
 function Settings:save()
-    -- Перевіряємо що difficulty це число
-    if type(self.difficulty) ~= "number" then
-        Logging.warning("RHM: difficulty is not a number! Type: %s, Value: %s", 
-            type(self.difficulty), tostring(self.difficulty))
-        self.difficulty = Settings.DIFFICULTY_NORMAL -- fallback
-    end
-    
     self.manager:saveSettings(self)
     
     -- Broadcast server settings to clients if multiplayer and admin
@@ -168,7 +168,8 @@ end
 
 ---Скидання налаштувань до значень за замовчуванням
 function Settings:resetToDefaults()
-    self.difficulty = Settings.DIFFICULTY_NORMAL
+    self.difficultyLoss = Settings.DIFFICULTY_NORMAL
+    self.difficultyMotor = Settings.DIFFICULTY_NORMAL
     self.enableSpeedLimit = true
     self.enableCropLoss = true
     self.showHUD = true

@@ -279,12 +279,31 @@ function HUD:drawText()
         -- Показуємо Loss
         drawRowWithIcon(self.iconLoss, textY)
         
-        if self.data.cropLoss and self.data.cropLoss > 0 then
-            setTextColor(1, 0.4, 0.4, 1)
-            renderText(textX, textY, textSize, string.format("%.1f%%", self.data.cropLoss))
+        if self.data.cropLoss and self.data.cropLoss > 0.5 then
+            local lossText = "LOW"
+            local color = {0.2, 0.8, 0.2, 1} -- Green
+            
+            if self.data.cropLoss > 3.0 then
+                lossText = "HIGH"
+                color = {0.9, 0.1, 0.1, 1} -- Red
+            elseif self.data.cropLoss > 1.0 then
+                lossText = "MED"
+                color = {0.9, 0.8, 0.1, 1} -- Yellow
+            end
+            
+            setTextColor(color[1], color[2], color[3], color[4])
+            -- Якщо доступні переклади, використовуємо їх (додамо пізніше в modDesc)
+            if g_i18n:hasText("rhm_loss_" .. lossText:lower()) then
+                lossText = g_i18n:getText("rhm_loss_" .. lossText:lower())
+            end
+            renderText(textX, textY, textSize, lossText)
         else
-            setTextColor(0.6, 0.6, 0.6, 0.8)
-            renderText(textX, textY, textSize, "0%")
+            setTextColor(0.2, 0.8, 0.2, 0.8) -- Green transparent
+            local lossText = "LOW"
+            if g_i18n:hasText("rhm_loss_low") then
+                lossText = g_i18n:getText("rhm_loss_low")
+            end
+            renderText(textX, textY, textSize, lossText)
         end
         
         -- Рядок 4: Speed (якщо включений showSpeedometer)
