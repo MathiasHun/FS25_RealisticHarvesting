@@ -13,72 +13,20 @@
         <it>Raccolta Realistica</it>
         <cz>Realistická Sklizeň</cz>
         <br>Colheita Realista</br>
-        <uk>Реалістичний Збір Врожаю</uk>
-        <ru>Реалистичный Сбор Урожая</ru>
-        <hu>Realisztikus betakarítás</hu>
+        <uk>Реалістичний збір врожаю</uk>
+        <ru>Реалистичный сбор урожая</ru>
     </title>
     <description>
-        <en><![CDATA[Adds realistic harvesting mechanics to your combines.
-
-Features:
-- Dynamic engine load calculation based on crop density and header width
-- Automatic speed limiting to prevent overloading
-- Realistic crop loss simulation
-- Customizable HUD with real-time metrics
-- Full multiplayer support with server-side settings
-- Support for Cotton Harvesters, Root Crop Harvesters, and partial Forage Harvester support
-
-Changelog 1.2.1.0:
-- Fixed productivity calculation displaying incorrect values (was 1000x too low)
-- Improved accuracy of mass-to-volume conversion using actual crop density
-
-Changelog 1.2.0.0:
-- Added support for Cotton Harvesters
-- Added partial support for Forage Harvesters
-- Fixed Multiplayer Synchronization issues
-- Fixed settings menu conflict with other mods
-- Improved Unit System display (Imperial/Metric)
-
-Changelog 1.1.0.0:
-- New Feature: Added "Reset Settings" button to settings menu footer (key: X)
-- UI Improvements: Added side descriptions for all settings in menu (tooltips)
-- Localization: Full translation support for 10 languages (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
-- Bug Fixes: Improved settings menu stability]]></en>
-        <de><![CDATA[Fügt realistische Erntemechanik zu Ihren Mähdreschern hinzu.
-
-Funktionen:
-- Dynamische Motorlastberechnung basierend auf Erntedichte und Schneidwerksbreite
-- Automatische Geschwindigkeitsbegrenzung zur Vermeidung von Überlastung
-- Realistische Ernteverlustsimulation
-- Anpassbares HUD mit Echtzeit-Metriken
-- Volle Multiplayer-Unterstützung mit serverseitigen Einstellungen
-- Unterstützung für Baumwollernter, Rübenerntemaschinen und teilweise Feldhäcksler
-
-Changelog 1.2.1.0:
-- Produktivitätsberechnung korrigiert (zeigte falsche Werte an - war 1000x zu niedrig)
-- Verbesserte Genauigkeit der Masse-zu-Volumen-Konvertierung mit tatsächlicher Erntedichte
-
-Changelog 1.2.0.0:
-- Unterstützung für Baumwollernter hinzugefügt
-- Teilweise Unterstützung für Feldhäcksler hinzugefügt
-- Multiplayer-Synchronisierungsprobleme behoben
-- Einstellungsmenü-Konflikt mit anderen Mods behoben
-- Einheitensystem-Anzeige verbessert (Imperial/Metrisch)
-
-Changelog 1.1.0.0:
-- Neue Funktion: Schaltfläche "Einstellungen zurücksetzen" zur Fußzeile des Einstellungsmenüs hinzugefügt (Taste: X)
-- UI-Verbesserungen: Seitenbeschreibungen für alle Einstellungen im Menü hinzugefügt (Tooltips)
-- Lokalisierung: Vollständige Übersetzungsunterstützung für 10 Sprachen (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
-- Fehlerbehebungen: Verbesserte Stabilität des Einstellungsmenüs]]></de>
-        <fr><![CDATA[Ajoute des mécaniques de récolte réalistes.]]></fr>
-        <pl><![CDATA[Dodaje realistyczną mechanikę żniw.]]></pl>
-        <es><![CDATA[Añade mecánicas de cosecha realistas.]]></es>
-        <it><![CDATA[Aggiunge meccaniche di raccolta realistiche.]]></it>
-        <cz><![CDATA[Přidává realistickou mechaniku sklizně.]]></cz>
-        <br><![CDATA[Adiciona mecânicas de colheita realistas.]]></br>
-        <uk><![CDATA[Додає реалістичну механіку збору врожаю.]]></uk>
-        <ru><![CDATA[Добавляет реалистичную механику уборки урожая.]]></ru>
-        <hu><![CDATA[Realisztikus betakarítási mechanikákat ad hozzá a kombájnjaihoz.]]></hu>
+        <en>Adds realistic harvesting mechanics.</en>
+        <de>Fügt realistische Erntemechanik hinzu.</de>
+        <fr>Ajoute des mécaniques de récolte réalistes.</fr>
+        <pl>Dodaje realistyczną mechanikę żniw.</pl>
+        <es>Añade mecánicas de cosecha realistas.</es>
+        <it>Aggiunge meccaniche di raccolta realistiche.</it>
+        <cz>Přidává realistickou mechaniku sklizně.</cz>
+        <br>Adiciona mecânicas de colheita realistas.</br>
+        <uk>Додає реалістичну механіку збору врожаю.</uk>
+        <ru>Добавляет реалистичную механику уборки урожая.</ru>
     </description>
     <iconFilename>icon_FS25_RealisticHarvesting.dds</iconFilename>
     
@@ -240,7 +188,6 @@ Changelog 1.1.0.0:
             <br>Perda de colheita</br>
             <uk>Втрати врожаю</uk>
             <ru>Потери урожая</ru>
-            <hu>Termésvesztéség</hu>
         </text>
         
         <text name="rhm_croploss_long">
@@ -254,7 +201,6 @@ Changelog 1.1.0.0:
             <br>Calcular perda de colheita quando sobrecarregado</br>
             <uk>Розраховувати втрати врожаю при перевантаженні комбайна</uk>
             <ru>Рассчитывать потери урожая при перегрузке комбайна</ru>
-            <hu>Túlterhelés esetén termésvesztéség számítása</hu>
         </text>
         
         <text name="rhm_speedindicator_short">
