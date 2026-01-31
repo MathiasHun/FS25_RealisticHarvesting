@@ -373,19 +373,7 @@ Változások 1.1.0.0:
             <hu>Könnyű: Magas korlátok (+100%). Normál: Mérsékelt (+20%). Realisztikus: Szigorú (0%)</hu>
         </text>
         
-        <text name="rhm_diff_1">
-            <en>Arcade</en>
-            <de>Arkade</de>
-            <fr>Arcade</fr>
-            <pl>Arkada</pl>
-            <es>Arcade</es>
-            <it>Arcade</it>
-            <cz>Arkáda</cz>
-            <br>Arcade</br>
-            <uk>Аркада</uk>
-            <ru>Аркада</ru>
-            <hu>Könnyű</hu>
-        </text>
+
         
         <text name="rhm_diff_2">
             <en>Normal</en>

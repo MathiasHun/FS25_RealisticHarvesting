@@ -156,6 +156,7 @@ function LoadCalculator:loadDefaultCropFactors()
     -- Other
     if FruitType.POPLAR then self.CROP_FACTORS[FruitType.POPLAR] = 0.5 end 
     if FruitType.OILSEEDRADISH then self.CROP_FACTORS[FruitType.OILSEEDRADISH] = 0.5 end
+end
 
 ---Встановлює базову продуктивність комбайна mass-based
 ---@param basePerfMass number Базова продуктивність в кг/с
@@ -533,11 +534,7 @@ function LoadCalculator:getSpeedLimit()
     return self.speedLimit or 0
 end
 
----Отримує поточне обмеження швидкості
----@return number Обмеження швидкості в км/год
-function LoadCalculator:getSpeedLimit()
-    return self.speedLimit
-end
+
 
 ---Встановлює оригінальне обмеження швидкості комбайна
 ---@param limit number Оригінальний ліміт в км/год

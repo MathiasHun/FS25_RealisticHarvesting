@@ -11,6 +11,7 @@ end
 -- Реєстрація перевизначених функцій (ОБОВ'ЯЗКОВО перед registerEventListeners!)
 function rhm_Combine.registerOverwrittenFunctions(vehicleType)
     print("RHM: Registering overwritten functions for rhm_Combine")
+    -- SpecializationUtil.registerOverwrittenFunction(vehicleType, "processCutters", rhm_Combine.processCutters) -- Removed: Not needed and was causing nil error
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "addCutterArea", rhm_Combine.addCutterArea)
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "getSpeedLimit", rhm_Combine.getSpeedLimit)
 end
@@ -44,6 +45,12 @@ function rhm_Combine:onLoad(savegame)
     
     -- Створюємо LoadCalculator з modDirectory
     local modDir = g_realisticHarvestManager and g_realisticHarvestManager.modDirectory or g_currentModDirectory
+    
+    if not LoadCalculator then
+        Logging.error("RHM: LoadCalculator class is missing! Check script loading order.")
+        return
+    end
+
     spec.loadCalculator = LoadCalculator.new(modDir)
     
     if not spec.loadCalculator then
@@ -103,6 +110,10 @@ function rhm_Combine:addCutterArea(superFunc, area, liters, inputFruitType, outp
                 end
             end
         end
+    end
+    
+    if rhm_Combine.debug then
+        print(string.format("RHM: addCutterArea called. Liters: %.2f, Area: %.2f, Mult: %.2f", liters or 0, area or 0, multiplier))
     end
     
     -- Зберігаємо площу для LoadCalculator з урахуванням множника!
@@ -463,4 +474,7 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
         end
     end
 end
+
+
+
 
