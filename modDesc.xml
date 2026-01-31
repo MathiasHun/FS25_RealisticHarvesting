@@ -69,14 +69,214 @@ Changelog 1.1.0.0:
 - UI-Verbesserungen: Seitenbeschreibungen für alle Einstellungen im Menü hinzugefügt (Tooltips)
 - Lokalisierung: Vollständige Übersetzungsunterstützung für 10 Sprachen (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
 - Fehlerbehebungen: Verbesserte Stabilität des Einstellungsmenüs]]></de>
-        <fr><![CDATA[Ajoute des mécaniques de récolte réalistes.]]></fr>
-        <pl><![CDATA[Dodaje realistyczną mechanikę żniw.]]></pl>
-        <es><![CDATA[Añade mecánicas de cosecha realistas.]]></es>
-        <it><![CDATA[Aggiunge meccaniche di raccolta realistiche.]]></it>
-        <cz><![CDATA[Přidává realistickou mechaniku sklizně.]]></cz>
-        <br><![CDATA[Adiciona mecânicas de colheita realistas.]]></br>
-        <uk><![CDATA[Додає реалістичну механіку збору врожаю.]]></uk>
-        <ru><![CDATA[Добавляет реалистичную механику уборки урожая.]]></ru>
+        <fr><![CDATA[Ajoute des mécaniques de récolte réalistes à vos moissonneuses-batteuses.
+
+Fonctionnalités:
+- Calcul dynamique de la charge moteur basé sur la densité des cultures et la largeur de la coupe
+- Limitation automatique de la vitesse pour éviter la surcharge
+- Indicateur de perte de récolte (visuel uniquement - simulation complète à venir)
+- HUD personnalisable avec métriques en temps réel
+- Support multijoueur complet avec paramètres côté serveur
+- Support pour moissonneuses à coton, récolteuses de racines et support partiel pour ensileuses
+
+Changelog 1.2.1.0:
+- Correction du calcul de productivité affichant des valeurs incorrectes (était 1000x trop bas)
+- Amélioration de la précision de la conversion masse-volume avec la densité réelle des cultures
+
+Changelog 1.2.0.0:
+- Ajout du support pour les moissonneuses à coton
+- Ajout du support partiel pour les ensileuses
+- Correction des problèmes de synchronisation multijoueur
+- Correction du conflit du menu des paramètres avec d'autres mods
+- Amélioration de l'affichage du système d'unités (Impérial/Métrique)
+
+Changelog 1.1.0.0:
+- Nouvelle fonctionnalité: Bouton "Réinitialiser les paramètres" dans le pied de page du menu (touche: X)
+- Améliorations de l'interface: Descriptions latérales pour tous les paramètres (infobulles)
+- Localisation: Support de traduction complet pour 10 langues (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Corrections de bugs: Amélioration de la stabilité du menu des paramètres]]></fr>
+        <pl><![CDATA[Dodaje realistyczną mechanikę żniw do kombajnów.
+
+Funkcje:
+- Dynamiczne obliczanie obciążenia silnika w oparciu o gęstość plonów i szerokość hederów
+- Automatyczne ograniczanie prędkości, aby zapobiec przeciążeniu
+- Wskaźnik strat plonów (tylko wizualny - pełna symulacja wkrótce)
+- Konfigurowalny HUD z metrykami w czasie rzeczywistym
+- Pełne wsparcie dla trybu wieloosobowego z ustawieniami po stronie serwera
+- Wsparcie dla kombajnów bawełnianych, kombajnów korzeniowych i częściowe wsparcie dla sieczkarni
+
+Changelog 1.2.1.0:
+- Naprawiono obliczanie produktywności wyświetlające nieprawidłowe wartości (było 1000x za niskie)
+- Poprawiono dokładność konwersji masy na objętość przy użyciu rzeczywistej gęstości plonów
+
+Changelog 1.2.0.0:
+- Dodano wsparcie dla kombajnów bawełnianych
+- Dodano częściowe wsparcie dla sieczkarni
+- Naprawiono problemy z synchronizacją w trybie wieloosobowym
+- Naprawiono konflikt menu ustawień z innymi modami
+- Poprawiono wyświetlanie systemu jednostek (Imperialny/Metryczny)
+
+Changelog 1.1.0.0:
+- Nowa funkcja: Przycisk "Resetuj ustawienia" w stopce menu (klawisz: X)
+- Ulepszenia interfejsu: Opisy boczne dla wszystkich ustawień (podpowiedzi)
+- Lokalizacja: Pełne wsparcie tłumaczeń dla 10 języków (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Poprawki błędów: Poprawiona stabilność menu ustawień]]></pl>
+        <es><![CDATA[Añade mecánicas de cosecha realistas a tus cosechadoras.
+
+Características:
+- Cálculo dinámico de carga del motor basado en densidad de cultivos y ancho de cabezal
+- Limitación automática de velocidad para evitar sobrecarga
+- Indicador de pérdida de cosecha (solo visual - simulación completa próximamente)
+- HUD personalizable con métricas en tiempo real
+- Soporte multijugador completo con configuración del servidor
+- Soporte para cosechadoras de algodón, cosechadoras de raíces y soporte parcial para picadoras
+
+Changelog 1.2.1.0:
+- Corregido cálculo de productividad mostrando valores incorrectos (era 1000x demasiado bajo)
+- Mejorada precisión de conversión masa-volumen usando densidad real de cultivos
+
+Changelog 1.2.0.0:
+- Añadido soporte para cosechadoras de algodón
+- Añadido soporte parcial para picadoras
+- Corregidos problemas de sincronización multijugador
+- Corregido conflicto del menú de configuración con otros mods
+- Mejorada visualización del sistema de unidades (Imperial/Métrico)
+
+Changelog 1.1.0.0:
+- Nueva característica: Botón "Restablecer configuración" en pie de menú (tecla: X)
+- Mejoras de interfaz: Descripciones laterales para todas las configuraciones (tooltips)
+- Localización: Soporte de traducción completo para 10 idiomas (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Correcciones de errores: Mejorada estabilidad del menú de configuración]]></es>
+        <it><![CDATA[Aggiunge meccaniche di raccolta realistiche alle tue mietitrebbie.
+
+Caratteristiche:
+- Calcolo dinamico del carico motore basato su densità colture e larghezza testata
+- Limitazione automatica velocità per prevenire sovraccarico
+- Indicatore perdita raccolto (solo visivo - simulazione completa in arrivo)
+- HUD personalizzabile con metriche in tempo reale
+- Supporto multiplayer completo con impostazioni lato server
+- Supporto per raccoglitrici cotone, raccoglitrici radici e supporto parziale per trincia
+
+Changelog 1.2.1.0:
+- Corretto calcolo produttività che mostrava valori errati (era 1000x troppo basso)
+- Migliorata precisione conversione massa-volume usando densità reale colture
+
+Changelog 1.2.0.0:
+- Aggiunto supporto per raccoglitrici cotone
+- Aggiunto supporto parziale per trincia
+- Corretti problemi sincronizzazione multiplayer
+- Corretto conflitto menu impostazioni con altri mod
+- Migliorata visualizzazione sistema unità (Imperiale/Metrico)
+
+Changelog 1.1.0.0:
+- Nuova funzionalità: Pulsante "Ripristina impostazioni" nel piè di pagina menu (tasto: X)
+- Miglioramenti interfaccia: Descrizioni laterali per tutte le impostazioni (tooltip)
+- Localizzazione: Supporto traduzione completo per 10 lingue (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Correzioni bug: Migliorata stabilità menu impostazioni]]></it>
+        <cz><![CDATA[Přidává realistickou mechaniku sklizně k vašim kombajnům.
+
+Funkce:
+- Dynamický výpočet zatížení motoru na základě hustoty plodin a šířky žacího ústrojí
+- Automatické omezení rychlosti pro zabránění přetížení
+- Indikátor ztráty úrody (pouze vizuální - plná simulace brzy)
+- Přizpůsobitelný HUD s metrikami v reálném čase
+- Plná podpora multiplayeru s nastavením na straně serveru
+- Podpora pro sklízecí stroje na bavlnu, sklízecí stroje na kořenovou zeleninu a částečná podpora pro sklízecí řezačky
+
+Changelog 1.2.1.0:
+- Opravený výpočet produktivity zobrazující nesprávné hodnoty (byl 1000x příliš nízký)
+- Vylepšená přesnost převodu hmotnosti na objem pomocí skutečné hustoty plodin
+
+Changelog 1.2.0.0:
+- Přidána podpora pro sklízecí stroje na bavlnu
+- Přidána částečná podpora pro sklízecí řezačky
+- Opraveny problémy se synchronizací v multiplayeru
+- Opraven konflikt nabídky nastavení s jinými mody
+- Vylepšené zobrazení systému jednotek (Imperiální/Metrický)
+
+Changelog 1.1.0.0:
+- Nová funkce: Tlačítko "Obnovit nastavení" v zápatí nabídky (klávesa: X)
+- Vylepšení rozhraní: Boční popisy pro všechna nastavení (nápovědy)
+- Lokalizace: Plná podpora překladu pro 10 jazyků (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Opravy chyb: Vylepšená stabilita nabídky nastavení]]></cz>
+        <br><![CDATA[Adiciona mecânicas de colheita realistas às suas colheitadeiras.
+
+Recursos:
+- Cálculo dinâmico de carga do motor baseado em densidade de culturas e largura da plataforma
+- Limitação automática de velocidade para evitar sobrecarga
+- Indicador de perda de colheita (apenas visual - simulação completa em breve)
+- HUD personalizável com métricas em tempo real
+- Suporte completo para multijogador com configurações do servidor
+- Suporte para colheitadeiras de algodão, colheitadeiras de raízes e suporte parcial para forrageiras
+
+Changelog 1.2.1.0:
+- Corrigido cálculo de produtividade exibindo valores incorretos (estava 1000x muito baixo)
+- Melhorada precisão da conversão massa-volume usando densidade real das culturas
+
+Changelog 1.2.0.0:
+- Adicionado suporte para colheitadeiras de algodão
+- Adicionado suporte parcial para forrageiras
+- Corrigidos problemas de sincronização multijogador
+- Corrigido conflito do menu de configurações com outros mods
+- Melhorada exibição do sistema de unidades (Imperial/Métrico)
+
+Changelog 1.1.0.0:
+- Novo recurso: Botão "Restaurar configurações" no rodapé do menu (tecla: X)
+- Melhorias de interface: Descrições laterais para todas as configurações (dicas)
+- Localização: Suporte completo de tradução para 10 idiomas (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Correções de bugs: Melhorada estabilidade do menu de configurações]]></br>
+        <uk><![CDATA[Додає реалістичну механіку збору врожаю до ваших комбайнів.
+
+Функції:
+- Динамічний розрахунок навантаження двигуна на основі щільності культур та ширини жатки
+- Автоматичне обмеження швидкості для запобігання перевантаженню
+- Індикатор втрат врожаю (тільки візуально - повна симуляція незабаром)
+- Налаштовуваний HUD з метриками в реальному часі
+- Повна підтримка мультиплеєра з налаштуваннями на стороні сервера
+- Підтримка бавовняних комбайнів, коренезбиральних комбайнів та часткова підтримка кормозбиральних комбайнів
+
+Зміни 1.2.1.0:
+- Виправлено розрахунок продуктивності, що показував неправильні значення (було в 1000 разів занижено)
+- Покращено точність перетворення маси в об'єм з використанням реальної щільності культур
+
+Зміни 1.2.0.0:
+- Додано підтримку бавовняних комбайнів
+- Додано часткову підтримку кормозбиральних комбайнів
+- Виправлено проблеми синхронізації в мультиплеєрі
+- Виправлено конфлікт меню налаштувань з іншими модами
+- Покращено відображення системи одиниць (Імперська/Метрична)
+
+Зміни 1.1.0.0:
+- Нова функція: Кнопка "Скинути налаштування" в нижній частині меню (клавіша: X)
+- Покращення інтерфейсу: Бічні описи для всіх налаштувань (підказки)
+- Локалізація: Повна підтримка перекладу для 10 мов (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Виправлення помилок: Покращено стабільність меню налаштувань]]></uk>
+        <ru><![CDATA[Добавляет реалистичную механику уборки урожая к вашим комбайнам.
+
+Функции:
+- Динамический расчет нагрузки двигателя на основе плотности культур и ширины жатки
+- Автоматическое ограничение скорости для предотвращения перегрузки
+- Индикатор потерь урожая (только визуально - полная симуляция скоро)
+- Настраиваемый HUD с метриками в реальном времени
+- Полная поддержка мультиплеера с настройками на стороне сервера
+- Поддержка хлопкоуборочных комбайнов, корнеуборочных комбайнов и частичная поддержка кормоуборочных комбайнов
+
+Изменения 1.2.1.0:
+- Исправлен расчет производительности, показывающий неправильные значения (было в 1000 раз занижено)
+- Улучшена точность преобразования массы в объем с использованием реальной плотности культур
+
+Изменения 1.2.0.0:
+- Добавлена поддержка хлопкоуборочных комбайнов
+- Добавлена частичная поддержка кормоуборочных комбайнов
+- Исправлены проблемы синхронизации в мультиплеере
+- Исправлен конфликт меню настроек с другими модами
+- Улучшено отображение системы единиц (Имперская/Метрическая)
+
+Изменения 1.1.0.0:
+- Новая функция: Кнопка "Сбросить настройки" в нижней части меню (клавиша: X)
+- Улучшения интерфейса: Боковые описания для всех настроек (подсказки)
+- Локализация: Полная поддержка перевода для 10 языков (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+- Исправления ошибок: Улучшена стабильность меню настроек]]></ru>
     </description>
     <iconFilename>icon_FS25_RealisticHarvesting.dds</iconFilename>
     
