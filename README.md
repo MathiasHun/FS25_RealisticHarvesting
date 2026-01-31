@@ -1,6 +1,6 @@
 ﻿# 🌾 Realistic Harvesting - Farming Simulator 25
 
-[![Version](https://img.shields.io/badge/version-1.2.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Version](https://img.shields.io/badge/version-1.2.1.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![FS25](https://img.shields.io/badge/FS25-Compatible-blue.svg)](https://www.farming-simulator.com/)
 [![Multiplayer](https://img.shields.io/badge/Multiplayer-Supported-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE)
@@ -50,7 +50,7 @@ A **sleek, icon-based display** near your speedometer shows:
 |--------|-------------|
 | **Load** | Current engine load (0-200%) with color coding |
 | **T/h** | Real-time productivity in tons per hour |
-| **Loss** | Crop loss indicator *(visual only in v1.0 - always shows 0%)* |
+| **Loss** | Crop loss indicator *(visual only in v1.2.1.0 - always shows 0%)* |
 | **Speed** | Current vs. recommended speed *(shown when Speed Limiting is OFF)* |
 
 **HUD Features:**
@@ -61,7 +61,7 @@ A **sleek, icon-based display** near your speedometer shows:
 
 ### ⚠️ Crop Loss System *(Coming Soon!)*
 
-> **Note:** In version 1.2.0.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
+> **Note:** In version 1.2.1.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
 
 **Planned for v1.3+:**
 - Real yield reduction when overloading
@@ -165,7 +165,7 @@ For the best MP experience, all players should use the **same difficulty setting
 ## 🤝 Credits & Support
 
 **Created by:** exekx  
-**Version:** 1.2.0.0  
+**Version:** 1.2.1.0  
 **Compatible with:** Farming Simulator 25
 
 ### Support the Mod
@@ -204,7 +204,35 @@ This mod is protected by copyright law. Here's what that means:
 
 ---
 
-## 🚀 Future Roadmap
+## � Changelog
+
+### v1.2.1.0 (2026-01-31)
+**Bug Fixes:**
+- 🐛 Fixed productivity calculation displaying incorrect values (was 1000x too low)
+- ✨ Improved accuracy of mass-to-volume conversion using actual crop density from game data
+
+### v1.2.0.0 (2026-01-30)
+**New Features:**
+- ✨ Added support for Cotton Harvesters
+- ✨ Added partial support for Forage Harvesters
+
+**Bug Fixes:**
+- 🐛 Fixed Multiplayer Synchronization issues
+- 🐛 Fixed settings menu conflict with other mods
+- ✨ Improved Unit System display (Imperial/Metric)
+
+### v1.1.0.0 (2026-01-29)
+**New Features:**
+- ✨ Added "Reset Settings" button to settings menu footer (key: X)
+- ✨ Added side descriptions for all settings in menu (tooltips)
+- 🌍 Full translation support for 10 languages (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
+
+**Bug Fixes:**
+- 🐛 Improved settings menu stability
+
+---
+
+## �🚀 Future Roadmap
 
 See our detailed development plan: **[ROADMAP.md](ROADMAP.md)**
 

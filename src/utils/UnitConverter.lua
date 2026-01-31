@@ -66,17 +66,25 @@ end
 ---Convert productivity (mass per hour)
 ---@param tonnesPerHour number Productivity in t/h
 ---@param system number Unit system
----@param fruitType number|nil Current fruit type for bushel conversion
+---@param fruitType number|nil Current fruit type for bushel conversion (unused if liters provided)
+---@param litersPerHour number|nil Productivity in l/h (optional, for accurate bushel conversion)
 ---@return number convertedValue
 ---@return string suffix
-function UnitConverter.convertProductivity(tonnesPerHour, system, fruitType)
+function UnitConverter.convertProductivity(tonnesPerHour, system, fruitType, litersPerHour)
     if system == UnitConverter.SYSTEM_BUSHELS then
-        -- Convert to bushels using crop-specific coefficient
+        -- Preferred method: Convert directly from volume (liters) to bushels
+        -- 1 US Bushel = 35.2391 Liters
+        if litersPerHour and litersPerHour > 0 then
+            return litersPerHour / 35.2391, "bu/h"
+        end
+        
+        -- Fallback: Convert from mass using crop-specific coefficient
         local coefficient = UnitConverter.BUSHEL_DEFAULT
         if fruitType and UnitConverter.BUSHEL_COEFFICIENTS[fruitType] then
             coefficient = UnitConverter.BUSHEL_COEFFICIENTS[fruitType]
         end
         return tonnesPerHour * coefficient, "bu/h"
+        
     elseif system == UnitConverter.SYSTEM_IMPERIAL then
         return tonnesPerHour * UnitConverter.TONNE_TO_TON, "ton/h"
     else
@@ -84,7 +92,7 @@ function UnitConverter.convertProductivity(tonnesPerHour, system, fruitType)
     end
 end
 
----Convert area
+---Format area
 ---@param hectares number Area in hectares
 ---@param system number Unit system
 ---@return number convertedValue
@@ -110,9 +118,10 @@ end
 ---@param tonnesPerHour number
 ---@param system number
 ---@param fruitType number|nil
+---@param litersPerHour number|nil
 ---@return string
-function UnitConverter.formatProductivity(tonnesPerHour, system, fruitType)
-    local value, suffix = UnitConverter.convertProductivity(tonnesPerHour, system, fruitType)
+function UnitConverter.formatProductivity(tonnesPerHour, system, fruitType, litersPerHour)
+    local value, suffix = UnitConverter.convertProductivity(tonnesPerHour, system, fruitType, litersPerHour)
     return string.format("%.1f %s", value, suffix)
 end
 

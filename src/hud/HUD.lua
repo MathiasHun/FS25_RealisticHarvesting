@@ -128,6 +128,7 @@ function HUD:updateData()
         self.data.load = spec.data.load or 0
         self.data.cropLoss = spec.data.cropLoss or 0
         self.data.tonPerHour = spec.data.tonPerHour or 0
+        self.data.litersPerHour = spec.data.litersPerHour or 0 -- New: Volume flow
         self.data.recommendedSpeed = spec.data.recommendedSpeed or 0
     end
 end
@@ -263,7 +264,7 @@ function HUD:drawText()
         local prodStr = string.format("%.1f t/h", self.data.tonPerHour)
         if UnitConverter then
              -- Use nil for fruitType (defaults to wheat) until we add it to data
-            prodStr = UnitConverter.formatProductivity(self.data.tonPerHour, self.settings.unitSystem, nil)
+            prodStr = UnitConverter.formatProductivity(self.data.tonPerHour, self.settings.unitSystem, nil, self.data.litersPerHour)
         end
         renderText(textX, textY, textSize, prodStr)
     else

@@ -112,6 +112,11 @@ function rhm_Combine:addCutterArea(superFunc, area, liters, inputFruitType, outp
     -- Зберігаємо літри для розрахунку продуктивності в onUpdateTick
     spec.lastLiters = (spec.lastLiters or 0) + (liters or 0)
     
+    -- Зберігаємо тип культури для визначення маси
+    if outputFillType and outputFillType ~= FillType.UNKNOWN then
+        spec.lastFillType = outputFillType
+    end
+    
     -- Викликаємо оригінальну функцію
     return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
 end
@@ -263,8 +268,24 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     
     -- Оновлюємо продуктивність з накопичених літрів
     if spec.lastLiters and spec.lastLiters > 0 then
-        local massKg = spec.lastLiters * 0.75 -- Приблизна щільність зерна kg/L
-        spec.loadCalculator:updateProductivity(massKg, dt) -- Використовуємо РЕАЛЬНИЙ dt!
+        -- Розраховуємо реальну масу
+        local massKg = 0
+        local liters = spec.lastLiters
+        
+        if spec.lastFillType and g_fillTypeManager then
+            local fillType = g_fillTypeManager:getFillTypeByIndex(spec.lastFillType)
+            if fillType and fillType.massPerLiter then
+                -- ВАЖЛИВО: massPerLiter в грі зберігається в ТОННАХ на літр, тому множимо на 1000
+                massKg = liters * fillType.massPerLiter * 1000
+            else
+                massKg = liters * 0.75 -- Fallback, як було раніше
+            end
+        else
+            massKg = liters * 0.75 -- Fallback
+        end
+        
+        -- Передаємо і масу, і літри
+        spec.loadCalculator:updateProductivity(massKg, liters, dt) 
     end
     
     -- Скидаємо лічильники
@@ -276,6 +297,7 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         spec.data.load = spec.loadCalculator:getEngineLoad()
         spec.data.cropLoss = spec.loadCalculator:calculateCropLoss()
         spec.data.tonPerHour = spec.loadCalculator:getTonPerHour()
+        spec.data.litersPerHour = spec.loadCalculator:getLitersPerHour() -- NEW: Volume flow
         spec.data.recommendedSpeed = spec.loadCalculator:getSpeedLimit()
     end
     
@@ -346,12 +368,14 @@ function rhm_Combine:onWriteStream(streamId, connection)
         streamWriteFloat32(streamId, 0)
         streamWriteFloat32(streamId, 0)
         streamWriteFloat32(streamId, 0)
+        streamWriteFloat32(streamId, 0) -- litersPerHour
         return
     end
     
     streamWriteFloat32(streamId, spec.data.load or 0)
     streamWriteFloat32(streamId, spec.data.cropLoss or 0)
     streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
+    streamWriteFloat32(streamId, spec.data.litersPerHour or 0) -- litersPerHour
     streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
 end
 
@@ -360,6 +384,7 @@ function rhm_Combine:onReadStream(streamId, connection)
     local spec = self.spec_rhm_Combine
     if not spec then
         -- Пропускаємо дані якщо немає spec
+        streamReadFloat32(streamId)
         streamReadFloat32(streamId)
         streamReadFloat32(streamId)
         streamReadFloat32(streamId)
@@ -374,6 +399,7 @@ function rhm_Combine:onReadStream(streamId, connection)
     spec.data.load = streamReadFloat32(streamId)
     spec.data.cropLoss = streamReadFloat32(streamId)
     spec.data.tonPerHour = streamReadFloat32(streamId)
+    spec.data.litersPerHour = streamReadFloat32(streamId)
     spec.data.recommendedSpeed = streamReadFloat32(streamId)
 end
 
@@ -396,6 +422,7 @@ function rhm_Combine:onReadUpdateStream(streamId, timestamp, connection)
             spec.data.load = streamReadFloat32(streamId)
             spec.data.cropLoss = streamReadFloat32(streamId)
             spec.data.tonPerHour = streamReadFloat32(streamId)
+            spec.data.litersPerHour = streamReadFloat32(streamId)
             spec.data.recommendedSpeed = streamReadFloat32(streamId)
 
         end
@@ -420,6 +447,7 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
+                streamWriteFloat32(streamId, 0)
                 return
             end
 
@@ -427,6 +455,7 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, spec.data.load or 0)
             streamWriteFloat32(streamId, spec.data.cropLoss or 0)
             streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
+            streamWriteFloat32(streamId, spec.data.litersPerHour or 0)
             streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
         end
     end

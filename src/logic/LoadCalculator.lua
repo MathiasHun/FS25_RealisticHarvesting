@@ -37,10 +37,12 @@ function LoadCalculator.new(modDirectory)
     -- Crop loss and productivity
     self.cropLoss = 0  -- Поточні втрати врожаю (%)
     self.tonPerHour = 0  -- Продуктивність в T/h
+    self.litersPerHour = 0  -- Продуктивність в L/h
     self.totalOutputMass = 0  -- Загальна маса зібраного врожаю
     
-    -- Накопичення для розрахунку T/h
+    -- Накопичення для розрахунку T/h та L/h
     self.productivityMass = 0  -- Накопичена маса за поточний період (кг)
+    self.productivityLiters = 0  -- Накопичений об'єм за поточний період (л)
     self.productivityTime = 0  -- Час накопичення (мс)
     self.productivityUpdateInterval = 3000  -- Оновлювати кожні 3 секунди
     
@@ -500,8 +502,10 @@ function LoadCalculator:reset()
     
     -- Скидаємо накопичення продуктивності
     self.productivityMass = 0
+    self.productivityLiters = 0
     self.productivityTime = 0
     self.tonPerHour = 0
+    self.litersPerHour = 0
     
     if self.debug then
         print("RHM: LoadCalculator reset")
@@ -553,25 +557,37 @@ function LoadCalculator:getTonPerHour()
     return self.tonPerHour
 end
 
----Оновлює продуктивність на основі зібраної маси
+---Отримує продуктивність в літрах на годину (де факто volume flow)
+---@return number Продуктивність в L/h
+function LoadCalculator:getLitersPerHour()
+    return self.litersPerHour or 0
+end
+
+---Оновлює продуктивність на основі зібраної маси та об'єму
 ---@param mass number Маса зібраного врожаю в кг
+---@param liters number Об'єм зібраного врожаю в л
 ---@param dt number Delta time в мс
-function LoadCalculator:updateProductivity(mass, dt)
+function LoadCalculator:updateProductivity(mass, liters, dt)
     self.totalOutputMass = self.totalOutputMass + mass
     
-    -- Накопичуємо масу та час
+    -- Накопичуємо масу, об'єм та час
     self.productivityMass = self.productivityMass + mass
+    self.productivityLiters = (self.productivityLiters or 0) + liters
     self.productivityTime = self.productivityTime + dt
     
-    -- Оновлюємо T/h кожні 3 секунди для стабільного значення
+    -- Оновлюємо T/h та L/h кожні 3 секунди для стабільного значення
     if self.productivityTime >= self.productivityUpdateInterval then
         if self.productivityTime > 0 then
-            -- Розраховуємо T/h: (кг / мс) * 3600 = т/год
+            -- Формула: (кг / мс) * (3600000 мс/год) / (1000 кг/тонна) = т/год
+            -- Спрощено: (кг / мс) * 3600 = т/год
             self.tonPerHour = (self.productivityMass / self.productivityTime) * 3600
+            -- Формула: (л / мс) * (3600000 мс/год) = л/год
+            self.litersPerHour = (self.productivityLiters / self.productivityTime) * 3600000
         end
         
         -- Скидаємо накопичення з невеликим перекриттям для плавності
         self.productivityMass = self.productivityMass * 0.2
+        self.productivityLiters = self.productivityLiters * 0.2
         self.productivityTime = self.productivityTime * 0.2
     end
 end
