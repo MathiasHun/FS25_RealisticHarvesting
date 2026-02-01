@@ -3,9 +3,30 @@ rhm_Combine = {}
 
 rhm_Combine.debug = false
 
+---Перевіряє чи машина підходить для цієї спеціалізації
+---@param specializations table<string, table>
+---@return boolean
 function rhm_Combine.prerequisitesPresent(specializations)
-    -- Наш specialization додається тільки до комбайнів
-    return SpecializationUtil.hasSpecialization(Combine, specializations)
+    -- DEBUG: Виводимо всі specializations щоб побачити що має Nexat
+    print("========================================")
+    print("RHM: Checking prerequisites for vehicle")
+    print("Available specializations:")
+    for specName, specTable in pairs(specializations) do
+        if type(specTable) == "table" and specTable.className then
+            print("  - " .. specTable.className)
+        end
+    end
+    
+    -- Перевіряємо базову specialization Combine
+    local hasCombine = SpecializationUtil.hasSpecialization(Combine, specializations)
+    print("Has Combine: " .. tostring(hasCombine))
+    
+    -- Для Nexat: тимчасово спрощуємо перевірку
+    -- Повертаємо true якщо просто є Combine
+    print("Result: " .. tostring(hasCombine))
+    print("========================================")
+    
+    return hasCombine
 end
 
 -- Реєстрація перевизначених функцій (ОБОВ'ЯЗКОВО перед registerEventListeners!)
