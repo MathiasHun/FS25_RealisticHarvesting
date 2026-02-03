@@ -221,8 +221,24 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
     
     if power and tonumber(power) > 0 then
         local basePerf = tonumber(power) * coef
-        print(string.format("RHM: BasePerf Mass computed for %s (cat: %s, coef: %.3f): %d hp -> %.2f kg/s (%.1f t/h)", 
-            vehicle:getFullName(), category or "unknown", coef, power, basePerf, basePerf * 3.6))
+        
+        -- БОНУС для потужних машин (Nexat, великі комбайни)
+        -- Машини з високою потужністю мають кращу продуктивність на високих швидкостях
+        local powerBonus = 1.0
+        if power >= 1000 then
+            -- Nexat (1100 HP): +25% до базової продуктивності
+            powerBonus = 1.25
+            print(string.format("RHM: High-power machine detected (%d HP), applying +25%% performance bonus", power))
+        elseif power >= 800 then
+            -- Великі комбайни (800-1000 HP): +15%
+            powerBonus = 1.15
+            print(string.format("RHM: Large combine detected (%d HP), applying +15%% performance bonus", power))
+        end
+        
+        basePerf = basePerf * powerBonus
+        
+        print(string.format("RHM: BasePerf Mass computed for %s (cat: %s, coef: %.3f, bonus: %.2fx): %d hp -> %.2f kg/s (%.1f t/h)", 
+            vehicle:getFullName(), category or "unknown", coef, powerBonus, power, basePerf, basePerf * 3.6))
         return basePerf
     end
     

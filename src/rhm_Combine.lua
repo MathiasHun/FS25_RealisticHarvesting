@@ -1,6 +1,5 @@
 ---@class rhm_Combine
 rhm_Combine = {}
-
 rhm_Combine.debug = false
 
 ---Перевіряє чи машина підходить для цієї спеціалізації
@@ -43,9 +42,15 @@ function rhm_Combine.registerEventListeners(vehicleType)
     SpecializationUtil.registerEventListener(vehicleType, "onUpdateTick", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onDraw", rhm_Combine)
     
-    -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
+    -- SAVEGAME: Збереження та завантаження стану
     SpecializationUtil.registerEventListener(vehicleType, "onReadStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteStream", rhm_Combine)
+    
+    -- SAVEGAME XML: Критично важливо для збереження гри!
+    SpecializationUtil.registerEventListener(vehicleType, "saveToXMLFile", rhm_Combine)
+    SpecializationUtil.registerEventListener(vehicleType, "loadFromXMLFile", rhm_Combine)
+    
+    -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
     SpecializationUtil.registerEventListener(vehicleType, "onReadUpdateStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteUpdateStream", rhm_Combine)
 end
@@ -62,6 +67,11 @@ function rhm_Combine:onLoad(savegame)
         Logging.error("RHM: Failed to initialize spec for combine: %s (specName: %s)", 
             tostring(self:getFullName()), tostring(specName))
         return
+    end
+    
+    if rhm_Combine.debug then
+        print(string.format("RHM: onLoad called for %s (has savegame: %s)", 
+            tostring(self:getFullName()), tostring(savegame ~= nil)))
     end
     
     -- Створюємо LoadCalculator з modDirectory
@@ -347,25 +357,15 @@ end
 
 -- Викликається кожен кадр коли гравець в комбайні
 function rhm_Combine:onDraw(isActiveForInput, isActiveForInputIgnoreSelection, isSelected)
-    if rhm_Combine.debug then
-        print("RHM: rhm_Combine:onDraw called")
-    end
-    
     local spec = self.spec_rhm_Combine
     
     -- Перевіряємо чи комбайн запущений
     if not self:getIsTurnedOn() then
-        if rhm_Combine.debug then
-            print("RHM: Combine is not turned on, skipping HUD")
-        end
         return
     end
     
     -- Отримуємо HUD з глобального менеджера
     if not g_realisticHarvestManager or not g_realisticHarvestManager.hud then
-        if rhm_Combine.debug then
-            print("RHM: HUD not available")
-        end
         return
     end
     
@@ -373,9 +373,6 @@ function rhm_Combine:onDraw(isActiveForInput, isActiveForInputIgnoreSelection, i
     
     -- Перевіряємо налаштування showHUD
     if not hud.settings or not hud.settings.showHUD then
-        if rhm_Combine.debug then
-            print("RHM: showHUD is false")
-        end
         return
     end
     
@@ -384,9 +381,77 @@ function rhm_Combine:onDraw(isActiveForInput, isActiveForInputIgnoreSelection, i
     
     -- Малюємо HUD
     hud:draw()
+end
+
+-- ============================================================================
+-- SAVEGAME FUNCTIONS  
+-- ============================================================================
+
+---Збереження стану в savegame файл
+---@param xmlFile XMLFile
+---@param key string
+function rhm_Combine:saveToXMLFile(xmlFile, key, usedModNames)
+    local spec = self.spec_rhm_Combine
+    if not spec then
+        return
+    end
     
-    if rhm_Combine.debug and spec.data then
-        print(string.format("RHM: HUD drawn - Speed: %.1f km/h, Load: %.0f%%", spec.data.speed or 0, spec.data.load or 0))
+    -- Зберігаємо базову продуктивність LoadCalculator
+    if spec.loadCalculator then
+        xmlFile:setValue(key .. "#basePerformance", spec.loadCalculator.basePerformance or 0)
+        xmlFile:setValue(key .. "#genuineSpeedLimit", spec.loadCalculator.genuineSpeedLimit or 15)
+    end
+    
+    if rhm_Combine.debug then
+        print("RHM: saveToXMLFile completed for " .. tostring(self:getFullName()))
+    end
+end
+
+---Завантаження стану з savegame файлу
+---@param xmlFile XMLFile
+---@param key string  
+---@param resetVehicles table
+function rhm_Combine:loadFromXMLFile(xmlFile, key, resetVehicles)
+    if rhm_Combine.debug then
+        print(string.format("RHM: loadFromXMLFile called for %s with key: %s", 
+            tostring(self:getFullName()), tostring(key)))
+    end
+    
+    local spec = self.spec_rhm_Combine
+    if not spec then
+        if rhm_Combine.debug then
+            print("RHM: loadFromXMLFile - spec not found, skipping")
+        end
+        return
+    end
+    
+    if not spec.loadCalculator then
+        if rhm_Combine.debug then
+            print("RHM: loadFromXMLFile - loadCalculator not found, skipping")
+        end
+        return
+    end
+    
+    -- Безпечне завантаження базової продуктивності з default значенням
+    local basePerf = xmlFile:getValue(key .. "#basePerformance", spec.loadCalculator.basePerfMass)
+    if basePerf and tonumber(basePerf) and basePerf > 0 then
+        spec.loadCalculator:setBasePerformance(tonumber(basePerf))
+        if rhm_Combine.debug then
+            print(string.format("RHM: Loaded basePerformance: %.2f kg/s", basePerf))
+        end
+    end
+    
+    -- Безпечне завантаження genuineSpeedLimit з default значенням  
+    local speedLimit = xmlFile:getValue(key .. "#genuineSpeedLimit", spec.loadCalculator.genuineSpeedLimit)
+    if speedLimit and tonumber(speedLimit) and speedLimit > 0 then
+        spec.loadCalculator:setGenuineSpeedLimit(tonumber(speedLimit))
+        if rhm_Combine.debug then
+            print(string.format("RHM: Loaded genuineSpeedLimit: %.1f km/h", speedLimit))
+        end
+    end
+    
+    if rhm_Combine.debug then
+        print(string.format("RHM: loadFromXMLFile completed for %s", tostring(self:getFullName())))
     end
 end
 
