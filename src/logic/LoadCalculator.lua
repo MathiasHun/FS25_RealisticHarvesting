@@ -6,7 +6,7 @@ local LoadCalculator_mt = Class(LoadCalculator)
 function LoadCalculator.new(modDirectory)
     local self = setmetatable({}, LoadCalculator_mt)
     
-    self.debug = true -- TEMPORARY DEBUG ENABLED
+    self.debug = false -- TEMPORARY DEBUG ENABLED
     self.modDirectory = modDirectory or g_currentModDirectory  -- Зберігаємо modDirectory (with fallback)
     
     -- Коефіцієнти складності культур (завантажуються з XML)
@@ -200,6 +200,45 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
         power = vehicle.spec_motorized.motor.hp or 0
     end
     
+    -- Debug entry
+    -- print(string.format("RHM DEBUG: Checking power for %s. Initial power: %s", vehicle:getFullName(), tostring(power)))
+    
+    -- NEXAT FIX: Якщо це модуль (немає мотора), шукаємо двигун рекурсивно вгору по ієрархії
+    if (not power or power == 0) then
+        local function findVehicleWithEngine(v)
+            if not v then return nil end
+            
+            -- Check current vehicle
+            if v.spec_motorized and v.spec_motorized.motor and v.spec_motorized.motor.hp and v.spec_motorized.motor.hp > 0 then
+                return v
+            end
+            
+            -- Debug traversal
+            -- print(string.format("RHM DEBUG: Search engine in %s (hasAttacher: %s, root: %s)", 
+            --    v:getFullName(), tostring(v.getAttacherVehicle ~= nil), v.rootVehicle and v.rootVehicle:getFullName() or "nil"))
+
+            -- Check attacher vehicle (upwards)
+            if v.getAttacherVehicle then
+                return findVehicleWithEngine(v:getAttacherVehicle())
+            end
+            
+            -- FALLBACK: Check rootVehicle directly if recursion failed/ended
+            if v.rootVehicle and v.rootVehicle ~= v then
+                 if v.rootVehicle.spec_motorized and v.rootVehicle.spec_motorized.motor and v.rootVehicle.spec_motorized.motor.hp > 0 then
+                    return v.rootVehicle
+                 end
+            end
+
+            return nil
+        end
+        
+        local engineVeh = findVehicleWithEngine(vehicle)
+        if engineVeh then
+            power = engineVeh.spec_motorized.motor.hp or 0
+            -- print(string.format("RHM DEBUG: Found power in hierarchy (%s): %d HP", engineVeh:getFullName(), power))
+        end
+    end
+    
     -- Якщо не знайшли, спробувати з XML
     if power == 0 then
         local key, motorId = ConfigurationUtil.getXMLConfigurationKey(
@@ -222,24 +261,19 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
     if power and tonumber(power) > 0 then
         local basePerf = tonumber(power) * coef
         
-        -- БОНУС для потужних машин (Nexat, великі комбайни)
-        -- Машини з високою потужністю мають кращу продуктивність на високих швидкостях
-        local powerBonus = 1.0
-        if power >= 1000 then
-            -- Nexat (1100 HP): +25% до базової продуктивності
-            powerBonus = 1.25
-            print(string.format("RHM DEBUG: High-power machine detected (%d HP), applying +25%% performance bonus", power))
-        elseif power >= 800 then
-            -- Великі комбайни (800-1000 HP): +15%
-            powerBonus = 1.15
-            print(string.format("RHM DEBUG: Large combine detected (%d HP), applying +15%% performance bonus", power))
-        end
+        -- БОНУСИ ВИДАЛЕНО: Розраховуємо чисто від потужності двигуна
+        -- NEXAT має 1100 к.с., цього має бути достатньо для високої продуктивності
         
-        basePerf = basePerf * powerBonus
+    if power and tonumber(power) > 0 then
+        -- Стандартний розрахунок: 1 HP ~= 0.035 kg/s throughput
+        -- Для 1100 HP (NEXAT) це буде ~38.5 kg/s (~138 t/h)
+        -- Для 500 HP це буде ~17.5 kg/s (~63 t/h)
+        local basePerf = tonumber(power) * coef
         
-        print(string.format("RHM DEBUG: BasePerf Mass computed for %s (cat: %s, coef: %.3f, bonus: %.2fx): %d hp -> %.2f kg/s (%.1f t/h)", 
-            vehicle:getFullName(), category or "unknown", coef, powerBonus, power, basePerf, basePerf * 3.6))
+        print(string.format("RHM DEBUG: BasePerf Mass computed for %s (cat: %s, coef: %.3f): %d hp -> %.2f kg/s (%.1f t/h)", 
+            vehicle:getFullName(), category or "unknown", coef, power, basePerf, basePerf * 3.6))
         return basePerf
+    end
     end
     
     print("RHM: Warning - Could not determine combine power, using default basePerf")
