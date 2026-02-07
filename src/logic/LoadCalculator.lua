@@ -6,7 +6,7 @@ local LoadCalculator_mt = Class(LoadCalculator)
 function LoadCalculator.new(modDirectory)
     local self = setmetatable({}, LoadCalculator_mt)
     
-    self.debug = false
+    self.debug = true -- TEMPORARY DEBUG ENABLED
     self.modDirectory = modDirectory or g_currentModDirectory  -- Зберігаємо modDirectory (with fallback)
     
     -- Коефіцієнти складності культур (завантажуються з XML)
@@ -228,16 +228,16 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
         if power >= 1000 then
             -- Nexat (1100 HP): +25% до базової продуктивності
             powerBonus = 1.25
-            print(string.format("RHM: High-power machine detected (%d HP), applying +25%% performance bonus", power))
+            print(string.format("RHM DEBUG: High-power machine detected (%d HP), applying +25%% performance bonus", power))
         elseif power >= 800 then
             -- Великі комбайни (800-1000 HP): +15%
             powerBonus = 1.15
-            print(string.format("RHM: Large combine detected (%d HP), applying +15%% performance bonus", power))
+            print(string.format("RHM DEBUG: Large combine detected (%d HP), applying +15%% performance bonus", power))
         end
         
         basePerf = basePerf * powerBonus
         
-        print(string.format("RHM: BasePerf Mass computed for %s (cat: %s, coef: %.3f, bonus: %.2fx): %d hp -> %.2f kg/s (%.1f t/h)", 
+        print(string.format("RHM DEBUG: BasePerf Mass computed for %s (cat: %s, coef: %.3f, bonus: %.2fx): %d hp -> %.2f kg/s (%.1f t/h)", 
             vehicle:getFullName(), category or "unknown", coef, powerBonus, power, basePerf, basePerf * 3.6))
         return basePerf
     end
@@ -324,8 +324,8 @@ function LoadCalculator:calculateEngineLoad(vehicle)
     end
     
     if self.debug then
-        print(string.format("RHM: Load: %.1f%% (Raw: %.2f kg/s, Smooth: %.2f kg/s)", 
-            self.engineLoad * 100, rawAvgMass, self.currentAvgMass))
+        print(string.format("RHM DEBUG: Load: %.1f%% (Raw: %.2f kg/s, Smooth: %.2f kg/s) | Base: %.2f kg/s | Max: %.2f kg/s", 
+            self.engineLoad * 100, rawAvgMass, self.currentAvgMass, self.basePerfMass, maxAvgMass))
     end
 end
 
