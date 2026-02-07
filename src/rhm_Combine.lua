@@ -356,31 +356,11 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
 end
 
 -- Викликається кожен кадр коли гравець в комбайні
+-- Викликається кожен кадр коли гравець в комбайні
 function rhm_Combine:onDraw(isActiveForInput, isActiveForInputIgnoreSelection, isSelected)
-    local spec = self.spec_rhm_Combine
-    
-    -- Перевіряємо чи комбайн запущений
-    if not self:getIsTurnedOn() then
-        return
-    end
-    
-    -- Отримуємо HUD з глобального менеджера
-    if not g_realisticHarvestManager or not g_realisticHarvestManager.hud then
-        return
-    end
-    
-    local hud = g_realisticHarvestManager.hud
-    
-    -- Перевіряємо налаштування showHUD
-    if not hud.settings or not hud.settings.showHUD then
-        return
-    end
-    
-    -- Встановлюємо активний комбайн для HUD
-    hud:setVehicle(self)
-    
-    -- Малюємо HUD
-    hud:draw()
+    -- ПРИМІТКА: HUD малюється централізовано в RealisticHarvestManager:draw()
+    -- Ми використовуємо сканування ієрархії (getControlledVehicle -> root -> findCombine),
+    -- тому немає потреби малювати тут, це викликає дублювання.
 end
 
 -- ============================================================================

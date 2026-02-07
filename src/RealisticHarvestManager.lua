@@ -110,16 +110,47 @@ local function findCombineInHierarchy(vehicle, checkedVehicles)
 end
 
 -- Викликається кожен кадр
+-- Helper: Find the actual vehicle the player is controlling
+function RealisticHarvestManager:getControlledVehicle()
+    -- 1. Check standard game function
+    local vehicle = g_currentMission.controlledVehicle
+    if vehicle then return vehicle end
+    
+    -- 2. Check local player's current vehicle (fallback)
+    if g_localPlayer and g_localPlayer:getCurrentVehicle() then
+        return g_localPlayer:getCurrentVehicle()
+    end
+    
+    -- 3. Iterate entered vehicles (extreme fallback)
+    if g_currentMission.vehicles then
+        for _, v in pairs(g_currentMission.vehicles) do
+            if v.getIsEntered and v:getIsEntered() then
+                return v
+            end
+        end
+    end
+    
+    return nil
+end
+
+-- Викликається кожен кадр
 function RealisticHarvestManager:update(dt)
-    -- Оновлюємо HUD якщо він існує та є активний комбайн
-    if self.hud and g_currentMission.controlledVehicle then
-        local vehicle = g_currentMission.controlledVehicle
+    -- Оновлюємо HUD якщо він існує
+    if self.hud then
+        -- Знаходимо, де зараз гравець
+        local vehicle = self:getControlledVehicle()
+        local combineVehicle = nil
         
-        -- Для модульних систем (Nexat) шукаємо з rootVehicle
-        local searchRoot = vehicle.rootVehicle or vehicle
+        if vehicle then
+            -- Для модульних систем (Nexat) шукаємо з rootVehicle
+            local searchRoot = vehicle.rootVehicle or vehicle
+            
+            -- Шукаємо комбайн у всій ієрархії (для Nexat та інших модульних систем)
+            combineVehicle = findCombineInHierarchy(searchRoot)
+        end
         
-        -- Шукаємо комбайн у всій ієрархії (для Nexat та інших модульних систем)
-        local combineVehicle = findCombineInHierarchy(searchRoot)
+        -- Зберігаємо на майбутнє для draw()
+        self.lastActiveCombine = combineVehicle
         
         if combineVehicle and combineVehicle:getIsTurnedOn() then
             -- Встановлюємо активний комбайн
@@ -127,11 +158,33 @@ function RealisticHarvestManager:update(dt)
             
             -- Оновлюємо дані HUD
             self.hud:update(dt)
-            
-            -- НЕ МАЛЮЄМО ТУТ - update це не draw!
         else
             -- Скидаємо комбайн якщо не активний
             self.hud:setVehicle(nil)
+        end
+    end
+end
+
+-- Викликається кожен кадр для МАЛЮВАННЯ HUD
+function RealisticHarvestManager:draw()
+    -- НЕ малюємо якщо відкрито меню/GUI
+    if g_gui:getIsGuiVisible() then
+        return
+    end
+    
+    -- Перевіряємо чи є активний комбайн
+    local combineVehicle = self.lastActiveCombine
+    
+    -- Також перевіряємо чи гравець все ще в техніці (щоб HUD зникав при виході)
+    local playerVehicle = self:getControlledVehicle()
+    if not playerVehicle then
+        return
+    end
+    
+    -- Малюємо HUD якщо є активний комбайн і він увімкнений
+    if self.hud and combineVehicle and combineVehicle:getIsTurnedOn() then
+        if self.settings and self.settings.showHUD then
+            self.hud:draw()
         end
     end
 end
