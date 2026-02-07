@@ -117,50 +117,46 @@ function rhm_Combine:onLoad(savegame)
 end
 
 -- Перехоплюємо addCutterArea для отримання площі
-function rhm_Combine:addCutterArea(superFunc, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+-- Hook для addCutterArea щоб перехопити кількість зібраного
+-- Argument 2 is actually 'realArea' (actual cut area), not liters!
+function rhm_Combine:addCutterArea(superFunc, area, realArea, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    -- Викликаємо оригінальну функцію СПЕРШУ, щоб отримати реальні дані
+    local retLiters, retStrawLiters = superFunc(self, area, realArea, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    
     local spec = self.spec_rhm_Combine
-    
-    if not spec then
-        return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    if not spec or not spec.loadCalculator then
+        return retLiters, retStrawLiters
     end
     
-    -- Отримуємо lastMultiplier з workAreaParameters жатки
-    -- Цей множник враховує добрива (0-100%), густину врожаю, вологість
+    -- Отримуємо lastMultiplier (для сумісності зі старою логікою)
     local multiplier = 1.0
-    local spec_combine = self.spec_combine
-    if spec_combine and spec_combine.attachedCutters then
-        for cutter, _ in pairs(spec_combine.attachedCutters) do
-            if cutter.spec_cutter and cutter.spec_cutter.workAreaParameters then
-                local params = cutter.spec_cutter.workAreaParameters
-                if params.lastArea and params.lastArea > 0 and params.lastMultiplierArea then
-                    multiplier = params.lastMultiplierArea / params.lastArea
-                    -- Логування для діагностики
-                    if rhm_Combine.debug and multiplier ~= 1.0 then
-                        print(string.format("RHM: lastMultiplier = %.2f (fertilizer/density factor)", multiplier))
-                    end
-                end
-            end
-        end
-    end
     
-    if rhm_Combine.debug then
-        print(string.format("RHM: addCutterArea called. Liters: %.2f, Area: %.2f, Mult: %.2f", liters or 0, area or 0, multiplier))
-    end
+    -- Зберігаємо РЕАЛЬНУ площу (realArea) якщо вона доступна, інакше area
+    local areaForYield = realArea or area
     
-    -- Зберігаємо площу для LoadCalculator з урахуванням множника!
+    -- Зберігаємо площу для LoadCalculator (стара логіка)
     spec.lastArea = (spec.lastArea or 0) + (area * multiplier)
+    
+    -- Зберігаємо площу для Yield Monitor
+    spec.lastRawArea = (spec.lastRawArea or 0) + areaForYield
     spec.lastMultiplier = multiplier
     
-    -- Зберігаємо літри для розрахунку продуктивності в onUpdateTick
-    spec.lastLiters = (spec.lastLiters or 0) + (liters or 0)
+    -- Зберігаємо ЛІТРИ (результат жнив)
+    if retLiters and retLiters > 0 then
+        spec.lastLiters = (spec.lastLiters or 0) + retLiters
+    end
     
-    -- Зберігаємо тип культури для визначення маси
+    -- Зберігаємо тип культури
     if outputFillType and outputFillType ~= FillType.UNKNOWN then
         spec.lastFillType = outputFillType
     end
     
-    -- Викликаємо оригінальну функцію
-    return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    -- DEBUG: Uncomment to see values in console
+    -- if (retLiters or 0) > 0 then
+    --     print(string.format("RHM: cut=%.4f real=%.4f L=%.4f", area, realArea, retLiters))
+    -- end
+    
+    return retLiters, retStrawLiters
 end
 
 -- Перевизначаємо getSpeedLimit для автоматичного обмеження швидкості
@@ -322,19 +318,21 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         end
     end
     
-    -- Використовуємо lastArea з spec_combine (встановлюється в addCutterArea)
-    -- local area = spec.lastArea or 0 -- Більше не використовується для основного розрахунку
+    -- Використовуємо lastRawArea (реальна площа) для врожайності
+    local areaForYield = spec.lastRawArea or spec.lastArea or 0 
     
     -- Передаємо МАСУ в LoadCalculator!
     spec.loadCalculator:update(self, dt, massKg)
     
-    -- Оновлюємо продуктивність (логіку продуктивності теж залишаємо, вона використовує ті самі дані)
+    -- Оновлюємо продуктивність і врожайність
     if liters > 0 then
-        spec.loadCalculator:updateProductivity(massKg, liters, dt) 
+        -- Використовуємо нову функцію з area
+        spec.loadCalculator:updateProductivityAndYield(massKg, liters, areaForYield, dt) 
     end
     
     -- Скидаємо лічильники
     spec.lastArea = 0
+    spec.lastRawArea = 0 -- Reset new counter
     spec.lastLiters = 0
     
     -- Оновлюємо дані для HUD
@@ -344,6 +342,8 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         spec.data.tonPerHour = spec.loadCalculator:getTonPerHour()
         spec.data.litersPerHour = spec.loadCalculator:getLitersPerHour() -- NEW: Volume flow
         spec.data.recommendedSpeed = spec.loadCalculator:getSpeedLimit()
+        -- NEW: Yield Monitor Data
+        spec.data.yield = spec.loadCalculator.currentYield or 0
     end
     
     -- MULTIPLAYER: Позначаємо що дані змінились для синхронізації
@@ -449,6 +449,7 @@ function rhm_Combine:onWriteStream(streamId, connection)
         streamWriteFloat32(streamId, 0)
         streamWriteFloat32(streamId, 0)
         streamWriteFloat32(streamId, 0) -- litersPerHour
+        streamWriteFloat32(streamId, 0) -- yield
         return
     end
     
@@ -457,6 +458,7 @@ function rhm_Combine:onWriteStream(streamId, connection)
     streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
     streamWriteFloat32(streamId, spec.data.litersPerHour or 0) -- litersPerHour
     streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
+    streamWriteFloat32(streamId, spec.data.yield or 0)
 end
 
 ---Початкова синхронізація: Клієнт читає дані при підключенні
@@ -469,6 +471,7 @@ function rhm_Combine:onReadStream(streamId, connection)
         streamReadFloat32(streamId)
         streamReadFloat32(streamId)
         streamReadFloat32(streamId)
+        streamReadFloat32(streamId) -- yield
         return
     end
     
@@ -481,6 +484,7 @@ function rhm_Combine:onReadStream(streamId, connection)
     spec.data.tonPerHour = streamReadFloat32(streamId)
     spec.data.litersPerHour = streamReadFloat32(streamId)
     spec.data.recommendedSpeed = streamReadFloat32(streamId)
+    spec.data.yield = streamReadFloat32(streamId)
 end
 
 ---Постійна синхронізація: Клієнт читає оновлення від сервера
@@ -504,6 +508,7 @@ function rhm_Combine:onReadUpdateStream(streamId, timestamp, connection)
             spec.data.tonPerHour = streamReadFloat32(streamId)
             spec.data.litersPerHour = streamReadFloat32(streamId)
             spec.data.recommendedSpeed = streamReadFloat32(streamId)
+            spec.data.yield = streamReadFloat32(streamId)
 
         end
     end
@@ -528,6 +533,7 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
+                streamWriteFloat32(streamId, 0) -- yield
                 return
             end
 
@@ -537,6 +543,7 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
             streamWriteFloat32(streamId, spec.data.litersPerHour or 0)
             streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
+            streamWriteFloat32(streamId, spec.data.yield or 0)
         end
     end
 end

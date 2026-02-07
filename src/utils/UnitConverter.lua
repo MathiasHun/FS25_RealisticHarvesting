@@ -148,3 +148,44 @@ function UnitConverter.getSystemName(system)
         return "Unknown"
     end
 end
+
+---Convert yield (t/ha)
+---@param tPerHa number Yield in t/ha
+---@param system number Unit system
+---@param fruitType number|nil Current fruit type
+---@return number convertedValue
+---@return string suffix
+function UnitConverter.convertYield(tPerHa, system, fruitType)
+    if system == UnitConverter.SYSTEM_BUSHELS then
+        -- Convert t/ha to bu/ac
+        -- bu/ac = (t/ha * bu/t) / (ac/ha)
+        -- ac/ha = 2.47105
+        
+        local buPerTonne = UnitConverter.BUSHEL_DEFAULT
+        if fruitType and UnitConverter.BUSHEL_COEFFICIENTS[fruitType] then
+            buPerTonne = UnitConverter.BUSHEL_COEFFICIENTS[fruitType]
+        end
+        
+        local buPerHa = tPerHa * buPerTonne
+        local buPerAc = buPerHa / UnitConverter.HECTARE_TO_ACRE
+        
+        return buPerAc, "bu/ac"
+        
+    elseif system == UnitConverter.SYSTEM_IMPERIAL then
+        -- Convert t/ha to t/ac
+        -- t/ac = t/ha / 2.47105
+        return tPerHa / UnitConverter.HECTARE_TO_ACRE, "t/ac"
+    else
+        return tPerHa, "t/ha"
+    end
+end
+
+---Format yield
+---@param tPerHa number
+---@param system number
+---@param fruitType number|nil
+---@return string
+function UnitConverter.formatYield(tPerHa, system, fruitType)
+    local value, suffix = UnitConverter.convertYield(tPerHa, system, fruitType)
+    return string.format("%.1f %s", value, suffix)
+end

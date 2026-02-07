@@ -140,6 +140,19 @@ function SettingsUI:inject()
     )
     self.hudOption = hudOpt
     
+    -- Yield Monitor (Binary)
+    local yieldOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_show_yield",
+        "rhm_show_yield", -- Needs l10n
+        self.settings.showYield,
+        function(val)
+            self.settings.showYield = val
+            self.settings:save()
+        end
+    )
+    self.yieldOption = yieldOpt
+    
     -- Unit System (Multi)
     local unitOptions = {
         g_i18n:getText("rhm_unit_metric"),

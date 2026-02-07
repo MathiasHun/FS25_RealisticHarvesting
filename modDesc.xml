@@ -24,17 +24,19 @@ Features:
 - Dynamic engine load calculation based on throughput (mass/sec)
 - Automatic speed limiting to prevent overloading
 - Visual Crop Loss indicator (LOW/MED/HIGH)
+- Yield Monitor (t/ha, bu/ac) with realistic fluctuation
 - Customizable HUD with real-time metrics
 - Full multiplayer support with server-side settings
 - Support for all harvest types (Grain, Forage, Roots, Cotton)
 - Pickup Header support (Swathing)
+- Experimental NEXAT support
 
 Changelog 1.3.0.0:
-- NEW: Completely rewritten load calculation logic based on Mass Throughput (t/h) instead of area. Fixing issues with high-yield maps causing unrealistic slow speeds.
-- NEW: Added support for Pickup Headers (Swathing) - now correctly registers load based on swath volume.
-- NEW: Visual Crop Loss Indicator (LOW/MED/HIGH) instead of percentages for better readability.
-- IMPROVED: HUD now shows Green/Yellow/Red indicators for loss.
-- IMPROVED: Adaptive smoothing for more stable speed control.
+- NEW: Yield Monitor! See real-time yield in t/ha or bu/ac (toggleable in settings) (#10)
+- NEW: Completely rewritten load calculation logic based on Mass Throughput (t/h) instead of area.
+- NEW: Added experimental support for NEXAT system (HUD & Physics).
+- IMPROVED: HUD text is now bold for better visibility.
+- IMPROVED: Fixed issue where HUD would disappear when switching vehicle components.
 
 Changelog 1.2.1.0:
 - Fixed productivity calculation displaying incorrect values (was 1000x too low)
@@ -61,6 +63,14 @@ Funktionen:
 - Anpassbares HUD mit Echtzeit-Metriken
 - Volle Multiplayer-Unterstützung mit serverseitigen Einstellungen
 - Unterstützung für Baumwollernter, Hackfruchternter und teilweise Feldhäcksler
+- Experimentelle NEXAT-Unterstützung
+
+Changelog 1.3.0.0:
+- NEU: Ertragsmonitor! Sehen Sie den Ertrag in Echtzeit in t/ha oder bu/ac (umschaltbar in den Einstellungen) (#10)
+- NEU: Komplett überarbeitete Lastberechnungslogik basierend auf Massendurchsatz (t/h) statt Fläche.
+- NEU: Experimentelle Unterstützung für das NEXAT-System hinzugefügt.
+- VERBESSERT: HUD-Text ist jetzt fett für bessere Lesbarkeit.
+- VERBESSERT: Problem behoben, bei dem das HUD beim Wechseln der Fahrzeugkomponenten verschwand.
 
 Changelog 1.2.1.0:
 - Produktivitätsberechnung korrigiert (zeigte falsche Werte an - war 1000x zu niedrig)
@@ -87,6 +97,14 @@ Fonctionnalités:
 - HUD personnalisable avec métriques en temps réel
 - Support multijoueur complet avec paramètres côté serveur
 - Support pour moissonneuses à coton, récolteuses de racines et support partiel pour ensileuses
+- Support expérimental NEXAT
+
+Changelog 1.3.0.0:
+- NOUVEAU: Moniteur de rendement! Voir le rendement en temps réel en t/ha ou bu/ac (activable dans les paramètres) (#10)
+- NOUVEAU: Logique de calcul de charge entièrement réécrite basée sur le débit massique (t/h) au lieu de la surface.
+- NOUVEAU: Ajout du support expérimental pour le système NEXAT.
+- AMÉLIORÉ: Le texte du HUD est maintenant en gras pour une meilleure visibilité.
+- AMÉLIORÉ: Correction du problème où le HUD disparaissait lors du changement de composants du véhicule.
 
 Changelog 1.2.1.0:
 - Correction du calcul de productivité affichant des valeurs incorrectes (était 1000x trop bas)
@@ -113,6 +131,14 @@ Funkcje:
 - Konfigurowalny HUD z metrykami w czasie rzeczywistym
 - Pełne wsparcie dla trybu wieloosobowego z ustawieniami po stronie serwera
 - Wsparcie dla kombajnów bawełnianych, kombajnów korzeniowych i częściowe wsparcie dla sieczkarni
+- Eksperymentalne wsparcie dla NEXAT
+
+Changelog 1.3.0.0:
+- NOWOŚĆ: Monitor plonów! Zobacz plon w czasie rzeczywistym w t/ha lub bu/ac (przełączane w ustawieniach) (#10)
+- NOWOŚĆ: Całkowicie przepisana logika obliczania obciążenia oparta na przepustowości masy (t/h) zamiast powierzchni.
+- NOWOŚĆ: Dodano eksperymentalne wsparcie dla systemu NEXAT.
+- ULEPSZONO: Tekst HUD jest teraz pogrubiony dla lepszej widoczności.
+- ULEPSZONO: Naprawiono problem znikania HUD podczas przełączania elementów pojazdu.
 
 Changelog 1.2.1.0:
 - Naprawiono obliczanie produktywności wyświetlające nieprawidłowe wartości (było 1000x za niskie)
@@ -139,6 +165,14 @@ Características:
 - HUD personalizable con métricas en tiempo real
 - Soporte multijugador completo con configuración del servidor
 - Soporte para cosechadoras de algodón, cosechadoras de raíces y soporte parcial para picadoras
+- Soporte experimental para NEXAT
+
+Changelog 1.3.0.0:
+- NUEVO: ¡Monitor de rendimiento! Vea el rendimiento en tiempo real en t/ha o bu/ac (conmutable en la configuración) (#10)
+- NUEVO: Lógica de cálculo de carga completamente reescrita basada en el flujo másico (t/h) en lugar del área.
+- NUEVO: Añadido soporte experimental para el sistema NEXAT.
+- MEJORADO: El texto del HUD ahora está en negrita para una mejor visibilidad.
+- MEJORADO: Solucionado el problema donde el HUD desaparecía al cambiar componentes del vehículo.
 
 Changelog 1.2.1.0:
 - Corregido cálculo de productividad mostrando valores incorrectos (era 1000x demasiado bajo)
@@ -165,6 +199,14 @@ Caratteristiche:
 - HUD personalizzabile con metriche in tempo reale
 - Supporto multiplayer completo con impostazioni lato server
 - Supporto per raccoglitrici cotone, raccoglitrici radici e supporto parziale per trincia
+- Supporto sperimentale NEXAT
+
+Changelog 1.3.0.0:
+- NUOVO: Monitor di resa! Vedi la resa in tempo reale in t/ha o bu/ac (attivabile nelle impostazioni) (#10)
+- NUOVO: Logica di calcolo del carico completamente riscritta basata sulla portata di massa (t/h) invece che sull'area.
+- NUOVO: Aggiunto supporto sperimentale per il sistema NEXAT.
+- MIGLIORATO: Il testo dell'HUD è ora in grassetto per una migliore visibilità.
+- MIGLIORATO: Risolto il problema per cui l'HUD scompariva quando si cambiavano i componenti del veicolo.
 
 Changelog 1.2.1.0:
 - Corretto calcolo produttività che mostrava valori errati (era 1000x troppo basso)
@@ -191,6 +233,14 @@ Funkce:
 - Přizpůsobitelný HUD s metrikami v reálném čase
 - Plná podpora multiplayeru s nastavením na straně serveru
 - Podpora pro sklízecí stroje na bavlnu, sklízecí stroje na kořenovou zeleninu a částečná podpora pro sklízecí řezačky
+- Experimentální podpora NEXAT
+
+Changelog 1.3.0.0:
+- NOVINKA: Monitor výnosu! Sledujte výnos v reálném čase v t/ha nebo bu/ac (přepínatelné v nastavení) (#10)
+- NOVINKA: Zcela přepsaná logika výpočtu zatížení založená na hmotnostním průtoku (t/h) namísto plochy.
+- NOVINKA: Přidána experimentální podpora pro systém NEXAT.
+- VYLEPŠENÍ: Text HUD je nyní tučný pro lepší viditelnost.
+- VYLEPŠENÍ: Opraven problém, kdy HUD mizel při přepínání komponent vozidla.
 
 Changelog 1.2.1.0:
 - Opravený výpočet produktivity zobrazující nesprávné hodnoty (byl 1000x příliš nízký)
@@ -217,6 +267,14 @@ Recursos:
 - HUD personalizável com métricas em tempo real
 - Suporte completo para multijogador com configurações do servidor
 - Suporte para colheitadeiras de algodão, colheitadeiras de raízes e suporte parcial para forrageiras
+- Suporte experimental para NEXAT
+
+Changelog 1.3.0.0:
+- NOVO: Monitor de rendimento! Veja o rendimento em tempo real em t/ha ou bu/ac (alternável nas configurações) (#10)
+- NOVO: Lógica de cálculo de carga completamente reescrita baseada no fluxo de massa (t/h) em vez de área.
+- NOVO: Adicionado suporte experimental para o sistema NEXAT.
+- MELHORADO: O texto do HUD agora está em negrito para melhor visibilidade.
+- MELHORADO: Corrigido problema onde o HUD desaparecia ao trocar componentes do veículo.
 
 Changelog 1.2.1.0:
 - Corrigido cálculo de produtividade exibindo valores incorretos (estava 1000x muito baixo)
@@ -243,6 +301,14 @@ Changelog 1.1.0.0:
 - Налаштовуваний HUD з метриками в реальному часі
 - Повна підтримка мультиплеєра з налаштуваннями на стороні сервера
 - Підтримка бавовняних комбайнів, коренезбиральних комбайнів та часткова підтримка кормозбиральних комбайнів
+- Експериментальна підтримка NEXAT
+
+Зміни 1.3.0.0:
+- НОВЕ: Монітор врожайності! Дивіться врожайність в реальному часі в т/га або бу/акр (перемикається в налаштуваннях) (#10)
+- НОВЕ: Повністю переписана логіка розрахунку навантаження на основі пропускної здатності маси (т/год) замість площі.
+- НОВЕ: Додана експериментальна підтримка системи NEXAT.
+- ПОКРАЩЕНО: Текст HUD тепер жирний для кращої видимості.
+- ПОКРАЩЕНО: Виправлено проблему, коли HUD зникав при перемиканні компонентів транспортного засобу.
 
 Зміни 1.2.1.0:
 - Виправлено розрахунок продуктивності, що показував неправильні значення (було в 1000 разів занижено)
@@ -269,6 +335,14 @@ Changelog 1.1.0.0:
 - Настраиваемый HUD с метриками в реальном времени
 - Полная поддержка мультиплеера с настройками на стороне сервера
 - Поддержка хлопкоуборочных комбайнов, корнеуборочных комбайнов и частичная поддержка кормоуборочных комбайнов
+- Экспериментальная поддержка NEXAT
+
+Изменения 1.3.0.0:
+- НОВОЕ: Монитор урожайности! Смотрите урожайность в реальном времени в т/га или бу/акр (переключается в настройках) (#10)
+- НОВОЕ: Полностью переписана логика расчета нагрузки на основе пропускной способности массы (т/ч) вместо площади.
+- НОВОЕ: Добавлена экспериментальная поддержка системы NEXAT.
+- УЛУЧШЕНО: Текст HUD теперь жирный для лучшей видимости.
+- УЛУЧШЕНО: Исправлена проблема, когда HUD исчезал при переключении компонентов транспортного средства.
 
 Изменения 1.2.1.0:
 - Исправлен расчет производительности, показывающий неправильные значения (было в 1000 раз занижено)
@@ -295,6 +369,14 @@ Funkciók:
 - Testreszabható HUD valós idejű adatokkal
 - Teljes többjátékos támogatás, szerveroldali beállításokkal
 - Támogatás gyapotbetakarítókhoz, gyökérnövény-betakarítókhoz, valamint részleges támogatás silózó betakarítókhoz
+- Kísérleti NEXAT támogatás
+
+Változások 1.3.0.0:
+- ÚJ: Hozammonitor! Valós idejű hozam megtekintése t/ha vagy bu/ac mértékegységben (kapcsolható a beállításokban) (#10)
+- ÚJ: Teljesen átírt terhelésszámítási logika, amely terület helyett tömegáram (t/h) alapú.
+- ÚJ: Kísérleti támogatás a NEXAT rendszerhez.
+- JAVÍTVA: A HUD szövege most félkövér a jobb láthatóság érdekében.
+- JAVÍTVA: Javítva a hiba, amely miatt a HUD eltűnt a jármű alkatrészeinek váltásakor.
 
 Változások 1.2.1.0:
 - Javítva a teljesítményszámítás, amely hibás értékeket mutatott (1000× túl alacsony volt)
@@ -401,6 +483,34 @@ Változások 1.1.0.0:
             <uk>Реалістична</uk>
             <ru>Реалистичная</ru>
             <hu>Realisztikus</hu>
+        </text>
+        
+        <text name="rhm_show_yield">
+            <en>Show Yield Monitor</en>
+            <de>Ertragsmonitor anzeigen</de>
+            <fr>Afficher le moniteur de rendement</fr>
+            <pl>Pokaż monitor plonów</pl>
+            <es>Mostrar monitor de rendimiento</es>
+            <it>Mostra monitor di rendimento</it>
+            <cz>Zobrazit monitor výnosu</cz>
+            <br>Mostrar monitor de rendimento</br>
+            <uk>Монітор врожайності</uk>
+            <ru>Монитор урожайности</ru>
+            <hu>Hozammonitor megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_yield_label">
+            <en>Yield</en>
+            <de>Ertrag</de>
+            <fr>Rendement</fr>
+            <pl>Plon</pl>
+            <es>Rendimiento</es>
+            <it>Resa</it>
+            <cz>Výnos</cz>
+            <br>Rendimento</br>
+            <uk>Врожайність</uk>
+            <ru>Урожайность</ru>
+            <hu>Hozam</hu>
         </text>
         
         <text name="rhm_hud_short">

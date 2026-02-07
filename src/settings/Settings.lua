@@ -30,6 +30,7 @@ function Settings.new(manager)
     self.enableSpeedLimit = true
     self.enableCropLoss = false
     self.showHUD = true
+    self.showYield = true -- New Setting
     self.showSpeedometer = true
     
 
@@ -173,6 +174,7 @@ function Settings:resetToDefaults()
     self.enableSpeedLimit = true
     self.enableCropLoss = true
     self.showHUD = true
+    self.showYield = true
     self.hudOffsetX = 0
     self.hudOffsetY = 350
     

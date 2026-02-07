@@ -1,6 +1,6 @@
 ﻿# 🌾 Realistic Harvesting - Farming Simulator 25
 
-[![Version](https://img.shields.io/badge/version-1.2.1.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Version](https://img.shields.io/badge/version-1.3.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![FS25](https://img.shields.io/badge/FS25-Compatible-blue.svg)](https://www.farming-simulator.com/)
 [![Multiplayer](https://img.shields.io/badge/Multiplayer-Supported-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE)
@@ -27,7 +27,8 @@ In vanilla FS25, combines can harvest any crop at maximum speed, regardless of d
 
 ### The Solution
 This mod adds:
-- ✅ **Automatic speed limiting** based on real-time engine load
+- ✅ **Automatic speed limiting** based on real-time engine load (Mass Throughput)
+- ✅ **Yield Monitor** for tracking t/ha and bu/ac
 - ✅ **Realistic productivity tracking** in tons per hour
 - ✅ **Visual feedback** showing exactly what's happening with icon-based HUD
 - 🚧 **Crop loss visualization** (visual indicator only in v1.0 - full simulation coming soon!)
@@ -38,8 +39,8 @@ This mod adds:
 
 ### 🔧 Realistic Load Calculation
 Your combine's speed is **automatically adjusted** based on:
+- **Mass Throughput**: Actual mass (kg/s) entering the machine
 - **Crop Density**: Denser crops like corn slow you down more than wheat
-- **Header Width**: Wider headers process more material, increasing load
 - **Engine Capacity**: Each combine has realistic performance limits
 - **Real-time Physics**: Load is calculated dynamically every frame
 
@@ -49,11 +50,13 @@ A **sleek, icon-based display** near your speedometer shows:
 | Metric | Description |
 |--------|-------------|
 | **Load** | Current engine load (0-200%) with color coding |
+| **Yield** | Real-time yield in t/ha, t/ac, or bu/ac (Toggleable) |
 | **T/h** | Real-time productivity in tons per hour |
-| **Loss** | Crop loss indicator *(visual only in v1.2.1.0 - always shows 0%)* |
+| **Loss** | Crop loss indicator *(Low/Med/High)* |
 | **Speed** | Current vs. recommended speed *(shown when Speed Limiting is OFF)* |
 
 **HUD Features:**
+- **NEW: Yield Monitor with realistic fluctuation (+/- 5%)**
 - Color-coded warnings (Green → Yellow → Red)
 - Real-time productivity tracking
 - Minimal, non-intrusive design
