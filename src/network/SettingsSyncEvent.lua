@@ -13,9 +13,9 @@ end
 function SettingsSyncEvent.new(settings)
     local self = SettingsSyncEvent.emptyNew()
     
-    -- Server-side settings to sync
-    self.difficulty = settings.difficulty or 2
-    self.powerBoost = settings:getPowerBoost() or 20
+    -- Server-side settings to sync (FIXED: use split difficulty)
+    self.difficultyMotor = settings.difficultyMotor or 2
+    self.difficultyLoss = settings.difficultyLoss or 2
     self.enableSpeedLimit = settings.enableSpeedLimit
     self.enableCropLoss = settings.enableCropLoss
     
@@ -23,20 +23,20 @@ function SettingsSyncEvent.new(settings)
 end
 
 function SettingsSyncEvent:writeStream(streamId, connection)
-    -- print(string.format("RHM: [Sync] Writing stream (Diff: %d, Speed: %s)", self.difficulty, tostring(self.enableSpeedLimit)))
-    streamWriteUInt8(streamId, self.difficulty)
-    streamWriteUInt8(streamId, self.powerBoost)
+    -- print(string.format("RHM: [Sync] Writing stream (Motor: %d, Loss: %d, Speed: %s)", self.difficultyMotor, self.difficultyLoss, tostring(self.enableSpeedLimit)))
+    streamWriteUInt8(streamId, self.difficultyMotor)
+    streamWriteUInt8(streamId, self.difficultyLoss)
     streamWriteBool(streamId, self.enableSpeedLimit)
     streamWriteBool(streamId, self.enableCropLoss)
 end
 
 function SettingsSyncEvent:readStream(streamId, connection)
     -- print("RHM: [Sync] Reading stream...")
-    self.difficulty = streamReadUInt8(streamId)
-    self.powerBoost = streamReadUInt8(streamId)
+    self.difficultyMotor = streamReadUInt8(streamId)
+    self.difficultyLoss = streamReadUInt8(streamId)
     self.enableSpeedLimit = streamReadBool(streamId)
     self.enableCropLoss = streamReadBool(streamId)
-    -- print(string.format("RHM: [Sync] Read stream (Diff: %d, Speed: %s)", self.difficulty, tostring(self.enableSpeedLimit)))
+    -- print(string.format("RHM: [Sync] Read stream (Motor: %d, Loss: %d, Speed: %s)", self.difficultyMotor, self.difficultyLoss, tostring(self.enableSpeedLimit)))
     
     self:run(connection)
 end
@@ -52,11 +52,12 @@ function SettingsSyncEvent:run(connection)
         
         local settings = g_realisticHarvestManager.settings
         if settings then
-            print(string.format("RHM: [Sync] Server APPLYING settings - Diff: %d, Speed: %s, Loss: %s", 
-                self.difficulty, tostring(self.enableSpeedLimit), tostring(self.enableCropLoss)))
+            print(string.format("RHM: [Sync] Server APPLYING settings - Motor: %d, Loss: %d, Speed: %s, CropLoss: %s", 
+                self.difficultyMotor, self.difficultyLoss, tostring(self.enableSpeedLimit), tostring(self.enableCropLoss)))
             
-            -- Update server settings
-            settings.difficulty = self.difficulty
+            -- Update server settings (FIXED: use split difficulty)
+            settings.difficultyMotor = self.difficultyMotor
+            settings.difficultyLoss = self.difficultyLoss
             settings.enableSpeedLimit = self.enableSpeedLimit
             settings.enableCropLoss = self.enableCropLoss
             
@@ -76,12 +77,14 @@ function SettingsSyncEvent:run(connection)
     if g_realisticHarvestManager then
         local settings = g_realisticHarvestManager.settings
         if settings then
-            settings.difficulty = self.difficulty
+            -- FIXED: Apply split difficulty fields
+            settings.difficultyMotor = self.difficultyMotor
+            settings.difficultyLoss = self.difficultyLoss
             settings.enableSpeedLimit = self.enableSpeedLimit
             settings.enableCropLoss = self.enableCropLoss
             
-            -- print(string.format("RHM: [Sync] Client received update - Diff: %s, Speed: %s", 
-            --    settings:getDifficultyName(), tostring(self.enableSpeedLimit)))
+            print(string.format("RHM: [Sync] Client received update - Motor: %d, Loss: %d, Speed: %s, CropLoss: %s", 
+                self.difficultyMotor, self.difficultyLoss, tostring(self.enableSpeedLimit), tostring(self.enableCropLoss)))
         end
     end
 end

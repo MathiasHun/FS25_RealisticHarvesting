@@ -7,7 +7,8 @@ SettingsManager.XMLTAG = "realisticHarvestManager"
 
 -- Server-side settings (global, admin only)
 SettingsManager.SERVER_SETTINGS = {
-    "difficulty",
+    "difficultyMotor",
+    "difficultyLoss",
     "enableSpeedLimit",
     "enableCropLoss"
 }
@@ -21,7 +22,8 @@ SettingsManager.CLIENT_SETTINGS = {
 }
 
 SettingsManager.defaultConfig = {
-    difficulty = 2,  -- Normal
+    difficultyMotor = 2,  -- Normal
+    difficultyLoss = 2,   -- Normal
     showHUD = true,
     enableSpeedLimit = true,
     enableCropLoss = true,
@@ -64,13 +66,27 @@ function SettingsManager:loadServerSettings(settingsObject)
         if xml then
             for _, key in ipairs(self.SERVER_SETTINGS) do
                 local xmlKey = self.XMLTAG.."."..key
-                if key == "difficulty" or key == "powerBoost" or key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
+                if key == "difficultyMotor" or key == "difficultyLoss" or key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
                     settingsObject[key] = xml:getInt(xmlKey, self.defaultConfig[key])
                 else
                     settingsObject[key] = xml:getBool(xmlKey, self.defaultConfig[key])
                 end
             end
             xml:delete()
+            
+            -- MIGRATION: Convert old 'difficulty' to split fields if needed
+            if settingsObject.difficultyMotor == nil and settingsObject.difficultyLoss == nil then
+                -- Try to load legacy 'difficulty' field
+                local legacyXml = XMLFile.load("RHM_ServerConfig_Legacy", xmlPath)
+                if legacyXml then
+                    local legacyDifficulty = legacyXml:getInt(self.XMLTAG..".difficulty", 2)
+                    settingsObject.difficultyMotor = legacyDifficulty
+                    settingsObject.difficultyLoss = legacyDifficulty
+                    print(string.format("RHM: Migrated legacy difficulty (%d) to split fields", legacyDifficulty))
+                    legacyXml:delete()
+                end
+            end
+            
             return
         end
     end
@@ -127,7 +143,7 @@ function SettingsManager:saveServerSettings(settingsObject)
     if xml then
         for _, key in ipairs(self.SERVER_SETTINGS) do
             local xmlKey = self.XMLTAG.."."..key
-            if key == "difficulty" then
+            if key == "difficultyMotor" or key == "difficultyLoss" then
                 xml:setInt(xmlKey, settingsObject[key])
             else
                 xml:setBool(xmlKey, settingsObject[key])

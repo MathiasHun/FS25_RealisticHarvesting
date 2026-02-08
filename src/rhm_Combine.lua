@@ -220,6 +220,27 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         --     genuineLimit, limit)
     end
     
+    -- === MULTIPLAYER FIX ===
+    -- На клієнті LoadCalculator НЕ оновлюється (тільки на сервері)
+    -- Тому клієнт повинен використовувати синхронізоване значення spec.data.recommendedSpeed
+    if not self.isServer then
+        -- CLIENT: Use synced value from server
+        if spec.data and spec.data.recommendedSpeed then
+            local syncedLimit = spec.data.recommendedSpeed
+            
+            -- Apply synced limit if it's actively limiting (< genuineSpeedLimit)
+            if syncedLimit < spec.loadCalculator.genuineSpeedLimit then
+                spec.isSpeedLimitActive = true
+                limit = syncedLimit
+            else
+                spec.isSpeedLimitActive = false
+            end
+        end
+        
+        return limit, doCheckSpeedLimit
+    end
+    
+    -- === SERVER: Continue with normal LoadCalculator logic ===
     -- Отримуємо обмеження з LoadCalculator
     local calculatedLimit = spec.loadCalculator:getSpeedLimit()
     local engineLoad = spec.loadCalculator:getEngineLoad()
@@ -526,7 +547,9 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
         -- Перевіряємо чи є зміни
         local hasChanges = bitAND(dirtyMask, spec.dirtyFlag) ~= 0
         
-        if streamWriteBool(streamId, hasChanges) then
+        streamWriteBool(streamId, hasChanges)
+        
+        if hasChanges then
             if not spec.data then
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
