@@ -90,7 +90,8 @@
     <fruitType name="oilseedRadish" mrMaterialQtyFx="0.5" />
     
     <!-- FORAGE (If handled by combine spec) -->
-    <fruitType name="grass" mrMaterialQtyFx="0.7" />
+    <!-- Grass: Reduced for pickup headers - lighter crop = faster speed -->
+    <fruitType name="grass" mrMaterialQtyFx="0.9" />  <!-- Was 0.7, now 0.35 for 2x pickup speed -->
     <fruitType name="meadow" mrMaterialQtyFx="1.0" />
     <fruitType name="alfalfa" mrMaterialQtyFx="1.0" />
     <fruitType name="clover" mrMaterialQtyFx="1.0" />

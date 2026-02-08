@@ -20,242 +20,111 @@
 
 ## 🎯 What Does This Mod Do?
 
-**Realistic Harvesting** brings true-to-life physics to your combine operations. No more harvesting at full throttle through dense wheat fields! Your combine will respond realistically to crop density, header width, and engine capacity - just like in real farming.
+**Realistic Harvesting** simulates real-world combine harvester physics in Farming Simulator 25. Instead of harvesting at full speed regardless of crop density, your combine now responds to the volume of material entering the header. Heavy crops, wide headers, and steep hills will naturally limit your speed, just like in real life.
 
-### The Problem
-In vanilla FS25, combines can harvest any crop at maximum speed, regardless of density or header size. This breaks immersion and makes harvesting too easy.
+### Key Features
 
-### The Solution
-This mod adds:
-- ✅ **Automatic speed limiting** based on real-time engine load (Mass Throughput)
-- ✅ **Yield Monitor** for tracking t/ha and bu/ac
-- ✅ **Realistic productivity tracking** in tons per hour
-- ✅ **Visual feedback** showing exactly what's happening with icon-based HUD
-- 🚧 **Crop loss visualization** (visual indicator only in v1.0 - full simulation coming soon!)
-
----
-
-## ✨ Key Features
-
-### 🔧 Realistic Load Calculation
-Your combine's speed is **automatically adjusted** based on:
-- **Mass Throughput**: Actual mass (kg/s) entering the machine
-- **Crop Density**: Denser crops like corn slow you down more than wheat
-- **Engine Capacity**: Each combine has realistic performance limits
-- **Real-time Physics**: Load is calculated dynamically every frame
-
-### 📊 Information HUD
-A **sleek, icon-based display** near your speedometer shows:
-
-| Metric | Description |
-|--------|-------------|
-| **Load** | Current engine load (0-200%) with color coding |
-| **Yield** | Real-time yield in t/ha, t/ac, or bu/ac (Toggleable) |
-| **T/h** | Real-time productivity in tons per hour |
-| **Loss** | Crop loss indicator *(Low/Med/High)* |
-| **Speed** | Current vs. recommended speed *(shown when Speed Limiting is OFF)* |
-
-**HUD Features:**
-- **NEW: Yield Monitor with realistic fluctuation (+/- 5%)**
-- Color-coded warnings (Green → Yellow → Red)
-- Real-time productivity tracking
-- Minimal, non-intrusive design
-- Custom icons for each metric
-
-### ⚠️ Crop Loss System *(Coming Soon!)*
-
-> **Note:** In version 1.2.1.0, crop loss is a **visual indicator only**. It always shows 0% and does not affect your actual yield. Full crop loss simulation will be added in a future update!
-
-**Planned for v1.3+:**
-- Real yield reduction when overloading
-- Loss calculation based on overload severity
+*   **⚡ Smart Speed Limiting**: Automatically adjusts your harvesting speed based on engine load.
+*   **📊 Advanced Yield Monitor**: Real-time display of:
+    *   **Productivity**: Tons per Hour (T/h)
+    *   **Engine Load**: Live percentage with color-coded feedback
+    *   **Yield Data**: Accurate yield tracking with realistic fluctuation
+*   **🚜 Vehicle Support**:
+    *   **Standard Combines**: Fully supported
+    *   **Forage Harvesters**: Partial support
+    *   **Cotton Harvesters**: Supported
+    *   **Nexat System**: Specialized support for Nexat carrier and headers
+*   **🌱 Crop-Specific Physics**: Different resistance values for various crop types (e.g., Wheat vs. Corn vs. Rice).
+*   **⚙️ Global Settings**: Configurations are saved globally in `modSettings/`, persistent across all savegames.
 
 ---
 
-## 🎮 Difficulty Modes
+## 🎮 Game Modes (Difficulty Settings)
 
-Choose your experience in **Game Settings** (`ESC → Settings → Realistic Harvesting`):
+You can customize the experience with **two independent difficulty settings** found in `ESC` -> `Settings` -> `Realistic Harvesting`. Mix and match to find your perfect balance!
 
-### 🎪 Arcade Mode
-- **Minimal speed restrictions**
-- Relaxed, forgiving gameplay
-- Great for learning or casual farming
-- Max Load: **200%** (double engine power!)
+### 🚜 Engine Power (Motor Difficulty)
+Determines how much "power boost" your combine gets beyond its real-world specs.
 
-### ⚖️ Normal Mode  
-- **Balanced experience**
-- Feel the weight of heavy crops
-- Realistic but not punishing
-- Max Load: **120%**
+| Mode | Boost | Capacity vs Real Life |
+| :--- | :--- | :--- |
+| **Arcade** | +100% | **200%** (Double capacity) |
+| **Normal** | +20% | **120%** (Slightly boosted) |
+| **Realistic** | +0% | **100%** (Real specs) |
 
-### 🎯 Realistic Mode
-- **Hardcore simulation**
-- Speed strictly limited by physics
-- True-to-life combine operation
-- Max Load: **100%** (real-world limits)
+### 🌾 Crop Loss (Loss Difficulty)
+Determines how strictly the "Crop Loss" logic is applied (coming son).
 
----
-
-## ⚙️ Settings & Customization
-
-### In-Game Settings
-Access via `ESC → Settings → Realistic Harvesting`:
-
-| Setting | Options | Description |
-|---------|---------|-------------|
-| **Difficulty** | Arcade / Normal / Realistic | Choose your physics model |
-| **Show HUD** | ON / OFF | Toggle info display |
-| **Speed Limiting** | ON / OFF | Enable automatic speed control |
-| **Crop Loss** | ON / OFF | Toggle loss indicator *(visual only in v1.2)* |
+| Mode | Effect |
+| :--- | :--- |
+| **Arcade** | **50%** of standard loss penalties. |
+| **Normal** | **Standard** loss penalties. |
+| **Realistic** | **200%** loss penalties (Strict). |
 
 ---
 
-## 🌐 Multiplayer Support
+## 📸 Screenshots
 
-✅ **Fully compatible with multiplayer!**
+> **Gameplay Action**
+>
+> ![Gameplay Action](docs/images/gameplay.png)
 
-### How It Works:
-- Each player sees their own HUD
-- Speed limiting applies to the combine (not the driver)
-- Settings are saved **per-client**
-- Host and clients can have different HUD preferences
-- Calculations are synchronized across the network
+> **HUD Explanation (Metric)**
+>
+> ![HUD Metric](docs/images/hud_metric.png)
+>
+> **HUD Explanation (Imperial)**
+>
+> ![HUD Imperial](docs/images/hud_imperial.png)
+>
+> **HUD Explanation (Bushels)**
+>
+> ![HUD Bushels](docs/images/hud_bushels.png)
 
-### Best Practice:
-For the best MP experience, all players should use the **same difficulty setting**.
-
----
-
-## 📥 Installation
-
-1. Download from [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
-2. Extract `FS25_RealisticHarvesting.zip`
-3. Place the folder in your FS25 mods directory:
-   ```
-   Documents/My Games/FarmingSimulator2025/mods/
-   ```
-4. Start the game and activate the mod
-5. Configure settings in `ESC → Settings`
+> **Settings Menu**
+>
+> ![Settings Menu](docs/images/settings_menu.png)
 
 ---
 
-## 🎥 Screenshots
+## 📟 The HUD
 
-> *Screenshots coming soon! Check back after release.*
+A modern, non-intrusive HUD appears when you enter a harvester:
+
+*   **Load Bar**: Visual representation of current engine strain.
+*   **T/h Display**: Monitor your harvesting efficiency in real-time.
+*   **Speed Warning**: Alerts you if you are exceeding optimal harvesting speed (when limiter is off).
 
 ---
 
-## 🐛 Known Issues & Troubleshooting
+## ️ Installation
 
-### HUD not showing?
-- Check if "Show HUD" is enabled in settings
-- Make sure you're in a combine harvester
+1.  Download the latest version from [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting).
+2.  Place the `FS25_RealisticHarvesting.zip` file into your `mods` folder.
+    *   Usually: `Documents/My Games/FarmingSimulator2025/mods/`
+3.  Activate the mod in the in-game Modhub menu.
 
-### Speed not limiting?
-- Verify "Speed Limiting" is ON
-- Check your difficulty mode (Arcade has minimal limits)
-- Ensure you're harvesting (not just driving empty)
+---
 
-### Settings not saving?
-- Settings are stored in:
-  ```
-  Documents/My Games/FarmingSimulator2025/savegame1/FS25_RealisticHarvesting.xml
-  ```
-- Delete this file to reset to defaults
+## 🌐 Multiplayer
+
+**Fully Multiplayer Compatible!**
+*   Each player has their own local settings and HUD preferences.
+*   Speed limiting is synchronized for smooth cooperative play.
 
 ---
 
 ## 🤝 Credits & Support
 
-**Created by:** exekx  
-**Version:** 1.2.1.0  
-**Compatible with:** Farming Simulator 25
+**Created by:** exekx
 
-### Support the Mod
-- ⭐ Star this repository
-- 🐛 Report bugs via [Issues](https://github.com/exekx/FS25_RealisticHarvesting/issues)
-- 💬 Share feedback on [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
-- 📺 Share your gameplay videos!
-
----
-
-## 📜 License
-
-**All Rights Reserved** © 2026 exekx
-
-This mod is protected by copyright law. Here's what that means:
-
-**✅ You MAY:**
-- Use this mod in your personal gameplay
-- Share the official download link with others
-- Create gameplay videos featuring this mod
-- Recommend it to friends and communities
-
-**❌ You MAY NOT:**
-- Re-upload to other sites (ModHub, other mod sites, etc.)
-- Modify and redistribute the code
-- Use in commercial projects or services
-- Claim as your own work
-
-**Why this license?**
-- Ensures you always get the latest, bug-free version from the official source
-- Prevents fragmentation and outdated copies
-- Supports the original creator's work
-- Maintains quality control
-
-> **Want to help?** Share the official link, report bugs, and provide feedback!
-
----
-
-## � Changelog
-
-### v1.2.1.0 (2026-01-31)
-**Bug Fixes:**
-- 🐛 Fixed productivity calculation displaying incorrect values (was 1000x too low)
-- ✨ Improved accuracy of mass-to-volume conversion using actual crop density from game data
-
-### v1.2.0.0 (2026-01-30)
-**New Features:**
-- ✨ Added support for Cotton Harvesters
-- ✨ Added partial support for Forage Harvesters
-
-**Bug Fixes:**
-- 🐛 Fixed Multiplayer Synchronization issues
-- 🐛 Fixed settings menu conflict with other mods
-- ✨ Improved Unit System display (Imperial/Metric)
-
-### v1.1.0.0 (2026-01-29)
-**New Features:**
-- ✨ Added "Reset Settings" button to settings menu footer (key: X)
-- ✨ Added side descriptions for all settings in menu (tooltips)
-- 🌍 Full translation support for 10 languages (EN, DE, FR, PL, ES, IT, CZ, PT-BR, UK, RU)
-
-**Bug Fixes:**
-- 🐛 Improved settings menu stability
-
----
-
-## �🚀 Future Roadmap
-
-See our detailed development plan: **[ROADMAP.md](ROADMAP.md)**
-
----
-
-## ⚠️ Distribution & License
-
-- **Issues:** [GitHub Issues](https://github.com/exekx/FS25_RealisticHarvesting/issues)
-- **Download:** [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
-- **Creator:** exekx
+*   **Report Bugs:** [GitHub Issues](https://github.com/exekx/FS25_RealisticHarvesting/issues)
+*   **Support:** [kingmod.net](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for the FS25 community**
-
-[![KingMod](https://img.shields.io/badge/Download-kingmod.net-orange.svg)](https://www.kingmods.net/en/fs25/mods/73932/realistic-harvesting)
-
-*If you enjoy this mod, please support by downloading from the official source!*
+**Made with ❤️ for the FS25 Community**
 
 </div>
-
