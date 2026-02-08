@@ -7,7 +7,8 @@ SettingsManager.XMLTAG = "realisticHarvestManager"
 
 -- Server-side settings (global, admin only)
 SettingsManager.SERVER_SETTINGS = {
-    "difficulty",
+    "difficultyMotor",
+    "difficultyLoss",
     "enableSpeedLimit",
     "enableCropLoss"
 }
@@ -15,16 +16,19 @@ SettingsManager.SERVER_SETTINGS = {
 -- Client-side settings (personal, per-player)
 SettingsManager.CLIENT_SETTINGS = {
     "showHUD",
+    "showYield",
     "hudOffsetX",
     "hudOffsetY",
     "unitSystem"
 }
 
 SettingsManager.defaultConfig = {
-    difficulty = 2,  -- Normal
+    difficultyMotor = 3,  -- Normal
+    difficultyLoss = 3,   -- Normal
     showHUD = true,
+    showYield = true,     -- Show yield monitor by default
     enableSpeedLimit = true,
-    enableCropLoss = true,
+    enableCropLoss = false,
     hudOffsetX = 0,    -- Horizontal offset
     hudOffsetY = 350,  -- Vertical offset
     unitSystem = 1     -- Metric
@@ -34,12 +38,30 @@ function SettingsManager.new()
     return setmetatable({}, SettingsManager_mt)
 end
 
--- Get path for server settings (in savegame directory)
+-- Get path for server settings (NOW IN modSettings FOR GLOBAL ACCESS)
 function SettingsManager:getServerXmlFilePath()
-    if g_currentMission.missionInfo and g_currentMission.missionInfo.savegameDirectory then
-        return ("%s/%s_server.xml"):format(g_currentMission.missionInfo.savegameDirectory, SettingsManager.MOD_NAME)
+    local userPath = getUserProfileAppPath()
+    if not userPath then
+        print("RHM: ERROR - Cannot get user profile path")
+        return nil
     end
-    return nil
+    
+    -- Create modSettings/FS25_RealisticHarvesting directory structure
+    local modSettingsPath = userPath .. "modSettings"
+    local rhmPath = modSettingsPath .. "/FS25_RealisticHarvesting"
+    
+    -- Create directories if they don't exist
+    if not fileExists(modSettingsPath) then
+        createFolder(modSettingsPath)
+        print(string.format("RHM: Created modSettings directory: %s", modSettingsPath))
+    end
+    
+    if not fileExists(rhmPath) then
+        createFolder(rhmPath)
+        print(string.format("RHM: Created mod settings directory: %s", rhmPath))
+    end
+    
+    return rhmPath .. "/settings.xml"
 end
 
 -- Get path for client settings (in user profile directory)
@@ -59,23 +81,47 @@ end
 -- Load server settings (everyone reads)
 function SettingsManager:loadServerSettings(settingsObject)
     local xmlPath = self:getServerXmlFilePath()
+    
+    print(string.format("RHM: [Load] Attempting to load server settings from: %s", tostring(xmlPath)))
+    print(string.format("RHM: [Load] File exists: %s", tostring(xmlPath and fileExists(xmlPath))))
+    
     if xmlPath and fileExists(xmlPath) then
         local xml = XMLFile.load("RHM_ServerConfig", xmlPath)
         if xml then
             for _, key in ipairs(self.SERVER_SETTINGS) do
                 local xmlKey = self.XMLTAG.."."..key
-                if key == "difficulty" or key == "powerBoost" or key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
+                if key == "difficultyMotor" or key == "difficultyLoss" or key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
                     settingsObject[key] = xml:getInt(xmlKey, self.defaultConfig[key])
                 else
                     settingsObject[key] = xml:getBool(xmlKey, self.defaultConfig[key])
                 end
             end
             xml:delete()
+            
+            print(string.format("RHM: [Load] Loaded values - Motor: %s, Loss: %s, SpeedLimit: %s", 
+                tostring(settingsObject.difficultyMotor), 
+                tostring(settingsObject.difficultyLoss),
+                tostring(settingsObject.enableSpeedLimit)))
+            
+            -- MIGRATION: Convert old 'difficulty' to split fields if needed
+            if settingsObject.difficultyMotor == nil and settingsObject.difficultyLoss == nil then
+                -- Try to load legacy 'difficulty' field
+                local legacyXml = XMLFile.load("RHM_ServerConfig_Legacy", xmlPath)
+                if legacyXml then
+                    local legacyDifficulty = legacyXml:getInt(self.XMLTAG..".difficulty", 2)
+                    settingsObject.difficultyMotor = legacyDifficulty
+                    settingsObject.difficultyLoss = legacyDifficulty
+                    print(string.format("RHM: Migrated legacy difficulty (%d) to split fields", legacyDifficulty))
+                    legacyXml:delete()
+                end
+            end
+            
             return
         end
     end
     
     -- Fallback to defaults
+    print("RHM: [Load] Using default values")
     for _, key in ipairs(self.SERVER_SETTINGS) do
         settingsObject[key] = self.defaultConfig[key]
     end
@@ -121,13 +167,23 @@ end
 -- Save server settings (only server)
 function SettingsManager:saveServerSettings(settingsObject)
     local xmlPath = self:getServerXmlFilePath()
-    if not xmlPath then return end
+    if not xmlPath then 
+        print("RHM: [Save] ERROR - Cannot get server XML path (savegame directory not available)")
+        return 
+    end
+    
+    print(string.format("RHM: [Save] Saving server settings to: %s", xmlPath))
+    print(string.format("RHM: [Save] Values - Motor: %s, Loss: %s, SpeedLimit: %s, CropLoss: %s", 
+        tostring(settingsObject.difficultyMotor), 
+        tostring(settingsObject.difficultyLoss),
+        tostring(settingsObject.enableSpeedLimit),
+        tostring(settingsObject.enableCropLoss)))
     
     local xml = XMLFile.create("RHM_ServerConfig", xmlPath, self.XMLTAG)
     if xml then
         for _, key in ipairs(self.SERVER_SETTINGS) do
             local xmlKey = self.XMLTAG.."."..key
-            if key == "difficulty" then
+            if key == "difficultyMotor" or key == "difficultyLoss" then
                 xml:setInt(xmlKey, settingsObject[key])
             else
                 xml:setBool(xmlKey, settingsObject[key])
@@ -135,6 +191,17 @@ function SettingsManager:saveServerSettings(settingsObject)
         end
         xml:save()
         xml:delete()
+        
+        -- Verify file was actually saved
+        if fileExists(xmlPath) then
+            print(string.format("RHM: [Save] ✓ File verified to exist: %s", xmlPath))
+        else
+            print(string.format("RHM: [Save] ✗ WARNING - File does NOT exist after save: %s", xmlPath))
+        end
+        
+        print("RHM: [Save] Server settings saved successfully")
+    else
+        print("RHM: [Save] ERROR - Failed to create XML file")
     end
 end
 

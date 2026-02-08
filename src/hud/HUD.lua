@@ -67,9 +67,9 @@ end
 function HUD:createOverlay()
     local speedMeter = g_currentMission.hud.speedMeter
     
-    -- Компактні розміри для вертикального HUD (4 рядки: LOAD + T/h + LOSS + Speed)
+    -- Компактні розміри для вертикального HUD (5 рядків: LOAD + YIELD + T/h + LOSS + Speed)
     local boxWidth = 140  -- вужчий
-    local boxHeight = 90  -- ЗБІЛЬШЕНО для більших іконок
+    local boxHeight = 110  -- ЗБІЛЬШЕНО для 5 рядків (було 90)
     
     -- Конвертуємо в екранні координати
     local width, height = speedMeter:scalePixelToScreenVector({boxWidth, boxHeight})
@@ -90,12 +90,14 @@ function HUD:createOverlay()
     -- Створюємо іконки з КВАДРАТНИМИ пропорціями
     self.iconLoad = Overlay.new(self.modDirectory .. "textures/icon_load.dds", 0, 0, iconWidth, iconSize)
     self.iconProductivity = Overlay.new(self.modDirectory .. "textures/icon_productivity.dds", 0, 0, iconWidth, iconSize)
+    self.iconYield = Overlay.new(self.modDirectory .. "textures/icon_yield.dds", 0, 0, iconWidth, iconSize) -- NEW ICON NAME
     self.iconLoss = Overlay.new(self.modDirectory .. "textures/icon_loss.dds", 0, 0, iconWidth, iconSize)
     self.iconSpeed = Overlay.new(self.modDirectory .. "textures/icon_speed.dds", 0, 0, iconWidth, iconSize)
     
     -- Встановлюємо білий колір для іконок
     if self.iconLoad then self.iconLoad:setColor(1, 1, 1, 1) end
     if self.iconProductivity then self.iconProductivity:setColor(1, 1, 1, 1) end
+    if self.iconYield then self.iconYield:setColor(1, 1, 1, 1) end
     if self.iconLoss then self.iconLoss:setColor(1, 1, 1, 1) end
     if self.iconSpeed then self.iconSpeed:setColor(1, 1, 1, 1) end
 end
@@ -129,6 +131,7 @@ function HUD:updateData()
         self.data.cropLoss = spec.data.cropLoss or 0
         self.data.tonPerHour = spec.data.tonPerHour or 0
         self.data.litersPerHour = spec.data.litersPerHour or 0 -- New: Volume flow
+        self.data.yield = spec.data.yield or 0 -- NEW
         self.data.recommendedSpeed = spec.data.recommendedSpeed or 0
     end
 end
@@ -193,7 +196,7 @@ function HUD:drawText()
     
     -- Базове зміщення HUD
     local offsetX = speedMeter:scalePixelToScreenWidth(-160)  -- Трохи більше ліворуч (було -145)
-    local offsetY = speedMeter:scalePixelToScreenHeight(50)    -- Опустити вниз (було 15, потім 10)
+    local offsetY = speedMeter:scalePixelToScreenHeight(85)    -- ПІДНЯТО ЗНОВУ (було 85)
     
     -- Icons: 36x36px (квадратні)
     local iconSize = speedMeter:scalePixelToScreenHeight(36)
@@ -216,7 +219,7 @@ function HUD:drawText()
     local lineHeight = rowBgHeight
     
     setTextAlignment(RenderText.ALIGN_LEFT)
-    setTextBold(false)
+    setTextBold(true) -- CHANGED: Bold text
     
     -- Функція для малювання фону та іконки
     local function drawRowWithIcon(icon, textY)
@@ -255,7 +258,30 @@ function HUD:drawText()
     setTextColor(loadColor[1], loadColor[2], loadColor[3], loadColor[4])
     renderText(textX, textY, textSize, string.format("%.0f%%", self.data.load))
     
-    -- Рядок 2: T/h
+    -- Рядок 2: Yield (optional)
+    if self.settings.showYield then
+         textY = textY - lineHeight
+         drawRowWithIcon(self.iconYield, textY)
+         
+         if self.data.yield and self.data.yield > 0.01 then
+             setTextColor(1, 1, 1, 0.95)
+             local yieldStr = string.format("%.1f t/ha", self.data.yield)
+             if UnitConverter and UnitConverter.formatYield then
+                 -- Try to get fruitType for bushel conversion
+                 local fruitType = nil 
+                 if self.vehicle and self.vehicle.spec_combine then
+                     fruitType = self.vehicle.spec_combine.lastValidInputFruitType
+                 end
+                 yieldStr = UnitConverter.formatYield(self.data.yield, self.settings.unitSystem, fruitType)
+             end
+             renderText(textX, textY, textSize, yieldStr)
+         else
+             setTextColor(0.6, 0.6, 0.6, 0.8)
+             renderText(textX, textY, textSize, "--")
+         end
+    end
+
+    -- Рядок 3: T/h
     textY = textY - lineHeight
     drawRowWithIcon(self.iconProductivity, textY)
     
@@ -279,12 +305,31 @@ function HUD:drawText()
         -- Показуємо Loss
         drawRowWithIcon(self.iconLoss, textY)
         
-        if self.data.cropLoss and self.data.cropLoss > 0 then
-            setTextColor(1, 0.4, 0.4, 1)
-            renderText(textX, textY, textSize, string.format("%.1f%%", self.data.cropLoss))
+        if self.data.cropLoss and self.data.cropLoss > 0.5 then
+            local lossText = "LOW"
+            local color = {0.2, 0.8, 0.2, 1} -- Green
+            
+            if self.data.cropLoss > 3.0 then
+                lossText = "HIGH"
+                color = {0.9, 0.1, 0.1, 1} -- Red
+            elseif self.data.cropLoss > 1.0 then
+                lossText = "MED"
+                color = {0.9, 0.8, 0.1, 1} -- Yellow
+            end
+            
+            setTextColor(color[1], color[2], color[3], color[4])
+            -- Якщо доступні переклади, використовуємо їх (додамо пізніше в modDesc)
+            if g_i18n:hasText("rhm_loss_" .. lossText:lower()) then
+                lossText = g_i18n:getText("rhm_loss_" .. lossText:lower())
+            end
+            renderText(textX, textY, textSize, lossText)
         else
-            setTextColor(0.6, 0.6, 0.6, 0.8)
-            renderText(textX, textY, textSize, "0%")
+            setTextColor(0.2, 0.8, 0.2, 0.8) -- Green transparent
+            local lossText = "LOW"
+            if g_i18n:hasText("rhm_loss_low") then
+                lossText = g_i18n:getText("rhm_loss_low")
+            end
+            renderText(textX, textY, textSize, lossText)
         end
         
         -- Рядок 4: Speed (якщо включений showSpeedometer)

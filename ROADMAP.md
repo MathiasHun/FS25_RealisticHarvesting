@@ -1,7 +1,7 @@
 # 🚜 Realistic Harvesting - Development Roadmap
 
-[![Current Version](https://img.shields.io/badge/Current-v1.2.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
-[![In Development](https://img.shields.io/badge/Next-v1.3.0.0-blue.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Current Version](https://img.shields.io/badge/Current-v1.3.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![In Development](https://img.shields.io/badge/Next-v1.4.0.0-blue.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![Planned](https://img.shields.io/badge/Future-v2.0.0%20Crop%20Loss-orange.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 
@@ -9,40 +9,27 @@ This roadmap outlines our vision for making Realistic Harvesting the most immers
 
 ---
 
-## 📍 Current Version: v1.2.0.0 ✅
+## 📍 Current Version: v1.3.0.0 ✅
 
-**Released:** January 2026
+**Released:** February 2026
 
 **New Features:**
-- ✅ **Multiplayer Synchronization:** Full two-way sync for settings (Admin <-> Server <-> Clients).
-- ✅ **Permissions System:** Server settings locked to Admins.
-- ✅ **Extended Support:** Cotton, Root, and partial Forage Harvester support.
-- ✅ **Game Balance Refinements:** Fine-tuned difficulty and load calculations.
-- ✅ **Code Quality:** Optimized performance and fixed UI conflicts.
-
-**Core Features:**
-- ✅ Automatic speed limiting based on engine load
-- ✅ Real-time productivity tracking (tons/hour)
-- ✅ Icon-based HUD with load indicators
-- ✅ 3 difficulty modes (Arcade, Normal, Realistic)
-- ✅ Full localization (10 languages)
+- ✅ **Yield Monitor:** Real-time t/ha and bu/ac display (#10).
+- ✅ **Mass-Based Logic:** Load calculation now uses actual mass throughput.
+- ✅ **NEXAT Support:** Experimental support for modular harvesters.
+- ✅ **HUD Improvements:** Better visibility with bold text.
 
 ---
 
-## 🎯 Next Release: v1.3.0.0 - Hardware Expansion
+## 🎯 Next Release: v1.3.X - Refinement & Expansion
 
 **Status:** Planned
 
-**1. Nexat Pack Support**
-- Full compatibility with modular harvesters
-- HUD display for Nexat carrier vehicles
-- Speed limiting for harvester modules
-
-**2. MacDon DLC Support**
+**1. MacDon DLC Support**
 - Full compatibility with MacDon swathers and headers
 - Specialized load calculations for swath harvesting
 
-**3. Full Forage Harvester Support**
+**2. Full Forage Harvester Support**
 - Comprehensive load calculations for chaff/silage
 - Optimized HUD for continuous flow harvesting
 - Support for various crop processors (Cracker/Kernel Processor)

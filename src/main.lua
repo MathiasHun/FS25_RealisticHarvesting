@@ -84,4 +84,12 @@ FSBaseMission.update = Utils.appendedFunction(FSBaseMission.update, function(mis
     end
 end)
 
+-- Додаємо draw для МАЛЮВАННЯ HUD кожен кадр
+-- ВАЖЛИВО: renderOverlay() працює ТІЛЬКИ в draw callbacks!
+FSBaseMission.draw = Utils.appendedFunction(FSBaseMission.draw, function(mission)
+    if rhm then
+        rhm:draw()
+    end
+end)
+
 TypeManager.validateTypes = Utils.prependedFunction(TypeManager.validateTypes, validateTypes)

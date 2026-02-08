@@ -1,16 +1,37 @@
 ---@class rhm_Combine
 rhm_Combine = {}
-
 rhm_Combine.debug = false
 
+---Перевіряє чи машина підходить для цієї спеціалізації
+---@param specializations table<string, table>
+---@return boolean
 function rhm_Combine.prerequisitesPresent(specializations)
-    -- Наш specialization додається тільки до комбайнів
-    return SpecializationUtil.hasSpecialization(Combine, specializations)
+    -- DEBUG: Виводимо всі specializations щоб побачити що має Nexat
+    print("========================================")
+    print("RHM: Checking prerequisites for vehicle")
+    print("Available specializations:")
+    for specName, specTable in pairs(specializations) do
+        if type(specTable) == "table" and specTable.className then
+            print("  - " .. specTable.className)
+        end
+    end
+    
+    -- Перевіряємо базову specialization Combine
+    local hasCombine = SpecializationUtil.hasSpecialization(Combine, specializations)
+    print("Has Combine: " .. tostring(hasCombine))
+    
+    -- Для Nexat: тимчасово спрощуємо перевірку
+    -- Повертаємо true якщо просто є Combine
+    print("Result: " .. tostring(hasCombine))
+    print("========================================")
+    
+    return hasCombine
 end
 
 -- Реєстрація перевизначених функцій (ОБОВ'ЯЗКОВО перед registerEventListeners!)
 function rhm_Combine.registerOverwrittenFunctions(vehicleType)
     print("RHM: Registering overwritten functions for rhm_Combine")
+    -- SpecializationUtil.registerOverwrittenFunction(vehicleType, "processCutters", rhm_Combine.processCutters) -- Removed: Not needed and was causing nil error
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "addCutterArea", rhm_Combine.addCutterArea)
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "getSpeedLimit", rhm_Combine.getSpeedLimit)
 end
@@ -21,9 +42,15 @@ function rhm_Combine.registerEventListeners(vehicleType)
     SpecializationUtil.registerEventListener(vehicleType, "onUpdateTick", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onDraw", rhm_Combine)
     
-    -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
+    -- SAVEGAME: Збереження та завантаження стану
     SpecializationUtil.registerEventListener(vehicleType, "onReadStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteStream", rhm_Combine)
+    
+    -- SAVEGAME XML: Disabled - functions are commented out
+    -- SpecializationUtil.registerEventListener(vehicleType, "saveToXMLFile", rhm_Combine)
+    -- SpecializationUtil.registerEventListener(vehicleType, "loadFromXMLFile", rhm_Combine)
+    
+    -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
     SpecializationUtil.registerEventListener(vehicleType, "onReadUpdateStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteUpdateStream", rhm_Combine)
 end
@@ -42,8 +69,19 @@ function rhm_Combine:onLoad(savegame)
         return
     end
     
+    if rhm_Combine.debug then
+        print(string.format("RHM: onLoad called for %s (has savegame: %s)", 
+            tostring(self:getFullName()), tostring(savegame ~= nil)))
+    end
+    
     -- Створюємо LoadCalculator з modDirectory
     local modDir = g_realisticHarvestManager and g_realisticHarvestManager.modDirectory or g_currentModDirectory
+    
+    if not LoadCalculator then
+        Logging.error("RHM: LoadCalculator class is missing! Check script loading order.")
+        return
+    end
+
     spec.loadCalculator = LoadCalculator.new(modDir)
     
     if not spec.loadCalculator then
@@ -79,46 +117,46 @@ function rhm_Combine:onLoad(savegame)
 end
 
 -- Перехоплюємо addCutterArea для отримання площі
-function rhm_Combine:addCutterArea(superFunc, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+-- Hook для addCutterArea щоб перехопити кількість зібраного
+-- Argument 2 is actually 'realArea' (actual cut area), not liters!
+function rhm_Combine:addCutterArea(superFunc, area, realArea, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    -- Викликаємо оригінальну функцію СПЕРШУ, щоб отримати реальні дані
+    local retLiters, retStrawLiters = superFunc(self, area, realArea, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    
     local spec = self.spec_rhm_Combine
-    
-    if not spec then
-        return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    if not spec or not spec.loadCalculator then
+        return retLiters, retStrawLiters
     end
     
-    -- Отримуємо lastMultiplier з workAreaParameters жатки
-    -- Цей множник враховує добрива (0-100%), густину врожаю, вологість
+    -- Отримуємо lastMultiplier (для сумісності зі старою логікою)
     local multiplier = 1.0
-    local spec_combine = self.spec_combine
-    if spec_combine and spec_combine.attachedCutters then
-        for cutter, _ in pairs(spec_combine.attachedCutters) do
-            if cutter.spec_cutter and cutter.spec_cutter.workAreaParameters then
-                local params = cutter.spec_cutter.workAreaParameters
-                if params.lastArea and params.lastArea > 0 and params.lastMultiplierArea then
-                    multiplier = params.lastMultiplierArea / params.lastArea
-                    -- Логування для діагностики
-                    if rhm_Combine.debug and multiplier ~= 1.0 then
-                        print(string.format("RHM: lastMultiplier = %.2f (fertilizer/density factor)", multiplier))
-                    end
-                end
-            end
-        end
-    end
     
-    -- Зберігаємо площу для LoadCalculator з урахуванням множника!
+    -- Зберігаємо РЕАЛЬНУ площу (realArea) якщо вона доступна, інакше area
+    local areaForYield = realArea or area
+    
+    -- Зберігаємо площу для LoadCalculator (стара логіка)
     spec.lastArea = (spec.lastArea or 0) + (area * multiplier)
+    
+    -- Зберігаємо площу для Yield Monitor
+    spec.lastRawArea = (spec.lastRawArea or 0) + areaForYield
     spec.lastMultiplier = multiplier
     
-    -- Зберігаємо літри для розрахунку продуктивності в onUpdateTick
-    spec.lastLiters = (spec.lastLiters or 0) + (liters or 0)
+    -- Зберігаємо ЛІТРИ (результат жнив)
+    if retLiters and retLiters > 0 then
+        spec.lastLiters = (spec.lastLiters or 0) + retLiters
+    end
     
-    -- Зберігаємо тип культури для визначення маси
+    -- Зберігаємо тип культури
     if outputFillType and outputFillType ~= FillType.UNKNOWN then
         spec.lastFillType = outputFillType
     end
     
-    -- Викликаємо оригінальну функцію
-    return superFunc(self, area, liters, inputFruitType, outputFillType, strawRatio, strawGroundType, farmId, cutterLoad)
+    -- DEBUG: Uncomment to see values in console
+    -- if (retLiters or 0) > 0 then
+    --     print(string.format("RHM: cut=%.4f real=%.4f L=%.4f", area, realArea, retLiters))
+    -- end
+    
+    return retLiters, retStrawLiters
 end
 
 -- Перевизначаємо getSpeedLimit для автоматичного обмеження швидкості
@@ -139,6 +177,33 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         return limit, doCheckSpeedLimit
     end
     
+    -- CRITICAL FIX: Перевіряємо чи жатка ПРАЦЮЄ (не просто прикріплена)
+    -- Якщо жатка піднята або не косить - НЕ обмежуємо швидкість
+    local spec_combine = self.spec_combine
+    local cutterIsWorking = false
+    
+    if spec_combine and spec_combine.attachedCutters then
+        for cutter, _ in pairs(spec_combine.attachedCutters) do
+            if cutter.spec_cutter then
+                local spec_cutter = cutter.spec_cutter
+                -- Жатка працює якщо: рух вперед, швидкість > 0.5, опущена (або дозволено косити піднятою)
+                cutterIsWorking = self.movingDirection == spec_cutter.movingDirection 
+                    and self:getLastSpeed() > 0.5 
+                    and (spec_cutter.allowCuttingWhileRaised or cutter:getIsLowered(true))
+                
+                if cutterIsWorking then
+                    break -- Знайшли працюючу жатку
+                end
+            end
+        end
+    end
+    
+    -- Якщо жатка НЕ працює - знімаємо обмеження відразу
+    if not cutterIsWorking then
+        spec.isSpeedLimitActive = false
+        return limit, doCheckSpeedLimit
+    end
+    
     -- Перевіряємо чи увімкнено обмеження швидкості
     if g_realisticHarvestManager and g_realisticHarvestManager.settings then
         if not g_realisticHarvestManager.settings.enableSpeedLimit then
@@ -154,7 +219,6 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     end
     
     -- Перевіряємо чи змінилася жатка
-    local spec_combine = self.spec_combine
     if spec_combine and spec_combine.attachedCutters then
         local currentCutter = nil
         for cutter, _ in pairs(spec_combine.attachedCutters) do
@@ -182,6 +246,27 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         --     genuineLimit, limit)
     end
     
+    -- === MULTIPLAYER FIX ===
+    -- На клієнті LoadCalculator НЕ оновлюється (тільки на сервері)
+    -- Тому клієнт повинен використовувати синхронізоване значення spec.data.recommendedSpeed
+    if not self.isServer then
+        -- CLIENT: Use synced value from server
+        if spec.data and spec.data.recommendedSpeed then
+            local syncedLimit = spec.data.recommendedSpeed
+            
+            -- Apply synced limit if it's actively limiting (< genuineSpeedLimit)
+            if syncedLimit < spec.loadCalculator.genuineSpeedLimit then
+                spec.isSpeedLimitActive = true
+                limit = syncedLimit
+            else
+                spec.isSpeedLimitActive = false
+            end
+        end
+        
+        return limit, doCheckSpeedLimit
+    end
+    
+    -- === SERVER: Continue with normal LoadCalculator logic ===
     -- Отримуємо обмеження з LoadCalculator
     local calculatedLimit = spec.loadCalculator:getSpeedLimit()
     local engineLoad = spec.loadCalculator:getEngineLoad()
@@ -262,34 +347,39 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     end
     
     -- Оновлюємо LoadCalculator
-    -- Використовуємо lastArea з spec_combine (встановлюється в addCutterArea)
-    local area = spec.lastArea or 0
-    spec.loadCalculator:update(self, dt, area)
+    -- Спершу розраховуємо масу, бо тепер вона головна!
+    local massKg = 0
+    local liters = spec.lastLiters or 0
     
-    -- Оновлюємо продуктивність з накопичених літрів
-    if spec.lastLiters and spec.lastLiters > 0 then
-        -- Розраховуємо реальну масу
-        local massKg = 0
-        local liters = spec.lastLiters
-        
+    if liters > 0 then
         if spec.lastFillType and g_fillTypeManager then
             local fillType = g_fillTypeManager:getFillTypeByIndex(spec.lastFillType)
             if fillType and fillType.massPerLiter then
                 -- ВАЖЛИВО: massPerLiter в грі зберігається в ТОННАХ на літр, тому множимо на 1000
                 massKg = liters * fillType.massPerLiter * 1000
             else
-                massKg = liters * 0.75 -- Fallback, як було раніше
+                massKg = liters * 0.75 -- Fallback
             end
         else
             massKg = liters * 0.75 -- Fallback
         end
-        
-        -- Передаємо і масу, і літри
-        spec.loadCalculator:updateProductivity(massKg, liters, dt) 
+    end
+    
+    -- Використовуємо lastRawArea (реальна площа) для врожайності
+    local areaForYield = spec.lastRawArea or spec.lastArea or 0 
+    
+    -- Передаємо МАСУ в LoadCalculator!
+    spec.loadCalculator:update(self, dt, massKg)
+    
+    -- Оновлюємо продуктивність і врожайність
+    if liters > 0 then
+        -- Використовуємо нову функцію з area
+        spec.loadCalculator:updateProductivityAndYield(massKg, liters, areaForYield, dt) 
     end
     
     -- Скидаємо лічильники
     spec.lastArea = 0
+    spec.lastRawArea = 0 -- Reset new counter
     spec.lastLiters = 0
     
     -- Оновлюємо дані для HUD
@@ -299,6 +389,8 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         spec.data.tonPerHour = spec.loadCalculator:getTonPerHour()
         spec.data.litersPerHour = spec.loadCalculator:getLitersPerHour() -- NEW: Volume flow
         spec.data.recommendedSpeed = spec.loadCalculator:getSpeedLimit()
+        -- NEW: Yield Monitor Data
+        spec.data.yield = spec.loadCalculator.currentYield or 0
     end
     
     -- MULTIPLAYER: Позначаємо що дані змінились для синхронізації
@@ -311,49 +403,88 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
 end
 
 -- Викликається кожен кадр коли гравець в комбайні
+-- Викликається кожен кадр коли гравець в комбайні
 function rhm_Combine:onDraw(isActiveForInput, isActiveForInputIgnoreSelection, isSelected)
+    -- ПРИМІТКА: HUD малюється централізовано в RealisticHarvestManager:draw()
+    -- Ми використовуємо сканування ієрархії (getControlledVehicle -> root -> findCombine),
+    -- тому немає потреби малювати тут, це викликає дублювання.
+end
+
+-- ============================================================================
+-- SAVEGAME FUNCTIONS  
+-- ============================================================================
+
+---Збереження стану в savegame файл
+---@param xmlFile XMLFile
+---@param key string
+-- saveToXMLFile disabled - causes XML schema validation errors
+-- Values are calculated dynamically, no need to save/load
+--[[function rhm_Combine:saveToXMLFile(xmlFile, key, usedModNames)
+    local spec = self.spec_rhm_Combine
+    if not spec then
+        return
+    end
+    
+    -- Зберігаємо базову продуктивність LoadCalculator
+    if spec.loadCalculator then
+        xmlFile:setValue(key .. "#basePerformance", spec.loadCalculator.basePerformance or 0)
+        xmlFile:setValue(key .. "#genuineSpeedLimit", spec.loadCalculator.genuineSpeedLimit or 15)
+    end
+    
     if rhm_Combine.debug then
-        print("RHM: rhm_Combine:onDraw called")
+        print("RHM: saveToXMLFile completed for " .. tostring(self:getFullName()))
+    end
+end--]]
+
+-- loadFromXMLFile disabled - causes XML schema validation errors
+-- Values are calculated dynamically, no need to save/load
+--[[---Завантаження стану з savegame файлу
+---@param xmlFile XMLFile
+---@param key string  
+---@param resetVehicles table
+function rhm_Combine:loadFromXMLFile(xmlFile, key, resetVehicles)
+    if rhm_Combine.debug then
+        print(string.format("RHM: loadFromXMLFile called for %s with key: %s", 
+            tostring(self:getFullName()), tostring(key)))
     end
     
     local spec = self.spec_rhm_Combine
-    
-    -- Перевіряємо чи комбайн запущений
-    if not self:getIsTurnedOn() then
+    if not spec then
         if rhm_Combine.debug then
-            print("RHM: Combine is not turned on, skipping HUD")
+            print("RHM: loadFromXMLFile - spec not found, skipping")
         end
         return
     end
     
-    -- Отримуємо HUD з глобального менеджера
-    if not g_realisticHarvestManager or not g_realisticHarvestManager.hud then
+    if not spec.loadCalculator then
         if rhm_Combine.debug then
-            print("RHM: HUD not available")
+            print("RHM: loadFromXMLFile - loadCalculator not found, skipping")
         end
         return
     end
     
-    local hud = g_realisticHarvestManager.hud
-    
-    -- Перевіряємо налаштування showHUD
-    if not hud.settings or not hud.settings.showHUD then
+    -- Безпечне завантаження базової продуктивності з default значенням
+    local basePerf = xmlFile:getValue(key .. "#basePerformance", spec.loadCalculator.basePerfMass)
+    if basePerf and tonumber(basePerf) and basePerf > 0 then
+        spec.loadCalculator:setBasePerformance(tonumber(basePerf))
         if rhm_Combine.debug then
-            print("RHM: showHUD is false")
+            print(string.format("RHM: Loaded basePerformance: %.2f kg/s", basePerf))
         end
-        return
     end
     
-    -- Встановлюємо активний комбайн для HUD
-    hud:setVehicle(self)
-    
-    -- Малюємо HUD
-    hud:draw()
-    
-    if rhm_Combine.debug and spec.data then
-        print(string.format("RHM: HUD drawn - Speed: %.1f km/h, Load: %.0f%%", spec.data.speed or 0, spec.data.load or 0))
+    -- Безпечне завантаження genuineSpeedLimit з default значенням  
+    local speedLimit = xmlFile:getValue(key .. "#genuineSpeedLimit", spec.loadCalculator.genuineSpeedLimit)
+    if speedLimit and tonumber(speedLimit) and speedLimit > 0 then
+        spec.loadCalculator:setGenuineSpeedLimit(tonumber(speedLimit))
+        if rhm_Combine.debug then
+            print(string.format("RHM: Loaded genuineSpeedLimit: %.1f km/h", speedLimit))
+        end
     end
-end
+    
+    if rhm_Combine.debug then
+        print(string.format("RHM: loadFromXMLFile completed for %s", tostring(self:getFullName())))
+    end
+end--]]
 
 -- ============================================================================
 -- MULTIPLAYER SYNCHRONIZATION
@@ -369,6 +500,7 @@ function rhm_Combine:onWriteStream(streamId, connection)
         streamWriteFloat32(streamId, 0)
         streamWriteFloat32(streamId, 0)
         streamWriteFloat32(streamId, 0) -- litersPerHour
+        streamWriteFloat32(streamId, 0) -- yield
         return
     end
     
@@ -377,6 +509,7 @@ function rhm_Combine:onWriteStream(streamId, connection)
     streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
     streamWriteFloat32(streamId, spec.data.litersPerHour or 0) -- litersPerHour
     streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
+    streamWriteFloat32(streamId, spec.data.yield or 0)
 end
 
 ---Початкова синхронізація: Клієнт читає дані при підключенні
@@ -389,6 +522,7 @@ function rhm_Combine:onReadStream(streamId, connection)
         streamReadFloat32(streamId)
         streamReadFloat32(streamId)
         streamReadFloat32(streamId)
+        streamReadFloat32(streamId) -- yield
         return
     end
     
@@ -401,6 +535,7 @@ function rhm_Combine:onReadStream(streamId, connection)
     spec.data.tonPerHour = streamReadFloat32(streamId)
     spec.data.litersPerHour = streamReadFloat32(streamId)
     spec.data.recommendedSpeed = streamReadFloat32(streamId)
+    spec.data.yield = streamReadFloat32(streamId)
 end
 
 ---Постійна синхронізація: Клієнт читає оновлення від сервера
@@ -424,6 +559,7 @@ function rhm_Combine:onReadUpdateStream(streamId, timestamp, connection)
             spec.data.tonPerHour = streamReadFloat32(streamId)
             spec.data.litersPerHour = streamReadFloat32(streamId)
             spec.data.recommendedSpeed = streamReadFloat32(streamId)
+            spec.data.yield = streamReadFloat32(streamId)
 
         end
     end
@@ -441,13 +577,16 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
         -- Перевіряємо чи є зміни
         local hasChanges = bitAND(dirtyMask, spec.dirtyFlag) ~= 0
         
-        if streamWriteBool(streamId, hasChanges) then
+        streamWriteBool(streamId, hasChanges)
+        
+        if hasChanges then
             if not spec.data then
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
                 streamWriteFloat32(streamId, 0)
+                streamWriteFloat32(streamId, 0) -- yield
                 return
             end
 
@@ -457,7 +596,11 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, spec.data.tonPerHour or 0)
             streamWriteFloat32(streamId, spec.data.litersPerHour or 0)
             streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
+            streamWriteFloat32(streamId, spec.data.yield or 0)
         end
     end
 end
+
+
+
 

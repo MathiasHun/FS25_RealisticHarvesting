@@ -2,7 +2,7 @@
 <modDesc descVersion="105">
     <author>exekx</author>
     <manufacturer>exekx</manufacturer>
-    <version>1.2.1.0</version>
+    <version>1.3.0.0</version>
     <modName>FS25_RealisticHarvesting</modName>
     <title>
         <en>Realistic Harvesting</en>
@@ -21,12 +21,22 @@
         <en><![CDATA[Adds realistic harvesting mechanics to your combines.
 
 Features:
-- Dynamic engine load calculation based on crop density and header width
+- Dynamic engine load calculation based on throughput (mass/sec)
 - Automatic speed limiting to prevent overloading
-- Crop loss indicator (visual only - full simulation coming soon)
+- Visual Crop Loss indicator (LOW/MED/HIGH)
+- Yield Monitor (t/ha, bu/ac) with realistic fluctuation
 - Customizable HUD with real-time metrics
 - Full multiplayer support with server-side settings
-- Support for Cotton Harvesters, Root Crop Harvesters, and partial Forage Harvester support
+- Support for all harvest types (Grain, Forage, Roots, Cotton)
+- Pickup Header support (Swathing)
+- Experimental NEXAT support
+
+Changelog 1.3.0.0:
+- NEW: Yield Monitor! See real-time yield in t/ha or bu/ac (toggleable in settings) (#10)
+- NEW: Completely rewritten load calculation logic based on Mass Throughput (t/h) instead of area.
+- NEW: Added experimental support for NEXAT system (HUD & Physics).
+- IMPROVED: HUD text is now bold for better visibility.
+- IMPROVED: Fixed issue where HUD would disappear when switching vehicle components.
 
 Changelog 1.2.1.0:
 - Fixed productivity calculation displaying incorrect values (was 1000x too low)
@@ -53,6 +63,14 @@ Funktionen:
 - Anpassbares HUD mit Echtzeit-Metriken
 - Volle Multiplayer-Unterstützung mit serverseitigen Einstellungen
 - Unterstützung für Baumwollernter, Hackfruchternter und teilweise Feldhäcksler
+- Experimentelle NEXAT-Unterstützung
+
+Changelog 1.3.0.0:
+- NEU: Ertragsmonitor! Sehen Sie den Ertrag in Echtzeit in t/ha oder bu/ac (umschaltbar in den Einstellungen) (#10)
+- NEU: Komplett überarbeitete Lastberechnungslogik basierend auf Massendurchsatz (t/h) statt Fläche.
+- NEU: Experimentelle Unterstützung für das NEXAT-System hinzugefügt.
+- VERBESSERT: HUD-Text ist jetzt fett für bessere Lesbarkeit.
+- VERBESSERT: Problem behoben, bei dem das HUD beim Wechseln der Fahrzeugkomponenten verschwand.
 
 Changelog 1.2.1.0:
 - Produktivitätsberechnung korrigiert (zeigte falsche Werte an - war 1000x zu niedrig)
@@ -79,6 +97,14 @@ Fonctionnalités:
 - HUD personnalisable avec métriques en temps réel
 - Support multijoueur complet avec paramètres côté serveur
 - Support pour moissonneuses à coton, récolteuses de racines et support partiel pour ensileuses
+- Support expérimental NEXAT
+
+Changelog 1.3.0.0:
+- NOUVEAU: Moniteur de rendement! Voir le rendement en temps réel en t/ha ou bu/ac (activable dans les paramètres) (#10)
+- NOUVEAU: Logique de calcul de charge entièrement réécrite basée sur le débit massique (t/h) au lieu de la surface.
+- NOUVEAU: Ajout du support expérimental pour le système NEXAT.
+- AMÉLIORÉ: Le texte du HUD est maintenant en gras pour une meilleure visibilité.
+- AMÉLIORÉ: Correction du problème où le HUD disparaissait lors du changement de composants du véhicule.
 
 Changelog 1.2.1.0:
 - Correction du calcul de productivité affichant des valeurs incorrectes (était 1000x trop bas)
@@ -105,6 +131,14 @@ Funkcje:
 - Konfigurowalny HUD z metrykami w czasie rzeczywistym
 - Pełne wsparcie dla trybu wieloosobowego z ustawieniami po stronie serwera
 - Wsparcie dla kombajnów bawełnianych, kombajnów korzeniowych i częściowe wsparcie dla sieczkarni
+- Eksperymentalne wsparcie dla NEXAT
+
+Changelog 1.3.0.0:
+- NOWOŚĆ: Monitor plonów! Zobacz plon w czasie rzeczywistym w t/ha lub bu/ac (przełączane w ustawieniach) (#10)
+- NOWOŚĆ: Całkowicie przepisana logika obliczania obciążenia oparta na przepustowości masy (t/h) zamiast powierzchni.
+- NOWOŚĆ: Dodano eksperymentalne wsparcie dla systemu NEXAT.
+- ULEPSZONO: Tekst HUD jest teraz pogrubiony dla lepszej widoczności.
+- ULEPSZONO: Naprawiono problem znikania HUD podczas przełączania elementów pojazdu.
 
 Changelog 1.2.1.0:
 - Naprawiono obliczanie produktywności wyświetlające nieprawidłowe wartości (było 1000x za niskie)
@@ -131,6 +165,14 @@ Características:
 - HUD personalizable con métricas en tiempo real
 - Soporte multijugador completo con configuración del servidor
 - Soporte para cosechadoras de algodón, cosechadoras de raíces y soporte parcial para picadoras
+- Soporte experimental para NEXAT
+
+Changelog 1.3.0.0:
+- NUEVO: ¡Monitor de rendimiento! Vea el rendimiento en tiempo real en t/ha o bu/ac (conmutable en la configuración) (#10)
+- NUEVO: Lógica de cálculo de carga completamente reescrita basada en el flujo másico (t/h) en lugar del área.
+- NUEVO: Añadido soporte experimental para el sistema NEXAT.
+- MEJORADO: El texto del HUD ahora está en negrita para una mejor visibilidad.
+- MEJORADO: Solucionado el problema donde el HUD desaparecía al cambiar componentes del vehículo.
 
 Changelog 1.2.1.0:
 - Corregido cálculo de productividad mostrando valores incorrectos (era 1000x demasiado bajo)
@@ -157,6 +199,14 @@ Caratteristiche:
 - HUD personalizzabile con metriche in tempo reale
 - Supporto multiplayer completo con impostazioni lato server
 - Supporto per raccoglitrici cotone, raccoglitrici radici e supporto parziale per trincia
+- Supporto sperimentale NEXAT
+
+Changelog 1.3.0.0:
+- NUOVO: Monitor di resa! Vedi la resa in tempo reale in t/ha o bu/ac (attivabile nelle impostazioni) (#10)
+- NUOVO: Logica di calcolo del carico completamente riscritta basata sulla portata di massa (t/h) invece che sull'area.
+- NUOVO: Aggiunto supporto sperimentale per il sistema NEXAT.
+- MIGLIORATO: Il testo dell'HUD è ora in grassetto per una migliore visibilità.
+- MIGLIORATO: Risolto il problema per cui l'HUD scompariva quando si cambiavano i componenti del veicolo.
 
 Changelog 1.2.1.0:
 - Corretto calcolo produttività che mostrava valori errati (era 1000x troppo basso)
@@ -183,6 +233,14 @@ Funkce:
 - Přizpůsobitelný HUD s metrikami v reálném čase
 - Plná podpora multiplayeru s nastavením na straně serveru
 - Podpora pro sklízecí stroje na bavlnu, sklízecí stroje na kořenovou zeleninu a částečná podpora pro sklízecí řezačky
+- Experimentální podpora NEXAT
+
+Changelog 1.3.0.0:
+- NOVINKA: Monitor výnosu! Sledujte výnos v reálném čase v t/ha nebo bu/ac (přepínatelné v nastavení) (#10)
+- NOVINKA: Zcela přepsaná logika výpočtu zatížení založená na hmotnostním průtoku (t/h) namísto plochy.
+- NOVINKA: Přidána experimentální podpora pro systém NEXAT.
+- VYLEPŠENÍ: Text HUD je nyní tučný pro lepší viditelnost.
+- VYLEPŠENÍ: Opraven problém, kdy HUD mizel při přepínání komponent vozidla.
 
 Changelog 1.2.1.0:
 - Opravený výpočet produktivity zobrazující nesprávné hodnoty (byl 1000x příliš nízký)
@@ -209,6 +267,14 @@ Recursos:
 - HUD personalizável com métricas em tempo real
 - Suporte completo para multijogador com configurações do servidor
 - Suporte para colheitadeiras de algodão, colheitadeiras de raízes e suporte parcial para forrageiras
+- Suporte experimental para NEXAT
+
+Changelog 1.3.0.0:
+- NOVO: Monitor de rendimento! Veja o rendimento em tempo real em t/ha ou bu/ac (alternável nas configurações) (#10)
+- NOVO: Lógica de cálculo de carga completamente reescrita baseada no fluxo de massa (t/h) em vez de área.
+- NOVO: Adicionado suporte experimental para o sistema NEXAT.
+- MELHORADO: O texto do HUD agora está em negrito para melhor visibilidade.
+- MELHORADO: Corrigido problema onde o HUD desaparecia ao trocar componentes do veículo.
 
 Changelog 1.2.1.0:
 - Corrigido cálculo de produtividade exibindo valores incorretos (estava 1000x muito baixo)
@@ -235,6 +301,14 @@ Changelog 1.1.0.0:
 - Налаштовуваний HUD з метриками в реальному часі
 - Повна підтримка мультиплеєра з налаштуваннями на стороні сервера
 - Підтримка бавовняних комбайнів, коренезбиральних комбайнів та часткова підтримка кормозбиральних комбайнів
+- Експериментальна підтримка NEXAT
+
+Зміни 1.3.0.0:
+- НОВЕ: Монітор врожайності! Дивіться врожайність в реальному часі в т/га або бу/акр (перемикається в налаштуваннях) (#10)
+- НОВЕ: Повністю переписана логіка розрахунку навантаження на основі пропускної здатності маси (т/год) замість площі.
+- НОВЕ: Додана експериментальна підтримка системи NEXAT.
+- ПОКРАЩЕНО: Текст HUD тепер жирний для кращої видимості.
+- ПОКРАЩЕНО: Виправлено проблему, коли HUD зникав при перемиканні компонентів транспортного засобу.
 
 Зміни 1.2.1.0:
 - Виправлено розрахунок продуктивності, що показував неправильні значення (було в 1000 разів занижено)
@@ -261,6 +335,14 @@ Changelog 1.1.0.0:
 - Настраиваемый HUD с метриками в реальном времени
 - Полная поддержка мультиплеера с настройками на стороне сервера
 - Поддержка хлопкоуборочных комбайнов, корнеуборочных комбайнов и частичная поддержка кормоуборочных комбайнов
+- Экспериментальная поддержка NEXAT
+
+Изменения 1.3.0.0:
+- НОВОЕ: Монитор урожайности! Смотрите урожайность в реальном времени в т/га или бу/акр (переключается в настройках) (#10)
+- НОВОЕ: Полностью переписана логика расчета нагрузки на основе пропускной способности массы (т/ч) вместо площади.
+- НОВОЕ: Добавлена экспериментальная поддержка системы NEXAT.
+- УЛУЧШЕНО: Текст HUD теперь жирный для лучшей видимости.
+- УЛУЧШЕНО: Исправлена проблема, когда HUD исчезал при переключении компонентов транспортного средства.
 
 Изменения 1.2.1.0:
 - Исправлен расчет производительности, показывающий неправильные значения (было в 1000 раз занижено)
@@ -287,6 +369,14 @@ Funkciók:
 - Testreszabható HUD valós idejű adatokkal
 - Teljes többjátékos támogatás, szerveroldali beállításokkal
 - Támogatás gyapotbetakarítókhoz, gyökérnövény-betakarítókhoz, valamint részleges támogatás silózó betakarítókhoz
+- Kísérleti NEXAT támogatás
+
+Változások 1.3.0.0:
+- ÚJ: Hozammonitor! Valós idejű hozam megtekintése t/ha vagy bu/ac mértékegységben (kapcsolható a beállításokban) (#10)
+- ÚJ: Teljesen átírt terhelésszámítási logika, amely terület helyett tömegáram (t/h) alapú.
+- ÚJ: Kísérleti támogatás a NEXAT rendszerhez.
+- JAVÍTVA: A HUD szövege most félkövér a jobb láthatóság érdekében.
+- JAVÍTVA: Javítva a hiba, amely miatt a HUD eltűnt a jármű alkatrészeinek váltásakor.
 
 Változások 1.2.1.0:
 - Javítva a teljesítményszámítás, amely hibás értékeket mutatott (1000× túl alacsony volt)
@@ -328,47 +418,44 @@ Változások 1.1.0.0:
             <hu>Realisztikus betakarítás</hu>
         </text>
         
-        <text name="rhm_difficulty_short">
-            <en>Difficulty</en>
-            <de>Schwierigkeit</de>
-            <fr>Difficulté</fr>
-            <pl>Trudność</pl>
-            <es>Dificultad</es>
-            <it>Difficoltà</it>
-            <cz>Obtížnost</cz>
-            <br>Dificuldade</br>
-            <uk>Складність</uk>
-            <ru>Сложность</ru>
-            <hu>Nehézség</hu>
-        </text>
+        <text name="rhm_difficulty"><en>Difficulty</en><uk>Складність</uk><de>Schwierigkeit</de><fr>Difficulté</fr><pl>Trudność</pl><es>Dificultad</es><it>Difficoltà</it><cz>Obtížnost</cz><br>Dificuldade</br><ru>Сложность</ru><hu>Nehézség</hu></text>
+        <text name="rhm_difficulty_motor"><en>Engine Power Limit</en><uk>Обмеження Потужності</uk><de>Motorleistung</de><fr>Puissance moteur</fr><pl>Moc silnika</pl><es>Potencia del motor</es><it>Potenza del motore</it><cz>Výkon motoru</cz><br>Potência do motor</br><ru>Мощность двигателя</ru><hu>Motorteljesítmény</hu></text>
+        <text name="rhm_difficulty_motor_short"><en>Engine Limit</en><uk>Потужність</uk><de>Motor</de><fr>Moteur</fr><pl>Silnik</pl><es>Motor</es><it>Motore</it><cz>Motor</cz><br>Motor</br><ru>Мотор</ru><hu>Motor</hu></text>
+        <text name="rhm_difficulty_motor_long"><en>Determines how much extra power is available. Arcade = +100%, Normal = +20%, Realistic = 0%.</en><uk>Визначає додаткову потужність. Аркада = +100%, Норма = +20%, Реалізм = 0%.</uk><de>Bestimmt die verfügbare Zusatzleistung.</de><fr>Détermine la puissance supplémentaire disponible.</fr><pl>Określa dostępną dodatkową moc.</pl><es>Determina la potencia extra disponible.</es><it>Determina la potenza extra disponibile.</it><cz>Určuje dostupný výkon navíc.</cz><br>Determina a potência extra disponível.</br><ru>Определяет дополнительную мощность.</ru><hu>Meghatározza a többletteljesítményt.</hu></text>
         
-        <text name="rhm_difficulty_long">
-            <en>Arcade: No speed limits. Normal: Moderate limits (120%). Realistic: Strict limits (100%)</en>
-            <de>Arkade: Keine Limits. Normal: Moderate Limits (120%). Realistisch: Strikte Limits (100%)</de>
-            <fr>Arcade: Pas de limites. Normal: Limites modérées (120%). Réaliste: Limites strictes (100%)</fr>
-            <pl>Arkada: Bez limitów. Normalna: Umiarkowane limity (120%). Realistyczna: Ścisłe limity (100%)</pl>
-            <es>Arcade: Sin límites. Normal: Límites moderados (120%). Realista: Límites estrictos (100%)</es>
-            <it>Arcade: Nessun limite. Normale: Limiti moderati (120%). Realistica: Limiti rigorosi (100%)</it>
-            <cz>Arkáda: Bez limitů. Normální: Mírné limity (120%). Realistická: Přísné limity (100%)</cz>
-            <br>Arcade: Sem limites. Normal: Limites moderados (120%). Realista: Limites rigorosos (100%)</br>
-            <uk>Аркада: Без обмежень. Нормальна: Помірні обмеження (120%). Реалістична: Жорсткі обмеження (100%)</uk>
-            <ru>Аркада: Без ограничений. Обычная: Умеренные ограничения (120%). Реалистичная: Строгие ограничения (100%)</ru>
-            <hu>Könnyű: Nincs sebességkorlát. Normál: Mérsékelt korlátok (120%). Realisztikus: Szigorú korlátok (100%)</hu>
-        </text>
+        <text name="rhm_difficulty_loss"><en>Crop Loss Penalty</en><uk>Штраф за Втрати</uk><de>Ernteverlust</de><fr>Perte de récolte</fr><pl>Strata plonów</pl><es>Pérdida de cultivo</es><it>Perdita raccolto</it><cz>Ztráta úrody</cz><br>Perda de colheita</br><ru>Потеря урожая</ru><hu>Termésveszteség</hu></text>
+        <text name="rhm_difficulty_loss_short"><en>Loss Penalty</en><uk>Втрати</uk><de>Verlust</de><fr>Perte</fr><pl>Strata</pl><es>Pérdida</es><it>Perdita</it><cz>Ztráta</cz><br>Perda</br><ru>Потеря</ru><hu>Veszteség</hu></text>
+        <text name="rhm_difficulty_loss_long"><en>Determines crop loss severity when overloaded. Realistic = High penalty.</en><uk>Визначає суворість втрат при перевантаженні. Реалізм = Високий штраф.</uk><de>Bestimmt die Schwere des Ernteverlusts.</de><fr>Détermine la sévérité de la perte.</fr><pl>Określa dotkliwość strat.</pl><es>Determina la severidad de la pérdida.</es><it>Determina la gravità della perdita.</it><cz>Určuje závažnost ztráty.</cz><br>Determina a gravidade da perda.</br><ru>Определяет строгость потерь.</ru><hu>Meghatározza a veszteség súlyosságát.</hu></text>
         
         <text name="rhm_diff_1">
             <en>Arcade</en>
             <de>Arkade</de>
             <fr>Arcade</fr>
-            <pl>Arkada</pl>
+            <pl>Zręcznościowy</pl>
             <es>Arcade</es>
             <it>Arcade</it>
             <cz>Arkáda</cz>
             <br>Arcade</br>
             <uk>Аркада</uk>
             <ru>Аркада</ru>
-            <hu>Könnyű</hu>
+            <hu>Árkád</hu>
         </text>
+        
+        <text name="rhm_difficulty_long">
+            <en>Arcade: High limits (+100%). Normal: Moderate (+20%). Realistic: Strict (0%)</en>
+            <de>Arkade: Hohe Limits (+100%). Normal: Moderat (+20%). Realistisch: Strikt (0%)</de>
+            <fr>Arcade: Limites élevées (+100%). Normal: Modéré (+20%). Réaliste: Strict (0%)</fr>
+            <pl>Arkada: Wysokie limity (+100%). Normalna: Umiarkowane (+20%). Realistyczna: Ścisłe (0%)</pl>
+            <es>Arcade: Límites altos (+100%). Normal: Moderado (+20%). Realista: Estricto (0%)</es>
+            <it>Arcade: Limiti alti (+100%). Normale: Moderato (+20%). Realistica: Rigorosi (0%)</it>
+            <cz>Arkáda: Vysoké limity (+100%). Normální: Mírné (+20%). Realistická: Přísné (0%)</cz>
+            <br>Arcade: Limites altos (+100%). Normal: Moderado (+20%). Realista: Rigorosos (0%)</br>
+            <uk>Аркада: Високі ліміти (+100%). Нормальна: Помірні (+20%). Реалістична: Жорсткі (0%)</uk>
+            <ru>Аркада: Высокие лимиты (+100%). Обычная: Умеренные (+20%). Реалистичная: Строгие (0%)</ru>
+            <hu>Könnyű: Magas korlátok (+100%). Normál: Mérsékelt (+20%). Realisztikus: Szigorú (0%)</hu>
+        </text>
+        
+
         
         <text name="rhm_diff_2">
             <en>Normal</en>
@@ -396,6 +483,62 @@ Változások 1.1.0.0:
             <uk>Реалістична</uk>
             <ru>Реалистичная</ru>
             <hu>Realisztikus</hu>
+        </text>
+        
+        <text name="rhm_show_yield">
+            <en>Show Yield Monitor</en>
+            <de>Ertragsmonitor anzeigen</de>
+            <fr>Afficher le moniteur de rendement</fr>
+            <pl>Pokaż monitor plonów</pl>
+            <es>Mostrar monitor de rendimiento</es>
+            <it>Mostra monitor di rendimento</it>
+            <cz>Zobrazit monitor výnosu</cz>
+            <br>Mostrar monitor de rendimento</br>
+            <uk>Монітор врожайності</uk>
+            <ru>Монитор урожайности</ru>
+            <hu>Hozammonitor megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_show_yield_short">
+            <en>Show Yield</en>
+            <de>Ertrag anzeigen</de>
+            <fr>Afficher rendement</fr>
+            <pl>Pokaż plon</pl>
+            <es>Mostrar rendimiento</es>
+            <it>Mostra resa</it>
+            <cz>Zobrazit výnos</cz>
+            <br>Mostrar rendimento</br>
+            <uk>Показувати врожайність</uk>
+            <ru>Показывать урожайность</ru>
+            <hu>Hozam megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_show_yield_long">
+            <en>Display real-time yield in HUD (t/ha or bu/ac)</en>
+            <de>Echtzeit-Ertrag im HUD anzeigen (t/ha oder bu/ac)</de>
+            <fr>Afficher le rendement en temps réel dans le HUD (t/ha ou bu/ac)</fr>
+            <pl>Wyświetlaj plon w czasie rzeczywistym w HUD (t/ha lub bu/ac)</pl>
+            <es>Mostrar rendimiento en tiempo real en HUD (t/ha o bu/ac)</es>
+            <it>Mostra resa in tempo reale nell'HUD (t/ha o bu/ac)</it>
+            <cz>Zobrazit výnos v reálném čase v HUD (t/ha nebo bu/ac)</cz>
+            <br>Exibir rendimento em tempo real no HUD (t/ha ou bu/ac)</br>
+            <uk>Відображати врожайність у реальному часі в HUD (т/га або бу/акр)</uk>
+            <ru>Отображать урожайность в реальном времени в HUD (т/га або бу/акр)</ru>
+            <hu>Valós idejű hozam megjelenítése a HUD-on (t/ha vagy bu/ac)</hu>
+        </text>
+        
+        <text name="rhm_yield_label">
+            <en>Yield</en>
+            <de>Ertrag</de>
+            <fr>Rendement</fr>
+            <pl>Plon</pl>
+            <es>Rendimiento</es>
+            <it>Resa</it>
+            <cz>Výnos</cz>
+            <br>Rendimento</br>
+            <uk>Врожайність</uk>
+            <ru>Урожайность</ru>
+            <hu>Hozam</hu>
         </text>
         
         <text name="rhm_hud_short">
@@ -592,6 +735,48 @@ Változások 1.1.0.0:
             <uk>Скинути налаштування RH</uk>
             <ru>Сбросить настройки RH</ru>
             <hu>RH beállítások visszaállítása</hu>
+        </text>
+
+        <text name="rhm_loss_low">
+            <en>LOW</en>
+            <de>NIEDRIG</de>
+            <fr>FAIBLE</fr>
+            <pl>NISKIE</pl>
+            <es>BAJO</es>
+            <it>BASSO</it>
+            <cz>NÍZKÉ</cz>
+            <br>BAIXO</br>
+            <uk>НИЗЬКІ</uk>
+            <ru>НИЗКИЕ</ru>
+            <hu>ALACSONY</hu>
+        </text>
+
+        <text name="rhm_loss_med">
+            <en>MED</en>
+            <de>MITTEL</de>
+            <fr>MOYEN</fr>
+            <pl>ŚREDNIE</pl>
+            <es>MEDIO</es>
+            <it>MEDIO</it>
+            <cz>STŘEDNÍ</cz>
+            <br>MÉDIO</br>
+            <uk>СЕРЕДНІ</uk>
+            <ru>СРЕДНИЕ</ru>
+            <hu>KÖZEPES</hu>
+        </text>
+
+        <text name="rhm_loss_high">
+            <en>HIGH</en>
+            <de>HOCH</de>
+            <fr>ÉLEVÉ</fr>
+            <pl>WYSOKIE</pl>
+            <es>ALTO</es>
+            <it>ALTO</it>
+            <cz>VYSOKÉ</cz>
+            <br>ALTO</br>
+            <uk>ВИСОКІ</uk>
+            <ru>ВЫСОКИЕ</ru>
+            <hu>MAGAS</hu>
         </text>
     </l10n>
 </modDesc>
