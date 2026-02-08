@@ -108,9 +108,9 @@ function LoadCalculator:loadDefaultCropFactors()
     self.CROP_FACTORS[FruitType.WHEAT] = 1.0
     self.CROP_FACTORS[FruitType.BARLEY] = 1.0 -- Barley same/slightly easier than wheat
     
-    -- Кукурудза: Маємо залишити низьким, бо в таблиці (CombineXP) коефіцієнт для об'єму/площі
-    -- Для МАСИ, кукурудза містить мало незернової частини (MOG), але для 6 км/год треба 0.85
-    self.CROP_FACTORS[FruitType.MAIZE] = 0.85
+    -- Кукурудза: Збільшено до 1.2 (було 0.85) для реалістичної швидкості 5-6 км/год
+    -- Кукурудза містить багато маси і важка для обробки
+    self.CROP_FACTORS[FruitType.MAIZE] = 1.2
     
     -- Соя: В таблиці 0.7 vs 0.8 Wheat -> легше. АЛЕ в FS25 вона дуже легка за вагою. 
     -- Щоб отримати реалістичну швидкість (6-7 км/год), треба підняти до 1.8
@@ -805,7 +805,3 @@ function LoadCalculator:getYieldText(unitSystem)
         self.productivityTime = self.productivityTime * 0.2
     end
 end
-
-
-
-

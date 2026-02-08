@@ -51,6 +51,10 @@ function RealisticHarvestManager.new(mission, modDirectory, modName)
         if not self.hud then
             Logging.error("RHM: Failed to create HUD instance!")
         end
+        
+        -- Простий Debug Logger (console logging)
+        self.debugLogTimer = 0
+        self.debugLogInterval = 10000  -- 10 секунд в мілісекундах
     end
     
     return self
@@ -158,6 +162,47 @@ function RealisticHarvestManager:update(dt)
             
             -- Оновлюємо дані HUD
             self.hud:update(dt)
+            
+            --[[ DEBUG LOGGING ВИМКНЕНО
+            -- Просте Debug Logging (кожні 10 секунд)
+            self.debugLogTimer = self.debugLogTimer + dt
+            if self.debugLogTimer >= self.debugLogInterval then
+                self.debugLogTimer = 0
+                
+                local spec = combineVehicle.spec_rhm_Combine
+                if spec and spec.data then
+                    local data = spec.data
+                    local cropLoss = "OK"
+                    if data.cropLoss >= 0.5 then
+                        cropLoss = "HIGH"
+                    elseif data.cropLoss >= 0.2 then
+                        cropLoss = "MED"
+                    elseif data.cropLoss > 0 then
+                        cropLoss = "LOW"
+                    end
+                    
+                    -- Отримуємо назву культури
+                    local cropName = "Unknown"
+                    if spec.lastFillType and g_fillTypeManager then
+                        local fillType = g_fillTypeManager:getFillTypeByIndex(spec.lastFillType)
+                        if fillType and fillType.title then
+                            cropName = fillType.title
+                        end
+                    end
+                    
+                    print("=== RHM DEBUG ===")
+                    print(string.format("  Combine: %s", combineVehicle:getFullName()))
+                    print(string.format("  Crop: %s", cropName))
+                    print(string.format("  Difficulty: Motor=%d, Loss=%d", self.settings.difficultyMotor, self.settings.difficultyLoss))
+                    print(string.format("  Speed: %.1f km/h (Recommended: %.1f km/h)", combineVehicle:getLastSpeed(), data.recommendedSpeed or 0))
+                    print(string.format("  Load: %.1f%%", data.load or 0))
+                    print(string.format("  Crop Loss: %s (%.2f)", cropLoss, data.cropLoss or 0))
+                    print(string.format("  Yield: %.2f t/ha", data.yield or 0))
+                    print(string.format("  Throughput: %.2f t/h", data.tonPerHour or 0))
+                    print("=================")
+                end
+            end
+            ]]--
         else
             -- Скидаємо комбайн якщо не активний
             self.hud:setVehicle(nil)
