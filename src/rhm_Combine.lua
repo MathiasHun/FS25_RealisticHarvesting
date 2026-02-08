@@ -46,9 +46,9 @@ function rhm_Combine.registerEventListeners(vehicleType)
     SpecializationUtil.registerEventListener(vehicleType, "onReadStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteStream", rhm_Combine)
     
-    -- SAVEGAME XML: Критично важливо для збереження гри!
-    SpecializationUtil.registerEventListener(vehicleType, "saveToXMLFile", rhm_Combine)
-    SpecializationUtil.registerEventListener(vehicleType, "loadFromXMLFile", rhm_Combine)
+    -- SAVEGAME XML: Disabled - functions are commented out
+    -- SpecializationUtil.registerEventListener(vehicleType, "saveToXMLFile", rhm_Combine)
+    -- SpecializationUtil.registerEventListener(vehicleType, "loadFromXMLFile", rhm_Combine)
     
     -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
     SpecializationUtil.registerEventListener(vehicleType, "onReadUpdateStream", rhm_Combine)
@@ -177,6 +177,33 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
         return limit, doCheckSpeedLimit
     end
     
+    -- CRITICAL FIX: Перевіряємо чи жатка ПРАЦЮЄ (не просто прикріплена)
+    -- Якщо жатка піднята або не косить - НЕ обмежуємо швидкість
+    local spec_combine = self.spec_combine
+    local cutterIsWorking = false
+    
+    if spec_combine and spec_combine.attachedCutters then
+        for cutter, _ in pairs(spec_combine.attachedCutters) do
+            if cutter.spec_cutter then
+                local spec_cutter = cutter.spec_cutter
+                -- Жатка працює якщо: рух вперед, швидкість > 0.5, опущена (або дозволено косити піднятою)
+                cutterIsWorking = self.movingDirection == spec_cutter.movingDirection 
+                    and self:getLastSpeed() > 0.5 
+                    and (spec_cutter.allowCuttingWhileRaised or cutter:getIsLowered(true))
+                
+                if cutterIsWorking then
+                    break -- Знайшли працюючу жатку
+                end
+            end
+        end
+    end
+    
+    -- Якщо жатка НЕ працює - знімаємо обмеження відразу
+    if not cutterIsWorking then
+        spec.isSpeedLimitActive = false
+        return limit, doCheckSpeedLimit
+    end
+    
     -- Перевіряємо чи увімкнено обмеження швидкості
     if g_realisticHarvestManager and g_realisticHarvestManager.settings then
         if not g_realisticHarvestManager.settings.enableSpeedLimit then
@@ -192,7 +219,6 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     end
     
     -- Перевіряємо чи змінилася жатка
-    local spec_combine = self.spec_combine
     if spec_combine and spec_combine.attachedCutters then
         local currentCutter = nil
         for cutter, _ in pairs(spec_combine.attachedCutters) do
@@ -391,7 +417,9 @@ end
 ---Збереження стану в savegame файл
 ---@param xmlFile XMLFile
 ---@param key string
-function rhm_Combine:saveToXMLFile(xmlFile, key, usedModNames)
+-- saveToXMLFile disabled - causes XML schema validation errors
+-- Values are calculated dynamically, no need to save/load
+--[[function rhm_Combine:saveToXMLFile(xmlFile, key, usedModNames)
     local spec = self.spec_rhm_Combine
     if not spec then
         return
@@ -406,9 +434,11 @@ function rhm_Combine:saveToXMLFile(xmlFile, key, usedModNames)
     if rhm_Combine.debug then
         print("RHM: saveToXMLFile completed for " .. tostring(self:getFullName()))
     end
-end
+end--]]
 
----Завантаження стану з savegame файлу
+-- loadFromXMLFile disabled - causes XML schema validation errors
+-- Values are calculated dynamically, no need to save/load
+--[[---Завантаження стану з savegame файлу
 ---@param xmlFile XMLFile
 ---@param key string  
 ---@param resetVehicles table
@@ -454,7 +484,7 @@ function rhm_Combine:loadFromXMLFile(xmlFile, key, resetVehicles)
     if rhm_Combine.debug then
         print(string.format("RHM: loadFromXMLFile completed for %s", tostring(self:getFullName())))
     end
-end
+end--]]
 
 -- ============================================================================
 -- MULTIPLAYER SYNCHRONIZATION

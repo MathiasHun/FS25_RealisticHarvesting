@@ -499,6 +499,34 @@ Változások 1.1.0.0:
             <hu>Hozammonitor megjelenítése</hu>
         </text>
         
+        <text name="rhm_show_yield_short">
+            <en>Show Yield</en>
+            <de>Ertrag anzeigen</de>
+            <fr>Afficher rendement</fr>
+            <pl>Pokaż plon</pl>
+            <es>Mostrar rendimiento</es>
+            <it>Mostra resa</it>
+            <cz>Zobrazit výnos</cz>
+            <br>Mostrar rendimento</br>
+            <uk>Показувати врожайність</uk>
+            <ru>Показывать урожайность</ru>
+            <hu>Hozam megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_show_yield_long">
+            <en>Display real-time yield in HUD (t/ha or bu/ac)</en>
+            <de>Echtzeit-Ertrag im HUD anzeigen (t/ha oder bu/ac)</de>
+            <fr>Afficher le rendement en temps réel dans le HUD (t/ha ou bu/ac)</fr>
+            <pl>Wyświetlaj plon w czasie rzeczywistym w HUD (t/ha lub bu/ac)</pl>
+            <es>Mostrar rendimiento en tiempo real en HUD (t/ha o bu/ac)</es>
+            <it>Mostra resa in tempo reale nell'HUD (t/ha o bu/ac)</it>
+            <cz>Zobrazit výnos v reálném čase v HUD (t/ha nebo bu/ac)</cz>
+            <br>Exibir rendimento em tempo real no HUD (t/ha ou bu/ac)</br>
+            <uk>Відображати врожайність у реальному часі в HUD (т/га або бу/акр)</uk>
+            <ru>Отображать урожайность в реальном времени в HUD (т/га або бу/акр)</ru>
+            <hu>Valós idejű hozam megjelenítése a HUD-on (t/ha vagy bu/ac)</hu>
+        </text>
+        
         <text name="rhm_yield_label">
             <en>Yield</en>
             <de>Ertrag</de>
