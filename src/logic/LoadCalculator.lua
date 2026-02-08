@@ -259,12 +259,6 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
     end
     
     if power and tonumber(power) > 0 then
-        local basePerf = tonumber(power) * coef
-        
-        -- БОНУСИ ВИДАЛЕНО: Розраховуємо чисто від потужності двигуна
-        -- NEXAT має 1100 к.с., цього має бути достатньо для високої продуктивності
-        
-    if power and tonumber(power) > 0 then
         -- Стандартний розрахунок: 1 HP ~= 0.035 kg/s throughput
         -- Для 1100 HP (NEXAT) це буде ~38.5 kg/s (~138 t/h)
         -- Для 500 HP це буде ~17.5 kg/s (~63 t/h)
@@ -274,6 +268,13 @@ function LoadCalculator:getBasePerformanceFromPower(vehicle)
             vehicle:getFullName(), category or "unknown", coef, power, basePerf, basePerf * 3.6))
         return basePerf
     end
+    
+    -- NEXAT POWER FIX: Якщо це NEXAT і power не знайдено, використовуємо 1100hp
+    -- Debug показав що система не бачить двигун NEXAT (modular structure issue)
+    if vehicle.configFileName and vehicle.configFileName:lower():find("nexat") then
+        local basePerf = 1100 * coef  -- 1100hp * 0.035 = 38.5 kg/s
+        print(string.format("RHM: NEXAT detected with power=0 - using hardcoded 1100 HP -> %.2f kg/s", basePerf))
+        return basePerf
     end
     
     print("RHM: Warning - Could not determine combine power, using default basePerf")
@@ -318,6 +319,22 @@ function LoadCalculator:calculateEngineLoad(vehicle)
     local spec_combine = vehicle.spec_combine
     if spec_combine and spec_combine.lastValidInputFruitType then
         cropFactor = self.CROP_FACTORS[spec_combine.lastValidInputFruitType] or 1.0
+    end
+    
+    -- PICKUP HEADER DETECTION: Check output fill type for grass
+    -- Pickup headers have lastCuttersOutputFillType = GRASS but InputFruitType = 0
+    -- Direct cutting has both Input and Output as GRASS
+    if spec_combine and spec_combine.lastCuttersOutputFillType then
+        local outputFill = spec_combine.lastCuttersOutputFillType
+        if outputFill == FillType.GRASS or 
+           outputFill == FillType.GRASS_WINDROW or
+           outputFill == FillType.DRYGRASS_WINDROW then
+            -- Only apply lighter cropFactor for pickup headers (Input=0)
+            -- Direct cutting uses cropFactor from XML
+            if spec_combine.lastValidInputFruitType == 0 then
+                cropFactor = 0.35  -- Pickup = lighter crop, faster speed
+            end
+        end
     end
     
     -- Розраховуємо RAW середню масу за секунду (кг/с)
