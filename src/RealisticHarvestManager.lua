@@ -46,7 +46,8 @@ function RealisticHarvestManager.new(mission, modDirectory, modName)
     
     -- Створюємо HUD (але НЕ ініціалізуємо елементи - це буде в load())
     if mission:getIsClient() then
-        self.hud = HUD.new(self.settings, g_currentMission.hud.speedMeter, self.modDirectory)
+        -- DraggableHUD.new(modDirectory, settings)
+        self.hud = DraggableHUD.new(self.modDirectory, self.settings)
         
         if not self.hud then
             Logging.error("RHM: Failed to create HUD instance!")
@@ -239,5 +240,39 @@ function RealisticHarvestManager:delete()
     if self.hud then
         self.hud:delete()
         self.hud = nil
+    end
+end
+
+---Обробка mouse events для drag & drop HUD
+---@param posX number Mouse X position
+---@param posY number Mouse Y position
+---@param isDown boolean Mouse button down
+---@param isUp boolean Mouse button up
+---@param button number Mouse button index
+function RealisticHarvestManager:mouseEvent(posX, posY, isDown, isUp, button)
+    if not self.mission:getIsClient() then
+        return
+    end
+    
+    if self.hud then
+        return self.hud:mouseEvent(posX, posY, isDown, isUp, button)
+    end
+    
+    return false
+end
+
+function RealisticHarvestManager:toggleCursor()
+    if not self.hud then return end
+    
+    -- Перемикаємо курсор
+    self.isCursorVisible = not self.isCursorVisible
+    g_inputBinding:setShowMouseCursor(self.isCursorVisible)
+    
+    if self.isCursorVisible and g_currentMission then
+         -- Повідомляємо користувача
+         g_currentMission:showBlinkingWarning("RHM: HUD Cursor Enabled - Drag HUD to move", 3000)
+    else
+         -- Скидаємо якщо вимкнули
+         g_inputBinding:setShowMouseCursor(false)
     end
 end

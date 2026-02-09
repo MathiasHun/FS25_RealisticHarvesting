@@ -11,7 +11,7 @@ source(modDirectory .. "src/utils/UIHelper.lua")
 source(modDirectory .. "src/utils/UnitConverter.lua")  -- Unit conversion utility
 source(modDirectory .. "src/settings/SettingsUI.lua")
 source(modDirectory .. "src/hud/HUDRenderer.lua")
-source(modDirectory .. "src/hud/HUD.lua")
+source(modDirectory .. "src/hud/DraggableHUD.lua")
 source(modDirectory .. "src/logic/LoadCalculator.lua")  -- Розрахунок навантаження
 source(modDirectory .. "src/rhm_Combine.lua")  -- Specialization для комбайна
 source(modDirectory .. "src/rhm_Cutter.lua")  -- Налаштування для жаток (КРИТИЧНО для роздільного запуску!)
@@ -93,4 +93,16 @@ FSBaseMission.draw = Utils.appendedFunction(FSBaseMission.draw, function(mission
     end
 end)
 
+-- Додаємо mouse event для drag & drop HUD
+FSBaseMission.mouseEvent = Utils.prependedFunction(FSBaseMission.mouseEvent, function(mission, posX, posY, isDown, isUp, button)
+    if rhm then
+        local wasUsed = rhm:mouseEvent(posX, posY, isDown, isUp, button)
+        if wasUsed then
+            -- Prevent game from handling this mouse event
+            return true
+        end
+    end
+end)
+
 TypeManager.validateTypes = Utils.prependedFunction(TypeManager.validateTypes, validateTypes)
+

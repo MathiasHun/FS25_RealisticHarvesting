@@ -58,6 +58,9 @@ function rhm_Combine.registerEventListeners(vehicleType)
     -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
     SpecializationUtil.registerEventListener(vehicleType, "onReadUpdateStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteUpdateStream", rhm_Combine)
+    
+    -- INPUT: Реєструємо події введення
+    SpecializationUtil.registerEventListener(vehicleType, "onRegisterActionEvents", rhm_Combine)
 end
 
 -- Викликається при завантаженні комбайна
@@ -119,6 +122,9 @@ function rhm_Combine:onLoad(savegame)
     
     -- MULTIPLAYER: Dirty flag для синхронізації
     spec.dirtyFlag = self:getNextDirtyFlag()
+    
+    -- INPUT: Таблиця для подій введення
+    spec.actionEvents = {}
 end
 
 -- Перехоплюємо addCutterArea для отримання площі
@@ -446,12 +452,21 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     end
     
     if not cutterIsTurnedOn then
-        -- Жатка не працює (але не скидаємо loadCalculator повністю, щоб уникнути стрибків при зупинках)
-        -- spec.loadCalculator:reset() -- ВИДАЛЕНО: Викликало нестабільність при короткочасних зупинках
+        -- Жатка не працює - скидаємо індикатори, щоб вони не висіли
+        spec.loadCalculator:reset() 
         if spec.data then
-            -- spec.data.load = 0 -- Не обнуляємо візуально, хай показує останнє
+            spec.data.load = 0 
+            spec.data.cropLoss = 0
+            spec.data.tonPerHour = 0
+            spec.data.litersPerHour = 0
+            spec.data.yield = 0
+            spec.data.recommendedSpeed = 0 -- Скидаємо рекомендовану швидкість, щоб не показувало "/ 3.8"
         end
         spec.isSpeedLimitActive = false
+        
+        -- СИНХРОНІЗАЦІЯ: Важливо оновити клієнтів, щоб у них теж зникли цифри
+        self:raiseDirtyFlags(spec.dirtyFlag)
+        
         return
     end
     
@@ -707,6 +722,33 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
             streamWriteFloat32(streamId, spec.data.yield or 0)
         end
+    end
+end
+
+-- ============================================================================
+-- INPUT MANAGEMENT
+-- ============================================================================
+
+-- Реєстрація UserActionEvents при вході в техніку
+function rhm_Combine:onRegisterActionEvents(isActiveForInput, isActiveForInputIgnoreSelection)
+    if self.isClient then
+        local spec = self.spec_rhm_Combine
+        self:clearActionEventsTable(spec.actionEvents)
+        
+        if isActiveForInputIgnoreSelection then
+            -- Реєструємо дію Перемикання Курсора (RMB за замовчуванням)
+            local _, eventId = self:addActionEvent(spec.actionEvents, InputAction.RHM_TOGGLE_CURSOR, self, rhm_Combine.actionToggleCursor, false, true, false, true, nil)
+            
+            -- Встановлюємо пріоритет тексту
+            g_inputBinding:setActionEventTextPriority(eventId, GS_PRIO_HIGH)
+        end
+    end
+end
+
+-- Callback для дії
+function rhm_Combine:actionToggleCursor(actionName, inputValue, callbackState, isAnalog)
+    if g_realisticHarvestManager then
+        g_realisticHarvestManager:toggleCursor()
     end
 end
 

@@ -26,8 +26,8 @@ function SettingsUI:inject()
         return 
     end
     
-    -- Додаємо секцію
-    local section = UIHelper.createSection(layout, "rhm_section")
+    -- Додаємо секцію "Simulation"
+    local section = UIHelper.createSection(layout, "rhm_section_simulation")
     if not section then
         Logging.error("RHM: Failed to create settings section!")
         return
@@ -127,6 +127,9 @@ function SettingsUI:inject()
     
     -- === CLIENT SETTINGS (всі можуть змінювати) ===
     
+    -- Додаємо секцію "HUD & Visuals"
+    UIHelper.createSection(layout, "rhm_section_visuals")
+    
     -- HUD (Binary)
     local hudOpt = UIHelper.createBinaryOption(
         layout,
@@ -152,6 +155,58 @@ function SettingsUI:inject()
         end
     )
     self.yieldOption = yieldOpt
+    
+    -- Load Indicator (Binary)
+    local loadOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_show_load",
+        "rhm_show_load", -- Use l10n key
+        self.settings.showLoad,
+        function(val)
+            self.settings.showLoad = val
+            self.settings:save()
+        end
+    )
+    self.loadOption = loadOpt
+    
+    -- Speed Indicator (Binary)
+    local speedOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_show_speed",
+        "rhm_show_speed", -- Use l10n key
+        self.settings.showSpeed,
+        function(val)
+            self.settings.showSpeed = val
+            self.settings:save()
+        end
+    )
+    self.speedOption = speedOpt
+    
+    -- Productivity (Binary)
+    local prodOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_show_productivity",
+        "rhm_show_productivity", -- Use l10n key
+        self.settings.showProductivity,
+        function(val)
+            self.settings.showProductivity = val
+            self.settings:save()
+        end
+    )
+    self.productivityOption = prodOpt
+    
+    -- Crop Loss Visibility (Binary) - DIFFERENT FROM ENABLE CROP LOSS
+    local lossVisOpt = UIHelper.createBinaryOption(
+        layout,
+        "rhm_show_croploss",
+        "rhm_show_croploss", -- Use l10n key
+        self.settings.showCropLoss,
+        function(val)
+            self.settings.showCropLoss = val
+            self.settings:save()
+        end
+    )
+    self.cropLossVisOption = lossVisOpt
     
     -- Unit System (Multi)
     local unitOptions = {
@@ -207,12 +262,29 @@ function SettingsUI:refreshUI()
         self.hudOption:setIsChecked(self.settings.showHUD)
     end
     
-    -- Оновлюємо Speed Limit
+    -- Оновлюємо HUD Elements
+    if self.yieldOption and self.yieldOption.setIsChecked then
+        self.yieldOption:setIsChecked(self.settings.showYield)
+    end
+    if self.loadOption and self.loadOption.setIsChecked then
+        self.loadOption:setIsChecked(self.settings.showLoad)
+    end
+    if self.speedOption and self.speedOption.setIsChecked then
+        self.speedOption:setIsChecked(self.settings.showSpeed)
+    end
+    if self.productivityOption and self.productivityOption.setIsChecked then
+        self.productivityOption:setIsChecked(self.settings.showProductivity)
+    end
+    if self.cropLossVisOption and self.cropLossVisOption.setIsChecked then
+        self.cropLossVisOption:setIsChecked(self.settings.showCropLoss)
+    end
+    
+    -- Оновлюємо Speed Limit (Global Setting)
     if self.speedLimitOption and self.speedLimitOption.setIsChecked then
         self.speedLimitOption:setIsChecked(self.settings.enableSpeedLimit)
     end
     
-    -- Оновлюємо Crop Loss
+    -- Оновлюємо Crop Loss Enable (Global Setting)
     if self.cropLossOption and self.cropLossOption.setIsChecked then
         self.cropLossOption:setIsChecked(self.settings.enableCropLoss)
     end

@@ -2,7 +2,7 @@
 <modDesc descVersion="105">
     <author>exekx</author>
     <manufacturer>exekx</manufacturer>
-    <version>1.3.0.0</version>
+    <version>1.3.1.0</version>
     <modName>FS25_RealisticHarvesting</modName>
     <title>
         <en>Realistic Harvesting</en>
@@ -30,6 +30,13 @@ Features:
 - Support for all harvest types (Grain, Forage, Roots, Cotton)
 - Pickup Header support (Swathing)
 - Experimental NEXAT support
+
+Changelog 1.3.1.0:
+- NEW: Settings menu reorganized into "Simulation" and "HUD & Visuals" sections.
+- NEW: Draggable HUD! Right-click to toggle cursor, then drag HUD to move it.
+- NEW: Independent Header Control (optional setting).
+- NEW: HUD metrics now reset instantly when cutter is lifted/stopped.
+- IMPROVED: Customizable HUD content (toggle individual elements).
 
 Changelog 1.3.0.0:
 - NEW: Yield Monitor! See real-time yield in t/ha or bu/ac (toggleable in settings) (#10)
@@ -65,6 +72,13 @@ Funktionen:
 - Unterstützung für Baumwollernter, Hackfruchternter und teilweise Feldhäcksler
 - Experimentelle NEXAT-Unterstützung
 
+Changelog 1.3.1.0:
+- NEU: Einstellungsmenü in "Simulation" und "Anzeige" unterteilt.
+- NEU: Verschiebbares HUD! Rechtsklick für Cursor, dann HUD ziehen.
+- NEU: Unabhängige Schneidwerkssteuerung (optionale Einstellung).
+- NEU: HUD-Metriken werden beim Anheben/Stoppen des Schneidwerks sofort zurückgesetzt.
+- VERBESSERT: Anpassbarer HUD-Inhalt (einzelne Elemente umschalten).
+
 Changelog 1.3.0.0:
 - NEU: Ertragsmonitor! Sehen Sie den Ertrag in Echtzeit in t/ha oder bu/ac (umschaltbar in den Einstellungen) (#10)
 - NEU: Komplett überarbeitete Lastberechnungslogik basierend auf Massendurchsatz (t/h) statt Fläche.
@@ -98,6 +112,13 @@ Fonctionnalités:
 - Support multijoueur complet avec paramètres côté serveur
 - Support pour moissonneuses à coton, récolteuses de racines et support partiel pour ensileuses
 - Support expérimental NEXAT
+
+Changelog 1.3.1.0:
+- NOUVEAU: Le menu des paramètres est réorganisé en sections "Simulation" et "Affichage".
+- NOUVEAU: HUD déplaçable ! Clic droit pour le curseur, puis faites glisser le HUD.
+- NOUVEAU: Contrôle indépendant de la barre de coupe (paramètre optionnel).
+- NOUVEAU: Les mesures du HUD se réinitialisent instantanément lorsque la coupe est levée/arrêtée.
+- AMÉLIORÉ: Contenu du HUD personnalisable (basculer les éléments individuels).
 
 Changelog 1.3.0.0:
 - NOUVEAU: Moniteur de rendement! Voir le rendement en temps réel en t/ha ou bu/ac (activable dans les paramètres) (#10)
@@ -133,6 +154,13 @@ Funkcje:
 - Wsparcie dla kombajnów bawełnianych, kombajnów korzeniowych i częściowe wsparcie dla sieczkarni
 - Eksperymentalne wsparcie dla NEXAT
 
+Changelog 1.3.1.0:
+- NOWOŚĆ: Menu ustawień zreorganizowane w sekcje "Symulacja" i "Wyświetlanie".
+- NOWOŚĆ: Przenośny HUD! Prawy przycisk dla kursora, a następnie przeciągnij HUD.
+- NOWOŚĆ: Niezależne sterowanie hederem (opcjonalne ustawienie).
+- NOWOŚĆ: Metryki HUD resetują się natychmiast po podniesieniu/zatrzymaniu hedera.
+- ULEPSZONO: Konfigurowalna zawartość HUD (przełączanie poszczególnych elementów).
+
 Changelog 1.3.0.0:
 - NOWOŚĆ: Monitor plonów! Zobacz plon w czasie rzeczywistym w t/ha lub bu/ac (przełączane w ustawieniach) (#10)
 - NOWOŚĆ: Całkowicie przepisana logika obliczania obciążenia oparta na przepustowości masy (t/h) zamiast powierzchni.
@@ -166,6 +194,13 @@ Características:
 - Soporte multijugador completo con configuración del servidor
 - Soporte para cosechadoras de algodón, cosechadoras de raíces y soporte parcial para picadoras
 - Soporte experimental para NEXAT
+
+Changelog 1.3.1.0:
+- NUEVO: Menú de configuración reorganizado en secciones "Simulación" y "Visualización".
+- NUEVO: ¡HUD movible! Clic derecho para cursor, luego arrastre el HUD.
+- NUEVO: Control independiente del cabezal (configuración opcional).
+- NUEVO: Las métricas del HUD se restablecen instantáneamente al levantar/detener el corte.
+- MEJORADO: Contenido del HUD personalizable (alternar elementos individuales).
 
 Changelog 1.3.0.0:
 - NUEVO: ¡Monitor de rendimiento! Vea el rendimiento en tiempo real en t/ha o bu/ac (conmutable en la configuración) (#10)
@@ -201,6 +236,13 @@ Caratteristiche:
 - Supporto per raccoglitrici cotone, raccoglitrici radici e supporto parziale per trincia
 - Supporto sperimentale NEXAT
 
+Changelog 1.3.1.0:
+- NUOVO: Menu impostazioni riorganizzato in sezioni "Simulazione" e "Visualizzazione".
+- NUOVO: HUD spostabile! Tasto destro per cursore, poi trascina HUD.
+- NUOVO: Controllo indipendente testata (impostazione opzionale).
+- NUOVO: Le metriche HUD si resettano istantaneamente quando la testata viene alzata/fermata.
+- MIGLIORATO: Contenuto HUD personalizzabile (attiva singoli elementi).
+
 Changelog 1.3.0.0:
 - NUOVO: Monitor di resa! Vedi la resa in tempo reale in t/ha o bu/ac (attivabile nelle impostazioni) (#10)
 - NUOVO: Logica di calcolo del carico completamente riscritta basata sulla portata di massa (t/h) invece che sull'area.
@@ -234,6 +276,13 @@ Funkce:
 - Plná podpora multiplayeru s nastavením na straně serveru
 - Podpora pro sklízecí stroje na bavlnu, sklízecí stroje na kořenovou zeleninu a částečná podpora pro sklízecí řezačky
 - Experimentální podpora NEXAT
+
+Changelog 1.3.1.0:
+- NOVINKA: Nabídka nastavení reorganizována do sekcí "Simulace" a "Zobrazení".
+- NOVINKA: Přesouvatelný HUD! Pravé tlačítko pro kurzor, poté přetáhněte HUD.
+- NOVINKA: Nezávislé ovládání lišty (volitelné nastavení).
+- NOVINKA: Metriky HUD se okamžitě resetují při zvednutí/zastavení lišty.
+- VYLEPŠENÍ: Přizpůsobitelný obsah HUD (přepínání jednotlivých prvků).
 
 Changelog 1.3.0.0:
 - NOVINKA: Monitor výnosu! Sledujte výnos v reálném čase v t/ha nebo bu/ac (přepínatelné v nastavení) (#10)
@@ -269,6 +318,13 @@ Recursos:
 - Suporte para colheitadeiras de algodão, colheitadeiras de raízes e suporte parcial para forrageiras
 - Suporte experimental para NEXAT
 
+Changelog 1.3.1.0:
+- NOVO: Menu de configurações reorganizado em seções "Simulação" e "Visualização".
+- NOVO: HUD móvel! Clique direito para cursor, depois arraste o HUD.
+- NOVO: Controle independente da plataforma (configuração opcional).
+- NOVO: Métricas do HUD resetam instantaneamente ao levantar/parar o corte.
+- MELHORADO: Conteúdo do HUD personalizável (alternar elementos individuais).
+
 Changelog 1.3.0.0:
 - NOVO: Monitor de rendimento! Veja o rendimento em tempo real em t/ha ou bu/ac (alternável nas configurações) (#10)
 - NOVO: Lógica de cálculo de carga completamente reescrita baseada no fluxo de massa (t/h) em vez de área.
@@ -302,6 +358,13 @@ Changelog 1.1.0.0:
 - Повна підтримка мультиплеєра з налаштуваннями на стороні сервера
 - Підтримка бавовняних комбайнів, коренезбиральних комбайнів та часткова підтримка кормозбиральних комбайнів
 - Експериментальна підтримка NEXAT
+
+Зміни 1.3.1.0:
+- НОВЕ: Меню налаштувань розділено на секції "Симуляція" та "Відображення".
+- НОВЕ: Переміщення HUD! Натисніть ПКМ для курсора, потім перетягніть HUD.
+- НОВЕ: Роздільне керування жаткою та молотаркою (опція в налаштуваннях).
+- НОВЕ: Показники HUD скидаються миттєво при піднятті/зупинці жатки.
+- ПОКРАЩЕНО: Можливість налаштування вмісту HUD (індивідуальні елементи).
 
 Зміни 1.3.0.0:
 - НОВЕ: Монітор врожайності! Дивіться врожайність в реальному часі в т/га або бу/акр (перемикається в налаштуваннях) (#10)
@@ -337,6 +400,13 @@ Changelog 1.1.0.0:
 - Поддержка хлопкоуборочных комбайнов, корнеуборочных комбайнов и частичная поддержка кормоуборочных комбайнов
 - Экспериментальная поддержка NEXAT
 
+Изменения 1.3.1.0:
+- НОВОЕ: Меню настроек разделено на секции "Симуляция" и "Отображение".
+- НОВОЕ: Перетаскиваемый HUD! ПКМ для курсора, затем перетащите HUD.
+- НОВОЕ: Раздельное управление жаткой и молотилкой (опция в настройках).
+- НОВОЕ: Показатели HUD сбрасываются мгновенно при поднятии/остановке жатки.
+- УЛУЧШЕНО: Возможность настройки содержимого HUD (индивидуальные элементы).
+
 Изменения 1.3.0.0:
 - НОВОЕ: Монитор урожайности! Смотрите урожайность в реальном времени в т/га или бу/акр (переключается в настройках) (#10)
 - НОВОЕ: Полностью переписана логика расчета нагрузки на основе пропускной способности массы (т/ч) вместо площади.
@@ -371,6 +441,13 @@ Funkciók:
 - Támogatás gyapotbetakarítókhoz, gyökérnövény-betakarítókhoz, valamint részleges támogatás silózó betakarítókhoz
 - Kísérleti NEXAT támogatás
 
+Változások 1.3.1.0:
+- ÚJ: A beállítási menü "Szimuláció" és "Megjelenítés" szekciókra lett osztva.
+- ÚJ: Mozgatható HUD! Jobb klikk a kurzorhoz, majd húzza a HUD-ot.
+- ÚJ: Független vágóasztal-vezérlés (opcionális beállítás).
+- ÚJ: A HUD mutatói azonnal visszaállnak a vágóasztal emelésekor/megállításakor.
+- JAVÍTVA: Testreszabható HUD tartalom (egyes elemek kapcsolása).
+
 Változások 1.3.0.0:
 - ÚJ: Hozammonitor! Valós idejű hozam megtekintése t/ha vagy bu/ac mértékegységben (kapcsolható a beállításokban) (#10)
 - ÚJ: Teljesen átírt terhelésszámítási logika, amely terület helyett tömegáram (t/h) alapú.
@@ -398,24 +475,63 @@ Változások 1.1.0.0:
     <iconFilename>icon_FS25_RealisticHarvesting.dds</iconFilename>
     
     <multiplayer supported="true"/>
+
+    <actions>
+        <action name="RHM_TOGGLE_CURSOR" category="VEHICLE" />
+    </actions>
+    
+    <inputBinding>
+        <actionBinding action="RHM_TOGGLE_CURSOR">
+            <binding device="KB_MOUSE_DEFAULT" input="MOUSE_BUTTON_RIGHT" />
+        </actionBinding>
+    </inputBinding>
+
     
     <extraSourceFiles>
         <sourceFile filename="src/main.lua" />
     </extraSourceFiles>
 
     <l10n>
-        <text name="rhm_section">
-            <en>Realistic Harvesting</en>
-            <de>Realistisches Ernten</de>
-            <fr>Récolte Réaliste</fr>
-            <pl>Realistyczne Żniwa</pl>
-            <es>Cosecha Realista</es>
-            <it>Raccolta Realistica</it>
-            <cz>Realistická Sklizeň</cz>
-            <br>Colheita Realista</br>
-            <uk>Реалістичний збір врожаю</uk>
-            <ru>Реалистичный сбор урожая</ru>
-            <hu>Realisztikus betakarítás</hu>
+        <text name="rhm_section_simulation">
+            <en>Realistic Harvesting - Simulation</en>
+            <de>Realistisches Ernten - Simulation</de>
+            <fr>Récolte Réaliste - Simulation</fr>
+            <pl>Realistyczne Żniwa - Symulacja</pl>
+            <es>Cosecha Realista - Simulación</es>
+            <it>Raccolta Realistica - Simulazione</it>
+            <cz>Realistická Sklizeň - Simulace</cz>
+            <br>Colheita Realista - Simulação</br>
+            <uk>Реалістичний збір - Симуляція</uk>
+            <ru>Реалистичный сбор - Симуляция</ru>
+            <hu>Realisztikus betakarítás - Szimuláció</hu>
+        </text>
+        
+        <text name="rhm_section_visuals">
+            <en>Realistic Harvesting - HUD &amp; Visuals</en>
+            <de>Realistisches Ernten - Anzeige</de>
+            <fr>Récolte Réaliste - Affichage</fr>
+            <pl>Realistyczne Żniwa - Wyświetlanie</pl>
+            <es>Cosecha Realista - Visualización</es>
+            <it>Raccolta Realistica - Visualizzazione</it>
+            <cz>Realistická Sklizeň - Zobrazení</cz>
+            <br>Colheita Realista - Visualização</br>
+            <uk>Реалістичний збір - Відображення</uk>
+            <ru>Реалистичный сбор - Отображение</ru>
+            <hu>Realisztikus betakarítás - Megjelenítés</hu>
+        </text>
+        
+        <text name="input_RHM_TOGGLE_CURSOR">
+            <en>Toggle HUD Cursor</en>
+            <de>HUD-Cursor umschalten</de>
+            <fr>Basc. curseur HUD</fr>
+            <pl>Włącz kursor HUD</pl>
+            <es>Alternar cursor HUD</es>
+            <it>Alterna cursore HUD</it>
+            <cz>Přepnout kurzor HUD</cz>
+            <br>Alternar cursor HUD</br>
+            <uk>Показати курсор HUD</uk>
+            <ru>Показать курсор HUD</ru>
+            <hu>HUD kurzor váltás</hu>
         </text>
         
         <text name="rhm_difficulty"><en>Difficulty</en><uk>Складність</uk><de>Schwierigkeit</de><fr>Difficulté</fr><pl>Trudność</pl><es>Dificultad</es><it>Difficoltà</it><cz>Obtížnost</cz><br>Dificuldade</br><ru>Сложность</ru><hu>Nehézség</hu></text>
@@ -570,17 +686,17 @@ Változások 1.1.0.0:
         </text>
         
         <text name="rhm_speedlimit_short">
-            <en>Speed Limiting</en>
-            <de>Geschwindigkeitsbegrenzung</de>
-            <fr>Limitation de vitesse</fr>
-            <pl>Ograniczenie prędkości</pl>
-            <es>Limitación de velocidad</es>
-            <it>Limitazione velocità</it>
-            <cz>Omezení rychlosti</cz>
-            <br>Limitação de velocidade</br>
-            <uk>Обмеження швидкості</uk>
-            <ru>Ограничение скорости</ru>
-            <hu>Sebességkorlátozás</hu>
+            <en>Enable Speed Limiter</en>
+            <de>Geschwindigkeitsbegrenzer</de>
+            <fr>Limiteur de vitesse</fr>
+            <pl>Ogranicznik prędkości</pl>
+            <es>Limitador de velocidad</es>
+            <it>Limitatore di velocità</it>
+            <cz>Omezovač rychlosti</cz>
+            <br>Limitador de velocidade</br>
+            <uk>Обмежувач швидкості</uk>
+            <ru>Ограничитель скорости</ru>
+            <hu>Sebességkorlátozó</hu>
         </text>
         
         <text name="rhm_speedlimit_long">
@@ -598,17 +714,17 @@ Változások 1.1.0.0:
         </text>
         
         <text name="rhm_croploss_short">
-            <en>Crop Loss</en>
-            <de>Ernteverlust</de>
-            <fr>Perte de récolte</fr>
-            <pl>Straty plonów</pl>
-            <es>Pérdida de cosecha</es>
-            <it>Perdita di raccolto</it>
-            <cz>Ztráta úrody</cz>
-            <br>Perda de colheita</br>
-            <uk>Втрати врожаю</uk>
-            <ru>Потери урожая</ru>
-            <hu>Termésveszteség</hu>
+            <en>Enable Crop Loss</en>
+            <de>Ernteverlust aktivieren</de>
+            <fr>Activer perte de récolte</fr>
+            <pl>Włącz straty plonów</pl>
+            <es>Activar pérdida de cosecha</es>
+            <it>Abilita perdita di raccolto</it>
+            <cz>Povolit ztrátu úrody</cz>
+            <br>Habilitar perda de colheita</br>
+            <uk>Увімкнути втрати</uk>
+            <ru>Включить потери</ru>
+            <hu>Termésveszteség bekapcsolása</hu>
         </text>
         
         <text name="rhm_croploss_long">
@@ -625,32 +741,116 @@ Változások 1.1.0.0:
             <hu>Túlterhelés esetén termésveszteség számítása</hu>
         </text>
         
-        <text name="rhm_speedindicator_short">
-            <en>Speed Indicator</en>
-            <de>Geschwindigkeitsanzeige</de>
-            <fr>Indicateur de vitesse</fr>
-            <pl>Wskaźnik prędkości</pl>
-            <es>Indicador de velocidad</es>
-            <it>Indicatore velocità</it>
-            <cz>Ukazatel rychlosti</cz>
-            <br>Indicador de velocidade</br>
-            <uk>Показник швидкості</uk>
-            <ru>Показатель скорости</ru>
-            <hu>Sebességjelző</hu>
+        <text name="rhm_show_speed_short">
+            <en>Show Speed</en>
+            <de>Geschwindigkeit anzeigen</de>
+            <fr>Afficher vitesse</fr>
+            <pl>Pokaż prędkość</pl>
+            <es>Mostrar velocidad</es>
+            <it>Mostra velocità</it>
+            <cz>Zobrazit rychlost</cz>
+            <br>Mostrar velocidade</br>
+            <uk>Показувати швидкість</uk>
+            <ru>Показывать скорость</ru>
+            <hu>Sebesség megjelenítése</hu>
         </text>
         
-        <text name="rhm_speedindicator_long">
-            <en>Display recommended speed indicator in HUD</en>
-            <de>Empfohlene Geschwindigkeitsanzeige im HUD anzeigen</de>
-            <fr>Afficher l'indicateur de vitesse recommandée dans le HUD</fr>
-            <pl>Wyświetl wskaźnik zalecanej prędkości w HUD</pl>
-            <es>Mostrar indicador de velocidad recomendada en HUD</es>
-            <it>Mostra l'indicatore della velocità consigliata nell'HUD</it>
-            <cz>Zobrazit ukazatel doporučené rychlosti v HUD</cz>
-            <br>Exibir indicador de velocidade recomendado no HUD</br>
-            <uk>Відображати рекомендовану швидкість в HUD</uk>
-            <ru>Показывать рекомендуемую скорость в HUD</ru>
-            <hu>Ajánlott sebesség megjelenítése a HUD-on</hu>
+        <text name="rhm_show_speed_long">
+            <en>Display current speed and recommended speed in HUD</en>
+            <de>Aktuelle und empfohlene Geschwindigkeit im HUD anzeigen</de>
+            <fr>Afficher la vitesse actuelle et recommandée dans le HUD</fr>
+            <pl>Pokaż aktualną i zalecaną prędkość w HUD</pl>
+            <es>Mostrar velocidad actual y recomendada en HUD</es>
+            <it>Mostra velocità attuale e consigliata nell'HUD</it>
+            <cz>Zobrazit aktuální a doporučenou rychlost v HUD</cz>
+            <br>Mostrar velocidade atual e recomendada no HUD</br>
+            <uk>Показувати поточну та рекомендовану швидкість в HUD</uk>
+            <ru>Показывать текущую и рекомендуемую скорость в HUD</ru>
+            <hu>Jelenlegi és ajánlott sebesség megjelenítése a HUD-on</hu>
+        </text>
+        
+        <text name="rhm_show_load_short">
+            <en>Show Engine Load</en>
+            <de>Maschinenlast anzeigen</de>
+            <fr>Afficher charge moteur</fr>
+            <pl>Pokaż obciążenie</pl>
+            <es>Mostrar carga del motor</es>
+            <it>Mostra carico motore</it>
+            <cz>Zobrazit zatížení</cz>
+            <br>Mostrar carga do motor</br>
+            <uk>Показувати навантаження</uk>
+            <ru>Показывать нагрузку</ru>
+            <hu>Terhelés megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_show_load_long">
+            <en>Display engine load percentage in HUD</en>
+            <de>Motorlast-Prozentsatz im HUD anzeigen</de>
+            <fr>Afficher le pourcentage de charge moteur dans le HUD</fr>
+            <pl>Wyświetl procent obciążenia silnika w HUD</pl>
+            <es>Mostrar porcentaje de carga del motor en HUD</es>
+            <it>Mostra percentuale carico motore in HUD</it>
+            <cz>Zobrazit procento zatížení motoru v HUD</cz>
+            <br>Mostrar porcentagem de carga do motor no HUD</br>
+            <uk>Відображати відсоток навантаження двигуна в HUD</uk>
+            <ru>Отображать процент нагрузки двигателя в HUD</ru>
+            <hu>Motor terhelésének százalékos megjelenítése a HUD-on</hu>
+        </text>
+        
+        <text name="rhm_show_productivity_short">
+            <en>Show Productivity</en>
+            <de>Produktivität anzeigen</de>
+            <fr>Afficher productivité</fr>
+            <pl>Pokaż produktywność</pl>
+            <es>Mostrar productividad</es>
+            <it>Mostra produttività</it>
+            <cz>Zobrazit produktivitu</cz>
+            <br>Mostrar produtividade</br>
+            <uk>Показувати продуктивність</uk>
+            <ru>Показывать производительность</ru>
+            <hu>Produktivitás megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_show_productivity_long">
+            <en>Display throughput (ton/h) in HUD</en>
+            <de>Durchatz (t/h) im HUD anzeigen</de>
+            <fr>Afficher le débit (t/h) dans le HUD</fr>
+            <pl>Wyświetl przepustowość (t/h) w HUD</pl>
+            <es>Mostrar rendimiento (t/h) en HUD</es>
+            <it>Mostra portata (t/h) in HUD</it>
+            <cz>Zobrazit průchodnost (t/h) v HUD</cz>
+            <br>Mostrar rendimento (t/h) no HUD</br>
+            <uk>Відображати пропускну здатність (т/год) в HUD</uk>
+            <ru>Отображать пропускную способность (т/ч) в HUD</ru>
+            <hu>Átbocsátás (t/h) megjelenítése a HUD-on</hu>
+        </text>
+        
+        <text name="rhm_show_croploss_short">
+            <en>Show Crop Loss</en>
+            <de>Verlust anzeigen</de>
+            <fr>Afficher perte</fr>
+            <pl>Pokaż straty</pl>
+            <es>Mostrar pérdida</es>
+            <it>Mostra perdita</it>
+            <cz>Zobrazit ztrátu</cz>
+            <br>Mostrar perda</br>
+            <uk>Показувати втрати</uk>
+            <ru>Показывать потери</ru>
+            <hu>Veszteség megjelenítése</hu>
+        </text>
+        
+        <text name="rhm_show_croploss_long">
+            <en>Display crop loss percentage in HUD</en>
+            <de>Ernteverlust-Prozentsatz im HUD anzeigen</de>
+            <fr>Afficher le pourcentage de perte dans le HUD</fr>
+            <pl>Wyświetl procent strat w HUD</pl>
+            <es>Mostrar porcentaje de pérdida en HUD</es>
+            <it>Mostra percentuale perdita in HUD</it>
+            <cz>Zobrazit procento ztráty v HUD</cz>
+            <br>Mostrar porcentagem de perda no HUD</br>
+            <uk>Відображати відсоток втрат врожаю в HUD</uk>
+            <ru>Отображать процент потерь урожая в HUD</ru>
+            <hu>Termésveszteség százalékos megjelenítése a HUD-on</hu>
         </text>
         
         <text name="rhm_units_short">

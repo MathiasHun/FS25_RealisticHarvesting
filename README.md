@@ -1,6 +1,6 @@
 ﻿# 🌾 Realistic Harvesting - Farming Simulator 25
 
-[![Version](https://img.shields.io/badge/version-1.3.0.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
+[![Version](https://img.shields.io/badge/version-1.3.1.0-green.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![FS25](https://img.shields.io/badge/FS25-Compatible-blue.svg)](https://www.farming-simulator.com/)
 [![Multiplayer](https://img.shields.io/badge/Multiplayer-Supported-brightgreen.svg)](https://github.com/exekx/FS25_RealisticHarvesting)
 [![License](https://img.shields.io/badge/License-All%20Rights%20Reserved-red.svg)](LICENSE)
@@ -35,6 +35,7 @@
     *   **Cotton Harvesters**: Supported
     *   **Nexat System**: Specialized support for Nexat carrier and headers
 *   **🌱 Crop-Specific Physics**: Different resistance values for various crop types (e.g., Wheat vs. Corn vs. Rice).
+*   **⚙️ Independent Control**: Option to start threshing and cutter separately (ideal for immersion and roleplay).
 *   **⚙️ Global Settings**: Configurations are saved globally in `modSettings/`, persistent across all savegames.
 
 ---
@@ -89,11 +90,17 @@ Determines how strictly the "Crop Loss" logic is applied (coming son).
 
 ## 📟 The HUD
 
-A modern, non-intrusive HUD appears when you enter a harvester:
+A modern, non-intrusive HUD appears when you enter a harvester.
 
-*   **Load Bar**: Visual representation of current engine strain.
-*   **T/h Display**: Monitor your harvesting efficiency in real-time.
-*   **Speed Warning**: Alerts you if you are exceeding optimal harvesting speed (when limiter is off).
+### **Features:**
+*   **Moveable**: Right-Click to enable cursor, then Left-Click drag the HUD anywhere on screen.
+*   **Customizable**: Toggle individual elements (Yield, Load, Speed, Loss, T/h) in settings.
+*   **Real-Time Data**:
+    *   **Load Bar**: Visual representation of current engine strain.
+    *   **T/h Display**: Monitor your harvesting throughput efficiency.
+    *   **Yield**: Live yield data (t/ha or bu/ac).
+    *   **Speed**: Current vs Recommended speed to prevent clogging.
+    *   **Loss**: Visual indicator of crop loss (Low/Med/High).
 
 ---
 

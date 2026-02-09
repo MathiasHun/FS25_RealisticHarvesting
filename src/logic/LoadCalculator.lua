@@ -628,6 +628,11 @@ function LoadCalculator:reset()
     self.tonPerHour = 0
     self.litersPerHour = 0
     
+    -- Скидаємо буфери врожайності та шуму
+    self.yieldBuffer = {}
+    self.currentYield = 0
+    self.instantYield = 0
+    
     if self.debug then
         print("RHM: LoadCalculator reset")
     end
