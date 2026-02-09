@@ -32,6 +32,7 @@ function Settings.new(manager)
     self.showHUD = true
     self.showYield = true -- New Setting
     self.showSpeedometer = true
+    self.enableIndependentLaunch = true -- New: Separate Header Start (enabled by default)
     
 
     -- HUD settings
@@ -175,6 +176,8 @@ function Settings:resetToDefaults()
     self.enableCropLoss = true
     self.showHUD = true
     self.showYield = true
+    self.showSpeedometer = true
+    self.enableIndependentLaunch = true -- Default: enabled
     self.hudOffsetX = 0
     self.hudOffsetY = 350
     

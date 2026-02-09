@@ -14,6 +14,7 @@ source(modDirectory .. "src/hud/HUDRenderer.lua")
 source(modDirectory .. "src/hud/HUD.lua")
 source(modDirectory .. "src/logic/LoadCalculator.lua")  -- Розрахунок навантаження
 source(modDirectory .. "src/rhm_Combine.lua")  -- Specialization для комбайна
+source(modDirectory .. "src/rhm_Cutter.lua")  -- Налаштування для жаток (КРИТИЧНО для роздільного запуску!)
 source(modDirectory .. "src/RealisticHarvestManager.lua")
 
 local rhm

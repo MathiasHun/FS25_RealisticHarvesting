@@ -34,6 +34,11 @@ function rhm_Combine.registerOverwrittenFunctions(vehicleType)
     -- SpecializationUtil.registerOverwrittenFunction(vehicleType, "processCutters", rhm_Combine.processCutters) -- Removed: Not needed and was causing nil error
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "addCutterArea", rhm_Combine.addCutterArea)
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "getSpeedLimit", rhm_Combine.getSpeedLimit)
+    -- SpecializationUtil.registerOverwrittenFunction(vehicleType, "setIsTurnedOn", rhm_Combine.setIsTurnedOn)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "startThreshing", rhm_Combine.startThreshing)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "stopThreshing", rhm_Combine.stopThreshing)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "verifyCombine", rhm_Combine.verifyCombine)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "getCanBeTurnedOn", rhm_Combine.getCanBeTurnedOn)
 end
 
 function rhm_Combine.registerEventListeners(vehicleType)
@@ -295,6 +300,110 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     end
     
     return limit, doCheckSpeedLimit
+end
+
+-- Перевіряємо чи можна увімкнути комбайн
+function rhm_Combine:getCanBeTurnedOn(superFunc)
+    local spec_combine = self.spec_combine
+    
+    -- Якщо немає жаток, використовуємо стандартну логіку
+    if spec_combine.numAttachedCutters <= 0 then
+        return superFunc(self)
+    end
+    
+    -- Перевіряємо кожну жатку
+    for cutter, _ in pairs(spec_combine.attachedCutters) do
+        if cutter ~= self and cutter.getCanBeTurnedOn ~= nil and not cutter:getCanBeTurnedOn() then
+            -- Якщо хоч одна жатка не готова (наприклад складена), комбайн не запуститься
+            return false
+        end
+    end
+
+    return superFunc(self)
+end
+
+-- Запобігаємо автозапуску жатки при старті молотарки
+-- ВАЖЛИВО: НЕ викликаємо superFunc, бо він запускає жатки автоматично!
+function rhm_Combine:startThreshing(superFunc)
+    local spec_combine = self.spec_combine
+    
+    -- Перевіряємо чи увімкнена функція роздільного запуску
+    local isIndependentLaunchEnabled = false
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        isIndependentLaunchEnabled = g_realisticHarvestManager.settings.enableIndependentLaunch
+    end
+    
+    -- Логіка запуску жаток:
+    -- - Якщо роздільний запуск ВИМКНЕНИЙ → запускаємо жатки завжди (класична поведінка)
+    -- - Якщо роздільний запуск УВІМКНЕНИЙ → запускаємо ТІЛЬКИ для AI
+    local isAIActive = self:getIsAIActive()
+    local shouldStartCutters = (not isIndependentLaunchEnabled) or (isIndependentLaunchEnabled and isAIActive)
+    
+    if spec_combine.numAttachedCutters > 0 and shouldStartCutters then
+        -- Запускаємо жатки (для AI завжди, для гравця - тільки якщо функція вимкнена)
+        local allowLowering = not self:getIsAIActive() or not self.rootVehicle:getAIFieldWorkerIsTurning()
+        
+        for _, cutter in pairs(spec_combine.attachedCutters) do
+            if allowLowering and cutter ~= self then
+                local jointDescIndex = self:getAttacherJointIndexFromObject(cutter)
+                self:setJointMoveDown(jointDescIndex, true, true)
+            end
+            
+            cutter:setIsTurnedOn(true, true)
+        end
+    end
+    
+    -- Анімації та звуки молотарки (завжди)
+    if spec_combine.threshingStartAnimation ~= nil and self.playAnimation ~= nil then
+        self:playAnimation(spec_combine.threshingStartAnimation, spec_combine.threshingStartAnimationSpeedScale, self:getAnimationTime(spec_combine.threshingStartAnimation), true)
+    end
+    
+    if self.isClient then
+        g_soundManager:stopSample(spec_combine.samples.stop)
+        g_soundManager:stopSample(spec_combine.samples.work)
+        g_soundManager:playSample(spec_combine.samples.start)
+        g_soundManager:playSample(spec_combine.samples.work, 0, spec_combine.samples.start)
+    end
+    
+    SpecializationUtil.raiseEvent(self, "onStartThreshing")
+end
+
+-- Запобігаємо авто-вимкненню жатки при зупинці молотарки
+function rhm_Combine:stopThreshing(superFunc)
+    local spec_combine = self.spec_combine
+    
+    if self.isClient then
+        g_soundManager:stopSample(spec_combine.samples.start)
+        g_soundManager:stopSample(spec_combine.samples.work)
+        g_soundManager:playSample(spec_combine.samples.stop)
+    end
+    
+    self:setCombineIsFilling(false, false, true)
+    local isFull = self:getCombineFillLevelPercentage() > 0.999
+    if isFull and self.rootVehicle.setCruiseControlState ~= nil then
+        self.rootVehicle:setCruiseControlState(Drivable.CRUISECONTROL_STATE_OFF)
+    end
+    
+    -- НЕ вимикаємо жатки автоматично (гравець керує ними вручну)
+    
+    if spec_combine.threshingStartAnimation ~= nil and spec_combine.playAnimation ~= nil then
+        self:playAnimation(spec_combine.threshingStartAnimation, -spec_combine.threshingStartAnimationSpeedScale, self:getAnimationTime(spec_combine.threshingStartAnimation), true)
+    end
+    
+    SpecializationUtil.raiseEvent(self, "onStopThreshing")
+end
+
+-- Забороняємо харвестинг якщо комбайн вимкнений
+-- Це запобігає збору врожаю коли увімкнена тільки жатка без комбайна
+function rhm_Combine:verifyCombine(superFunc, fruitType, outputFillType)
+    local isAIActive = self:getIsAIActive()
+    
+    -- Перевіряємо чи комбайн увімкнений (молотарка працює)
+    if not self:getIsTurnedOn() and not isAIActive then
+        return nil  -- Блокуємо харвестинг
+    end
+    
+    return superFunc(self, fruitType, outputFillType)
 end
 
 -- Викликається періодично для оновлення логіки
