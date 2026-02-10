@@ -125,6 +125,9 @@ function rhm_Combine:onLoad(savegame)
     
     -- INPUT: Таблиця для подій введення
     spec.actionEvents = {}
+    
+    -- TEST: Прапорець для показу тестового повідомлення
+    spec.testMessageShown = false
 end
 
 -- Перехоплюємо addCutterArea для отримання площі
@@ -500,6 +503,72 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         -- Використовуємо нову функцію з area
         spec.loadCalculator:updateProductivityAndYield(massKg, liters, areaForYield, dt) 
     end
+    
+    -- ========================================================================
+    -- PHYSICAL CROP LOSS - Видаляємо втрачене зерно з бункера
+    -- ========================================================================
+    if liters > 0 and self.isServer then
+        -- === ТЕСТОВИЙ РЕЖИМ ===
+        -- Встановіть TEST_CROP_LOSS_MODE = true для перевірки з 100% втратами
+        local TEST_CROP_LOSS_MODE = false  -- ✅ ВИМКНЕНО - Нормальна гра
+        
+        local cropLoss = 0
+        
+        if TEST_CROP_LOSS_MODE then
+            -- ТЕСТ: Примусові 100% втрати
+            cropLoss = 100
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("🧪 TEST MODE: FORCING 100% CROP LOSS")
+            print("   Harvested: " .. liters .. " L")
+            print("   ALL will be removed from bunker!")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        else
+            -- Нормальний режим: розраховуємо crop loss
+            cropLoss = spec.loadCalculator:calculateCropLoss()
+        end
+        
+        if cropLoss > 0 then
+            -- Перевіряємо чи crop loss увімкнений (тільки в нормальному режимі)
+            local enableCropLoss = TEST_CROP_LOSS_MODE  -- В тесті завжди true
+            if not TEST_CROP_LOSS_MODE and g_realisticHarvestManager and g_realisticHarvestManager.settings then
+                enableCropLoss = g_realisticHarvestManager.settings.enableCropLoss
+            end
+            
+            if enableCropLoss then
+                -- Розраховуємо кількість втрачених літрів
+                local lossRatio = cropLoss / 100  -- Конвертуємо % в десяткове число
+                local lostLiters = liters * lossRatio
+                
+                -- Комбайни зазвичай мають основний бункер з індексом 1
+                -- Це найпростіший і найнадійніший спосіб для FS25
+                local fillUnitIndex = 1
+                
+                -- Перевіряємо що fill unit існує
+                local spec_fillUnit = self.spec_fillUnit
+                if spec_fillUnit and spec_fillUnit.fillUnits and spec_fillUnit.fillUnits[fillUnitIndex] then
+                    -- Видаляємо втрачене зерно з бункера (негативне значення)
+                    self:addFillUnitFillLevel(
+                        self:getOwnerFarmId(),
+                        fillUnitIndex,
+                        -lostLiters,  -- Від'ємне значення = видалення
+                        spec.lastFillType,
+                        ToolType.UNDEFINED,
+                        nil
+                    )
+                    
+                    -- Debug logging
+                    if rhm_Combine.debug or TEST_CROP_LOSS_MODE or cropLoss > 1 then
+                        local emoji = TEST_CROP_LOSS_MODE and "🧪" or "🌾"
+                        print(string.format("RHM: %s Crop Loss Applied: %.1f L lost (%.1f%% of %.1f L harvest)", 
+                            emoji, lostLiters, cropLoss, liters))
+                    end
+                else
+                    print("RHM: Warning - Could not find fill unit for crop loss removal")
+                end
+            end
+        end
+    end
+    -- ========================================================================
     
     -- Скидаємо лічильники
     spec.lastArea = 0

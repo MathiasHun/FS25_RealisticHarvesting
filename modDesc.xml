@@ -2,7 +2,7 @@
 <modDesc descVersion="105">
     <author>exekx</author>
     <manufacturer>exekx</manufacturer>
-    <version>1.3.1.0</version>
+    <version>1.3.2.0</version>
     <modName>FS25_RealisticHarvesting</modName>
     <title>
         <en>Realistic Harvesting</en>
@@ -30,6 +30,12 @@ Features:
 - Support for all harvest types (Grain, Forage, Roots, Cotton)
 - Pickup Header support (Swathing)
 - Experimental NEXAT support
+
+Changelog 1.3.2.0:
+- NEW: Physical Crop Loss System! Losses now reduce actual grain collected in bunker.
+- NEW: Crop losses start at 95% engine load (was 100%).
+- NEW: Progressive loss formula - higher overload = exponentially more loss.
+- IMPROVED: Loss penalties now directly affect harvest yield for realistic gameplay.
 
 Changelog 1.3.1.0:
 - NEW: Settings menu reorganized into "Simulation" and "HUD & Visuals" sections.
@@ -72,6 +78,12 @@ Funktionen:
 - Unterstützung für Baumwollernter, Hackfruchternter und teilweise Feldhäcksler
 - Experimentelle NEXAT-Unterstützung
 
+Changelog 1.3.2.0:
+- NEU: Physisches Ernteverlustsystem! Verluste reduzieren jetzt das tatsächlich geerntete Getreide.
+- NEU: Ernteverluste beginnen bei 95% Motorlast (zuvor 100%).
+- NEU: Progressive Verlustformel - höhere Überlastung = exponentiell mehr Verlust.
+- VERBESSERT: Verluststrafen wirken sich nun direkt auf den Ernteertrag aus.
+
 Changelog 1.3.1.0:
 - NEU: Einstellungsmenü in "Simulation" und "Anzeige" unterteilt.
 - NEU: Verschiebbares HUD! Rechtsklick für Cursor, dann HUD ziehen.
@@ -112,6 +124,12 @@ Fonctionnalités:
 - Support multijoueur complet avec paramètres côté serveur
 - Support pour moissonneuses à coton, récolteuses de racines et support partiel pour ensileuses
 - Support expérimental NEXAT
+
+Changelog 1.3.2.0:
+- NOUVEAU: Système de perte de récolte physique! Les pertes réduisent maintenant le grain réellement collecté.
+- NOUVEAU: Les pertes de récolte commencent à 95% de charge moteur (au lieu de 100%).
+- NOUVEAU: Formule de perte progressive - surcharge plus élevée = perte exponentiellement plus grande.
+- AMÉLIORÉ: Les pénalités de perte affectent maintenant directement le rendement de récolte.
 
 Changelog 1.3.1.0:
 - NOUVEAU: Le menu des paramètres est réorganisé en sections "Simulation" et "Affichage".
@@ -154,6 +172,12 @@ Funkcje:
 - Wsparcie dla kombajnów bawełnianych, kombajnów korzeniowych i częściowe wsparcie dla sieczkarni
 - Eksperymentalne wsparcie dla NEXAT
 
+Changelog 1.3.2.0:
+- NOWOŚĆ: Fizyczny system strat plonów! Straty teraz zmniejszają rzeczywiście zebraną ilość ziarna.
+- NOWOŚĆ: Straty plonów zaczynają się przy 95% obciążenia silnika (poprzednio 100%).
+- NOWOŚĆ: Progresywna formuła strat - większe przeciążenie = wykładniczo większe straty.
+- ULEPSZONO: Kary za straty wpływają teraz bezpośrednio na plon.
+
 Changelog 1.3.1.0:
 - NOWOŚĆ: Menu ustawień zreorganizowane w sekcje "Symulacja" i "Wyświetlanie".
 - NOWOŚĆ: Przenośny HUD! Prawy przycisk dla kursora, a następnie przeciągnij HUD.
@@ -194,6 +218,12 @@ Características:
 - Soporte multijugador completo con configuración del servidor
 - Soporte para cosechadoras de algodón, cosechadoras de raíces y soporte parcial para picadoras
 - Soporte experimental para NEXAT
+
+Changelog 1.3.2.0:
+- NUEVO: ¡Sistema de pérdida de cosecha física! Las pérdidas ahora reducen el grano realmente recolectado.
+- NUEVO: Las pérdidas de cosecha comienzan al 95% de carga del motor (antes 100%).
+- NUEVO: Fórmula de pérdida progresiva - mayor sobrecarga = pérdida exponencialmente mayor.
+- MEJORADO: Las penalizaciones por pérdidas ahora afectan directamente el rendimiento.
 
 Changelog 1.3.1.0:
 - NUEVO: Menú de configuración reorganizado en secciones "Simulación" y "Visualización".
@@ -236,6 +266,12 @@ Caratteristiche:
 - Supporto per raccoglitrici cotone, raccoglitrici radici e supporto parziale per trincia
 - Supporto sperimentale NEXAT
 
+Changelog 1.3.2.0:
+- NUOVO: Sistema di perdita di raccolto fisica! Le perdite riducono ora il grano effettivamente raccolto.
+- NUOVO: Le perdite di raccolto iniziano al 95% di carico motore (prima 100%).
+- NUOVO: Formula di perdita progressiva - sovraccarico più alto = perdita esponenzialmente maggiore.
+- MIGLIORATO: Le penalità per perdite influenzano ora direttamente il rendimento.
+
 Changelog 1.3.1.0:
 - NUOVO: Menu impostazioni riorganizzato in sezioni "Simulazione" e "Visualizzazione".
 - NUOVO: HUD spostabile! Tasto destro per cursore, poi trascina HUD.
@@ -276,6 +312,12 @@ Funkce:
 - Plná podpora multiplayeru s nastavením na straně serveru
 - Podpora pro sklízecí stroje na bavlnu, sklízecí stroje na kořenovou zeleninu a částečná podpora pro sklízecí řezačky
 - Experimentální podpora NEXAT
+
+Changelog 1.3.2.0:
+- NOVINKA: Fyzický systém ztráty úrody! Ztráty nyní snižují skutečně sklizené zrní.
+- NOVINKA: Ztráty úrody začínají při 95% zatížení motoru (dříve 100%).
+- NOVINKA: Progresivní vzorec ztrát - vyšší přetížení = exponenciálně větší ztráty.
+- VYLEPŠENÍ: Pokuty za ztráty nyní přímo ovlivňují výnos sklizně.
 
 Changelog 1.3.1.0:
 - NOVINKA: Nabídka nastavení reorganizována do sekcí "Simulace" a "Zobrazení".
@@ -318,6 +360,12 @@ Recursos:
 - Suporte para colheitadeiras de algodão, colheitadeiras de raízes e suporte parcial para forrageiras
 - Suporte experimental para NEXAT
 
+Changelog 1.3.2.0:
+- NOVO: Sistema de perda de colheita física! As perdas agora reduzem o grão realmente coletado.
+- NOVO: As perdas de colheita começam em 95% de carga do motor (antes 100%).
+- NOVO: Fórmula de perda progressiva - sobrecarga maior = perda exponencialmente maior.
+- MELHORADO: As penalidades por perdas afetam agora diretamente o rendimento.
+
 Changelog 1.3.1.0:
 - NOVO: Menu de configurações reorganizado em seções "Simulação" e "Visualização".
 - NOVO: HUD móvel! Clique direito para cursor, depois arraste o HUD.
@@ -358,6 +406,12 @@ Changelog 1.1.0.0:
 - Повна підтримка мультиплеєра з налаштуваннями на стороні сервера
 - Підтримка бавовняних комбайнів, коренезбиральних комбайнів та часткова підтримка кормозбиральних комбайнів
 - Експериментальна підтримка NEXAT
+
+Зміни 1.3.2.0:
+- НОВЕ: Фізична система втрат врожаю! Втрати тепер зменшують реальну кількість зерна в бункері.
+- НОВЕ: Втрати врожаю починаються при 95% навантаженні двигуна (раніше 100%).
+- НОВЕ: Прогресивна формула втрат - більше перевантаження = експоненційно більше втрат.
+- ПОКРАЩЕНО: Штрафи за втрати тепер безпосередньо впливають на врожайність.
 
 Зміни 1.3.1.0:
 - НОВЕ: Меню налаштувань розділено на секції "Симуляція" та "Відображення".
@@ -400,6 +454,12 @@ Changelog 1.1.0.0:
 - Поддержка хлопкоуборочных комбайнов, корнеуборочных комбайнов и частичная поддержка кормоуборочных комбайнов
 - Экспериментальная поддержка NEXAT
 
+Изменения 1.3.2.0:
+- НОВОЕ: Физическая система потерь урожая! Потери теперь уменьшают реально собранное зерно.
+- НОВОЕ: Потери урожая начинаются при 95% нагрузке двигателя (ранее 100%).
+- НОВОЕ: Прогрессивная формула потерь - большая перегрузка = экспоненциально больше потерь.
+- УЛУЧШЕНО: Штрафы за потери теперь напрямую влияют на урожайность.
+
 Изменения 1.3.1.0:
 - НОВОЕ: Меню настроек разделено на секции "Симуляция" и "Отображение".
 - НОВОЕ: Перетаскиваемый HUD! ПКМ для курсора, затем перетащите HUD.
@@ -440,6 +500,12 @@ Funkciók:
 - Teljes többjátékos támogatás, szerveroldali beállításokkal
 - Támogatás gyapotbetakarítókhoz, gyökérnövény-betakarítókhoz, valamint részleges támogatás silózó betakarítókhoz
 - Kísérleti NEXAT támogatás
+
+Változások 1.3.2.0:
+- ÚJ: Fizikai termésveszteség rendszer! A veszteségek most csökkentik a ténylegesen összegyűjtött gabonát.
+- ÚJ: A termésveszteségek 95%-os motorterhelésnél kezdődnek (korábban 100%).
+- ÚJ: Progresszív veszteségképlet - nagyobb túlterhelés = exponenciálisan nagyobb veszteség.
+- JAVÍTVA: A veszteségbüntetések most közvetlenül befolyásolják a termésátlagot.
 
 Változások 1.3.1.0:
 - ÚJ: A beállítási menü "Szimuláció" és "Megjelenítés" szekciókra lett osztva.

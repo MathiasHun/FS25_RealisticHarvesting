@@ -7,7 +7,14 @@
 
 ## 📜 Version History (Changelog)
 
-### v1.3.1.0 (Current)
+### v1.3.2.0 (Current)
+**New Features:**
+*   **Physical Crop Loss System:** Crop losses now physically reduce the amount of grain collected in the bunker!
+*   **95% Load Threshold:** Losses start at 95% engine load (previously 100%) for earlier feedback.
+*   **Progressive Loss Formula:** Higher overload results in exponentially more loss for realistic penalties.
+*   **Difficulty Impact:** Arcade/Normal/Realistic settings now directly control crop loss severity.
+
+### v1.3.1.0
 **New Features:**
 *   **Independent Header Control:** Threshing and cutter can now be started independently (option in settings: "Enable Independent Header Control").
 *   **New Draggable HUD:** Completely redesigned HUD with Courseplay-style interaction (Right Click to toggle cursor, Left Click drag to move).
@@ -58,7 +65,7 @@
 Based on community feedback and suggestions, here is the plan for future updates.
 
 ### Phase 1: Core Mechanics & Refinement (Next)
-*   **Real Crop Loss:** Implement actual yield reduction when harvesting at high speeds/overloading (currently visual-only).
+*   ~~**Real Crop Loss:**~~ ✅ **COMPLETED in v1.3.2.0** - Implemented actual yield reduction when harvesting at high speeds/overloading.
 *   **Smoother Load Control:** Improve the "feel" of the governor to maintain ~90-95% load more consistently without "hunting" or hesitation.
 *   **Pickup Header Improved Support:** Better handling for windrow harvesting (grass/straw) with accurate load calculations.
 

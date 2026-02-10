@@ -650,18 +650,23 @@ function LoadCalculator:calculateCropLoss()
         return 0
     end
     
-    -- Якщо навантаження > 100%, розраховуємо втрати
-    if self.engineLoad > 1.0 then
-        local overload = self.engineLoad - 1.0 -- 0.0 - 1.0+
+    -- НОВИЙ ПОРІГ: Втрати починаються з 95% навантаження
+    if self.engineLoad > 0.95 then
+        -- Розраховуємо overload відносно 95%
+        local overload = self.engineLoad - 0.95  -- 0.0 при 95%, 0.05 при 100%, 0.25 при 120% і т.д.
         
         -- Отримуємо множник втрат залежно від складності
         local lossMultiplier = g_realisticHarvestManager.settings:getLossMultiplier()
         
-        -- Формула втрат: overload^2 * multiplier * 100
-        -- Наприклад: 150% load → 50% overload → 12.5% втрат (Normal)
-        --             150% load → 50% overload → 6.25% втрат (Arcade)
-        --             150% load → 50% overload → 25% втрат (Realistic)
-        local loss = (overload^2) * lossMultiplier * 100
+        -- Прогресивна формула втрат:
+        -- 95-100% load: Мінімальні втрати (0-2%)
+        -- 100-120% load: Помірні втрати (2-15%)
+        -- 120%+ load: Серйозні втрати (15-50%)
+        -- 
+        -- Формула: ((overload / 0.05)^1.5) * lossMultiplier * базовий_відсоток
+        -- де 0.05 = діапазон від 95% до 100%
+        local normalizedOverload = overload / 0.05  -- 0.0 при 95%, 1.0 при 100%, 5.0 при 120%
+        local loss = (normalizedOverload^1.5) * lossMultiplier * 2.5  -- 2.5 = базовий % при 100% load
         
         self.cropLoss = math.min(loss, 50) -- Максимум 50% втрат
     else
