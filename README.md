@@ -93,17 +93,21 @@ Determines how strictly the crop loss penalties are applied when overloading.
 > **Crop Loss Comparison - High Loss Scenario**
 >
 > ![High Crop Loss - Combine](docs/images/crop_loss_high_combine.png)
+>
 > *Combine showing high crop loss due to exceeding speed limits*
 >
 > ![High Crop Loss - Truck](docs/images/crop_loss_high_truck.png)
+>
 > *Reduced grain amount in truck after high losses*
 
 > **Crop Loss Comparison - Optimal Harvesting**
 >
 > ![Low Crop Loss - Combine](docs/images/crop_loss_low_combine.png)
+>
 > *Combine within optimal speed range, minimal losses*
 >
 > ![Low Crop Loss - Truck](docs/images/crop_loss_low_truck.png)
+>
 > *Maximum grain collected when following recommended speed*
 
 ---
