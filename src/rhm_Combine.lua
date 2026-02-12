@@ -34,6 +34,11 @@ function rhm_Combine.registerOverwrittenFunctions(vehicleType)
     -- SpecializationUtil.registerOverwrittenFunction(vehicleType, "processCutters", rhm_Combine.processCutters) -- Removed: Not needed and was causing nil error
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "addCutterArea", rhm_Combine.addCutterArea)
     SpecializationUtil.registerOverwrittenFunction(vehicleType, "getSpeedLimit", rhm_Combine.getSpeedLimit)
+    -- SpecializationUtil.registerOverwrittenFunction(vehicleType, "setIsTurnedOn", rhm_Combine.setIsTurnedOn)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "startThreshing", rhm_Combine.startThreshing)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "stopThreshing", rhm_Combine.stopThreshing)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "verifyCombine", rhm_Combine.verifyCombine)
+    SpecializationUtil.registerOverwrittenFunction(vehicleType, "getCanBeTurnedOn", rhm_Combine.getCanBeTurnedOn)
 end
 
 function rhm_Combine.registerEventListeners(vehicleType)
@@ -53,6 +58,9 @@ function rhm_Combine.registerEventListeners(vehicleType)
     -- MULTIPLAYER: Синхронізація даних між сервером і клієнтом
     SpecializationUtil.registerEventListener(vehicleType, "onReadUpdateStream", rhm_Combine)
     SpecializationUtil.registerEventListener(vehicleType, "onWriteUpdateStream", rhm_Combine)
+    
+    -- INPUT: Реєструємо події введення
+    SpecializationUtil.registerEventListener(vehicleType, "onRegisterActionEvents", rhm_Combine)
 end
 
 -- Викликається при завантаженні комбайна
@@ -114,6 +122,12 @@ function rhm_Combine:onLoad(savegame)
     
     -- MULTIPLAYER: Dirty flag для синхронізації
     spec.dirtyFlag = self:getNextDirtyFlag()
+    
+    -- INPUT: Таблиця для подій введення
+    spec.actionEvents = {}
+    
+    -- TEST: Прапорець для показу тестового повідомлення
+    spec.testMessageShown = false
 end
 
 -- Перехоплюємо addCutterArea для отримання площі
@@ -297,6 +311,110 @@ function rhm_Combine:getSpeedLimit(superFunc, onlyIfWorking)
     return limit, doCheckSpeedLimit
 end
 
+-- Перевіряємо чи можна увімкнути комбайн
+function rhm_Combine:getCanBeTurnedOn(superFunc)
+    local spec_combine = self.spec_combine
+    
+    -- Якщо немає жаток, використовуємо стандартну логіку
+    if spec_combine.numAttachedCutters <= 0 then
+        return superFunc(self)
+    end
+    
+    -- Перевіряємо кожну жатку
+    for cutter, _ in pairs(spec_combine.attachedCutters) do
+        if cutter ~= self and cutter.getCanBeTurnedOn ~= nil and not cutter:getCanBeTurnedOn() then
+            -- Якщо хоч одна жатка не готова (наприклад складена), комбайн не запуститься
+            return false
+        end
+    end
+
+    return superFunc(self)
+end
+
+-- Запобігаємо автозапуску жатки при старті молотарки
+-- ВАЖЛИВО: НЕ викликаємо superFunc, бо він запускає жатки автоматично!
+function rhm_Combine:startThreshing(superFunc)
+    local spec_combine = self.spec_combine
+    
+    -- Перевіряємо чи увімкнена функція роздільного запуску
+    local isIndependentLaunchEnabled = false
+    if g_realisticHarvestManager and g_realisticHarvestManager.settings then
+        isIndependentLaunchEnabled = g_realisticHarvestManager.settings.enableIndependentLaunch
+    end
+    
+    -- Логіка запуску жаток:
+    -- - Якщо роздільний запуск ВИМКНЕНИЙ → запускаємо жатки завжди (класична поведінка)
+    -- - Якщо роздільний запуск УВІМКНЕНИЙ → запускаємо ТІЛЬКИ для AI
+    local isAIActive = self:getIsAIActive()
+    local shouldStartCutters = (not isIndependentLaunchEnabled) or (isIndependentLaunchEnabled and isAIActive)
+    
+    if spec_combine.numAttachedCutters > 0 and shouldStartCutters then
+        -- Запускаємо жатки (для AI завжди, для гравця - тільки якщо функція вимкнена)
+        local allowLowering = not self:getIsAIActive() or not self.rootVehicle:getAIFieldWorkerIsTurning()
+        
+        for _, cutter in pairs(spec_combine.attachedCutters) do
+            if allowLowering and cutter ~= self then
+                local jointDescIndex = self:getAttacherJointIndexFromObject(cutter)
+                self:setJointMoveDown(jointDescIndex, true, true)
+            end
+            
+            cutter:setIsTurnedOn(true, true)
+        end
+    end
+    
+    -- Анімації та звуки молотарки (завжди)
+    if spec_combine.threshingStartAnimation ~= nil and self.playAnimation ~= nil then
+        self:playAnimation(spec_combine.threshingStartAnimation, spec_combine.threshingStartAnimationSpeedScale, self:getAnimationTime(spec_combine.threshingStartAnimation), true)
+    end
+    
+    if self.isClient then
+        g_soundManager:stopSample(spec_combine.samples.stop)
+        g_soundManager:stopSample(spec_combine.samples.work)
+        g_soundManager:playSample(spec_combine.samples.start)
+        g_soundManager:playSample(spec_combine.samples.work, 0, spec_combine.samples.start)
+    end
+    
+    SpecializationUtil.raiseEvent(self, "onStartThreshing")
+end
+
+-- Запобігаємо авто-вимкненню жатки при зупинці молотарки
+function rhm_Combine:stopThreshing(superFunc)
+    local spec_combine = self.spec_combine
+    
+    if self.isClient then
+        g_soundManager:stopSample(spec_combine.samples.start)
+        g_soundManager:stopSample(spec_combine.samples.work)
+        g_soundManager:playSample(spec_combine.samples.stop)
+    end
+    
+    self:setCombineIsFilling(false, false, true)
+    local isFull = self:getCombineFillLevelPercentage() > 0.999
+    if isFull and self.rootVehicle.setCruiseControlState ~= nil then
+        self.rootVehicle:setCruiseControlState(Drivable.CRUISECONTROL_STATE_OFF)
+    end
+    
+    -- НЕ вимикаємо жатки автоматично (гравець керує ними вручну)
+    
+    if spec_combine.threshingStartAnimation ~= nil and spec_combine.playAnimation ~= nil then
+        self:playAnimation(spec_combine.threshingStartAnimation, -spec_combine.threshingStartAnimationSpeedScale, self:getAnimationTime(spec_combine.threshingStartAnimation), true)
+    end
+    
+    SpecializationUtil.raiseEvent(self, "onStopThreshing")
+end
+
+-- Забороняємо харвестинг якщо комбайн вимкнений
+-- Це запобігає збору врожаю коли увімкнена тільки жатка без комбайна
+function rhm_Combine:verifyCombine(superFunc, fruitType, outputFillType)
+    local isAIActive = self:getIsAIActive()
+    
+    -- Перевіряємо чи комбайн увімкнений (молотарка працює)
+    if not self:getIsTurnedOn() and not isAIActive then
+        return nil  -- Блокуємо харвестинг
+    end
+    
+    return superFunc(self, fruitType, outputFillType)
+end
+
 -- Викликається періодично для оновлення логіки
 function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSelection, isSelected)
     if rhm_Combine.debug then
@@ -337,12 +455,21 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
     end
     
     if not cutterIsTurnedOn then
-        -- Жатка не працює (але не скидаємо loadCalculator повністю, щоб уникнути стрибків при зупинках)
-        -- spec.loadCalculator:reset() -- ВИДАЛЕНО: Викликало нестабільність при короткочасних зупинках
+        -- Жатка не працює - скидаємо індикатори, щоб вони не висіли
+        spec.loadCalculator:reset() 
         if spec.data then
-            -- spec.data.load = 0 -- Не обнуляємо візуально, хай показує останнє
+            spec.data.load = 0 
+            spec.data.cropLoss = 0
+            spec.data.tonPerHour = 0
+            spec.data.litersPerHour = 0
+            spec.data.yield = 0
+            spec.data.recommendedSpeed = 0 -- Скидаємо рекомендовану швидкість, щоб не показувало "/ 3.8"
         end
         spec.isSpeedLimitActive = false
+        
+        -- СИНХРОНІЗАЦІЯ: Важливо оновити клієнтів, щоб у них теж зникли цифри
+        self:raiseDirtyFlags(spec.dirtyFlag)
+        
         return
     end
     
@@ -376,6 +503,72 @@ function rhm_Combine:onUpdateTick(dt, isActiveForInput, isActiveForInputIgnoreSe
         -- Використовуємо нову функцію з area
         spec.loadCalculator:updateProductivityAndYield(massKg, liters, areaForYield, dt) 
     end
+    
+    -- ========================================================================
+    -- PHYSICAL CROP LOSS - Видаляємо втрачене зерно з бункера
+    -- ========================================================================
+    if liters > 0 and self.isServer then
+        -- === ТЕСТОВИЙ РЕЖИМ ===
+        -- Встановіть TEST_CROP_LOSS_MODE = true для перевірки з 100% втратами
+        local TEST_CROP_LOSS_MODE = false  -- ✅ ВИМКНЕНО - Нормальна гра
+        
+        local cropLoss = 0
+        
+        if TEST_CROP_LOSS_MODE then
+            -- ТЕСТ: Примусові 100% втрати
+            cropLoss = 100
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print("🧪 TEST MODE: FORCING 100% CROP LOSS")
+            print("   Harvested: " .. liters .. " L")
+            print("   ALL will be removed from bunker!")
+            print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        else
+            -- Нормальний режим: розраховуємо crop loss
+            cropLoss = spec.loadCalculator:calculateCropLoss()
+        end
+        
+        if cropLoss > 0 then
+            -- Перевіряємо чи crop loss увімкнений (тільки в нормальному режимі)
+            local enableCropLoss = TEST_CROP_LOSS_MODE  -- В тесті завжди true
+            if not TEST_CROP_LOSS_MODE and g_realisticHarvestManager and g_realisticHarvestManager.settings then
+                enableCropLoss = g_realisticHarvestManager.settings.enableCropLoss
+            end
+            
+            if enableCropLoss then
+                -- Розраховуємо кількість втрачених літрів
+                local lossRatio = cropLoss / 100  -- Конвертуємо % в десяткове число
+                local lostLiters = liters * lossRatio
+                
+                -- Комбайни зазвичай мають основний бункер з індексом 1
+                -- Це найпростіший і найнадійніший спосіб для FS25
+                local fillUnitIndex = 1
+                
+                -- Перевіряємо що fill unit існує
+                local spec_fillUnit = self.spec_fillUnit
+                if spec_fillUnit and spec_fillUnit.fillUnits and spec_fillUnit.fillUnits[fillUnitIndex] then
+                    -- Видаляємо втрачене зерно з бункера (негативне значення)
+                    self:addFillUnitFillLevel(
+                        self:getOwnerFarmId(),
+                        fillUnitIndex,
+                        -lostLiters,  -- Від'ємне значення = видалення
+                        spec.lastFillType,
+                        ToolType.UNDEFINED,
+                        nil
+                    )
+                    
+                    -- Debug logging
+                    if rhm_Combine.debug or TEST_CROP_LOSS_MODE or cropLoss > 1 then
+                        local emoji = TEST_CROP_LOSS_MODE and "🧪" or "🌾"
+                        print(string.format("RHM: %s Crop Loss Applied: %.1f L lost (%.1f%% of %.1f L harvest)", 
+                            emoji, lostLiters, cropLoss, liters))
+                    end
+                else
+                    print("RHM: Warning - Could not find fill unit for crop loss removal")
+                end
+            end
+        end
+    end
+    -- ========================================================================
     
     -- Скидаємо лічильники
     spec.lastArea = 0
@@ -598,6 +791,33 @@ function rhm_Combine:onWriteUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, spec.data.recommendedSpeed or 0)
             streamWriteFloat32(streamId, spec.data.yield or 0)
         end
+    end
+end
+
+-- ============================================================================
+-- INPUT MANAGEMENT
+-- ============================================================================
+
+-- Реєстрація UserActionEvents при вході в техніку
+function rhm_Combine:onRegisterActionEvents(isActiveForInput, isActiveForInputIgnoreSelection)
+    if self.isClient then
+        local spec = self.spec_rhm_Combine
+        self:clearActionEventsTable(spec.actionEvents)
+        
+        if isActiveForInputIgnoreSelection then
+            -- Реєструємо дію Перемикання Курсора (RMB за замовчуванням)
+            local _, eventId = self:addActionEvent(spec.actionEvents, InputAction.RHM_TOGGLE_CURSOR, self, rhm_Combine.actionToggleCursor, false, true, false, true, nil)
+            
+            -- Встановлюємо пріоритет тексту
+            g_inputBinding:setActionEventTextPriority(eventId, GS_PRIO_HIGH)
+        end
+    end
+end
+
+-- Callback для дії
+function rhm_Combine:actionToggleCursor(actionName, inputValue, callbackState, isAnalog)
+    if g_realisticHarvestManager then
+        g_realisticHarvestManager:toggleCursor()
     end
 end
 

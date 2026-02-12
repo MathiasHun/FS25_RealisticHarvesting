@@ -19,6 +19,8 @@ SettingsManager.CLIENT_SETTINGS = {
     "showYield",
     "hudOffsetX",
     "hudOffsetY",
+    "hudPosX",      -- NEW: Saved HUD X position
+    "hudPosY",      -- NEW: Saved HUD Y position
     "unitSystem"
 }
 
@@ -137,7 +139,10 @@ function SettingsManager:loadClientSettings(settingsObject)
             for _, key in ipairs(self.CLIENT_SETTINGS) do
                 local xmlKey = self.XMLTAG.."."..key
                 if key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
-                    settingsObject[key] = xml:getInt(xmlKey, self.defaultConfig[key])
+                    settingsObject[key] = xml:getInt(xmlKey, self.defaultConfig[key] or 0)
+                elseif key == "hudPosX" or key == "hudPosY" then
+                    -- Load as float (can be nil if not set)
+                    settingsObject[key] = xml:getFloat(xmlKey)
                 else
                     settingsObject[key] = xml:getBool(xmlKey, self.defaultConfig[key])
                 end
@@ -216,6 +221,11 @@ function SettingsManager:saveClientSettings(settingsObject)
             local xmlKey = self.XMLTAG.."."..key
             if key == "hudOffsetX" or key == "hudOffsetY" or key == "unitSystem" then
                 xml:setInt(xmlKey, settingsObject[key])
+            elseif key == "hudPosX" or key == "hudPosY" then
+                -- Save as float (only if not nil)
+                if settingsObject[key] ~= nil then
+                    xml:setFloat(xmlKey, settingsObject[key])
+                end
             else
                 xml:setBool(xmlKey, settingsObject[key])
             end

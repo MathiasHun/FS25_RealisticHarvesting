@@ -28,15 +28,24 @@ function Settings.new(manager)
     
     -- Feature toggles
     self.enableSpeedLimit = true
-    self.enableCropLoss = false
+    self.enableCropLoss = true -- ENABLED BY DEFAULT NOW
     self.showHUD = true
-    self.showYield = true -- New Setting
-    self.showSpeedometer = true
+    self.showYield = true
+    self.showSpeedometer = true -- Shows Current / Recommended
+    self.enableIndependentLaunch = true -- New: Separate Header Start (enabled by default)
+    
+    -- HUD Additional Toggles (Explicit defaults)
+    self.showLoad = true
+    self.showProductivity = true
+    self.showCropLoss = true
+    self.showSpeed = true -- Used in HUD instead of showSpeedometer sometimes (unified below)
     
 
     -- HUD settings
     self.hudOffsetX = 0
     self.hudOffsetY = 350
+    self.hudPosX = nil  -- Позиція HUD по X (nil = авто)
+    self.hudPosY = nil  -- Позиція HUD по Y (nil = авто)
     
     -- Unit system
     self.unitSystem = Settings.UNIT_METRIC
@@ -175,6 +184,8 @@ function Settings:resetToDefaults()
     self.enableCropLoss = true
     self.showHUD = true
     self.showYield = true
+    self.showSpeedometer = true
+    self.enableIndependentLaunch = true -- Default: enabled
     self.hudOffsetX = 0
     self.hudOffsetY = 350
     

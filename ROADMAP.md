@@ -7,7 +7,22 @@
 
 ## 📜 Version History (Changelog)
 
-### v1.3.0.0 (Current)
+### v1.3.2.0 (Current)
+**New Features:**
+*   **Physical Crop Loss System:** Crop losses now physically reduce the amount of grain collected in the bunker!
+*   **95% Load Threshold:** Losses start at 95% engine load (previously 100%) for earlier feedback.
+*   **Progressive Loss Formula:** Higher overload results in exponentially more loss for realistic penalties.
+*   **Difficulty Impact:** Arcade/Normal/Realistic settings now directly control crop loss severity.
+
+### v1.3.1.0
+**New Features:**
+*   **Independent Header Control:** Threshing and cutter can now be started independently (option in settings: "Enable Independent Header Control").
+*   **New Draggable HUD:** Completely redesigned HUD with Courseplay-style interaction (Right Click to toggle cursor, Left Click drag to move).
+*   **HUD Customization:** Toggle individual HUD elements (Yield, Load, Speed, Loss, Productivity) and choose between Metric/Imperial/Bushels units.
+*   **HUD Reset Logic:** All metrics (yield, productivity, recommended speed) now reset instantly when the cutter is lifted or disabled.
+*   **Settings Reorganization:** Settings menu split into "Simulation" and "HUD & Visuals" sections for better clarity.
+
+### v1.3.0.0
 **Fixed:**
 *   **Settings Persistence:** Resolved critical bug where Difficulty (Motor/Loss) settings were not saving between sessions.
 *   **Settings Storage:** Migrated settings to `modSettings/` directory for global persistence across all savegames.
@@ -50,18 +65,14 @@
 Based on community feedback and suggestions, here is the plan for future updates.
 
 ### Phase 1: Core Mechanics & Refinement (Next)
-*   **Real Crop Loss:** Implement actual yield reduction when harvesting at high speeds/overloading (currently visual-only).
+*   ~~**Real Crop Loss:**~~ ✅ **COMPLETED in v1.3.2.0** - Implemented actual yield reduction when harvesting at high speeds/overloading.
 *   **Smoother Load Control:** Improve the "feel" of the governor to maintain ~90-95% load more consistently without "hunting" or hesitation.
 *   **Pickup Header Improved Support:** Better handling for windrow harvesting (grass/straw) with accurate load calculations.
 
 ### Phase 2: Advanced Realism Features
-*   **Weather Integration (Realistic Weather Mod):**
     *   *Upcoming Support:* Direct integration with the **Realistic Weather** mod.
     *   *Features:* Moisture, air humidity, and rain will affect crop resistance, threshing difficulty, and clogging risks.
 *   **"Combine Jamming" (Verstopfung):**
-    *   *Idea:* If load exceeds 100% for too long, the combine jams and requires manual clearing/restart.
-*   **Independent Systems Control:**
-    *   *Idea:* Ability to start the engine and the threshing mechanism independently (inspired by *Combine Xperience*).
 *   **Realistic Loss Monitor:**
     *   *Idea:* Replace % numbers with a relative "Low / Med / High" scale for the Realistic difficulty setting, mimicking real loss monitors.
 
